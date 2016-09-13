@@ -9,8 +9,10 @@
     <context:property-placeholder location="classpath:app.properties"/>
 
     <!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
-    <context:component-scan base-package="com.neusoft.emr" use-default-filters="false">
+    <context:component-scan base-package="com.simlink" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <!--直接设置注解器，json转换默认已开启-->
@@ -50,11 +52,7 @@
 
     <!-- 静态资源映射 -->
     <mvc:resources mapping="/static/**" location="/static/" cache-period="31536000"/>
-    <mvc:resources mapping="/extapp/**" location="/extapp/" cache-period="31536000"/>
 
-
-    <!-- 定义无Controller的path<->view直接映射 -->
-    <!--<mvc:view-controller path="/" view-name="redirect:${defaultPath}"/>-->
 
 
     <!-- 文件上传解析器 -->
@@ -66,30 +64,6 @@
         </property>
     </bean>
 
-    <!--异常处理器-->
-    <!-- <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-         <property name="exceptionMappings">
-             <props>
-                 <prop key="java.lang.Throwable">redirect:sys/error</prop>&lt;!&ndash;所有异常拦截之后交异常展示controller处理&ndash;&gt;
-             </props>
-         </property>
-     </bean>-->
-
-    <!--拦截器配置-->
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <mvc:exclude-mapping path="/static/**"/><!--静态文件-->
-            <mvc:exclude-mapping path="/app/**"/><!--app文件-->
-            <mvc:exclude-mapping path="/extapp/**"/><!--extjs文件-->
-            <mvc:exclude-mapping path="/sys/error/**"/><!--异常处理方法-->
-            <mvc:exclude-mapping path="/sys/login/**"/><!--登录方法-->
-            <mvc:exclude-mapping path="/login.jsp"/><!--登录页面-->
-            <mvc:exclude-mapping path="/sys/logout**"/><!--登出方法-->
-            <mvc:exclude-mapping path="/sys/getvcode**"/><!--获取验证码图片-->
-            <bean class="com.neusoft.emr.common.security.interceptor.AuthenticationInterceptor"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
 
     <!-- AOP式方法级权限检查  -->
     <!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
@@ -101,17 +75,19 @@
 
 
     <!-- 支持Shiro对Controller的方法级AOP安全控制 begin-->
-    <!--  <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
-          <property name="proxyTargetClass" value="true" />
-      </bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
 
-      <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-          <property name="exceptionMappings">
-              <props>
-                  <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-                  <prop key="java.lang.Throwable">error/500</prop>
-              </props>
-          </property>
-      </bean>-->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+                <prop key="java.lang.Throwable">error/500</prop>
+            </props>
+        </property>
+    </bean>
     <!-- 支持Shiro对Controller的方法级AOP安全控制 end -->
 </beans>

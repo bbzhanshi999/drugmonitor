@@ -34,28 +34,6 @@ public class IdGen {
 		return Math.abs(random.nextLong());
 	}
 
-	/**
-	 * 基于Base62编码的SecureRandom随机生成bytes.
-	 */
-	public static String randomBase62(int length) {
-		byte[] randomBytes = new byte[length];
-		random.nextBytes(randomBytes);
-		return Encodes.encodeBase62(randomBytes);
-	}
-	
 
-	public String getNextId() {
-		return IdGen.uuid();
-	}
-
-	
-	public static void main(String[] args) {
-		System.out.println(IdGen.uuid());
-		System.out.println(IdGen.uuid().length());
-		System.out.println(new IdGen().getNextId());
-		for (int i=0; i<1000; i++){
-			System.out.println(IdGen.randomLong() + "  " + IdGen.randomBase62(5));
-		}
-	}
 
 }
