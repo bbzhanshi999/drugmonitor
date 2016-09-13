@@ -22,11 +22,11 @@
     <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" p:hostName="127.0.0.1" p:port="6379" />
     <!--spring-session设置 结束-->
 
-    
+
     <context:property-placeholder location="classpath:app.properties"/>
 
     <!--扫描配置，controller不扫描，交给mvc模块扫描-->
-    <context:component-scan base-package="com.neusoft.emr">
+    <context:component-scan base-package="com.simlink.sinosoft.drugmonitor">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
@@ -53,8 +53,8 @@
     <!-- MyBatis begin -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.neusoft.emr"/>
-        <property name="typeAliasesSuperType" value="com.neusoft.emr.common.persistence.BaseEntity"/>
+        <property name="typeAliasesPackage" value="com.simlink.sinosoft.drugmonitor"/>
+        <!--<property name="typeAliasesSuperType" value="com.neusoft.emr.common.persistence.BaseEntity"/>-->
         <property name="mapperLocations" value="classpath:/mappings/**/*.xml"/>
         <property name="configLocation" value="classpath:/mybatis-config.xml"/>
     </bean>
@@ -69,7 +69,7 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.neusoft" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <property name="annotationClass" value="com.neusoft.emr.common.annotation.MyBatisDao"/>
+        <property name="annotationClass" value="com.simlink.common.annotation.MyBatisDao"/>
     </bean>
     <!-- MyBatis end -->
 
