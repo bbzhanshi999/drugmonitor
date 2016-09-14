@@ -101,6 +101,16 @@
         <async-supported>true</async-supported>
     </servlet>
 
+    <!-- Validate code -->
+    <servlet>
+        <servlet-name>ValidateCodeServlet</servlet-name>
+        <servlet-class>com.simlink.common.web.ValidateCodeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ValidateCodeServlet</servlet-name>
+        <url-pattern>/servlet/validateCodeServlet</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
         <url-pattern>/</url-pattern>
@@ -109,7 +119,4 @@
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
-    <error-page>
-        <location>/error</location>
-    </error-page>
 </web-app>

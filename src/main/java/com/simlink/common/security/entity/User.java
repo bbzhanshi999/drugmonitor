@@ -1,8 +1,5 @@
 package com.simlink.common.security.entity;
 
-
-import com.google.common.collect.Lists;
-
 /**
  * 用户
  * Created by zql on 2016/5/3 0003.
@@ -14,13 +11,8 @@ public class User {
     private String dlmm;//登录密码
     private String yxdz;//邮箱地址
     private String gh ;//工号
+    private String salt;
 
-    public User(){super();}
-
-    public User(String dlm){
-        super();
-        this.dlm = dlm;
-    }
 
     public String getDlm() {
         return dlm;
@@ -54,5 +46,12 @@ public class User {
         this.gh = gh;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 }
 

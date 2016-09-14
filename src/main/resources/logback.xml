@@ -15,7 +15,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.neusoft" level="INFO">
+    <logger name="com.simlink" level="INFO">
         <appender-ref ref="FILE" />
     </logger>
 

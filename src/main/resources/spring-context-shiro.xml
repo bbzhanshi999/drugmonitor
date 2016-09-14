@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+       default-lazy-init="true">
+    <description>Shiro Configuration</description>
+
+    <context:property-placeholder location="classpath:app.properties"/>
+
+    <!-- Shiro权限过滤过滤器定义 -->
+    <bean name="shiroFilterChainDefinitions" class="java.lang.String">
+        <constructor-arg>
+            <value>
+                /static/** = anon
+                /error.jsp=anon
+                /login = authc
+                /logout = logout
+                /** = user
+            </value>
+        </constructor-arg>
+    </bean>
+
+    <!-- 安全认证过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager" /><!--
+		<property name="loginUrl" value="${cas.server.url}?service=${cas.project.url}${adminPath}/cas" /> -->
+        <property name="loginUrl" value="/login" />
+        <property name="successUrl" value="${defaultPath}" />
+        <!--錯誤驗證地址在springmvc中配置-->
+        <!--<property name="unauthorizedUrl" value="/error.jsp"/>-->
+        <property name="filters">
+            <map>
+                <entry key="authc" value-ref="formAuthenticationFilter"/>
+            </map>
+        </property>
+        <property name="filterChainDefinitions">
+            <ref bean="shiroFilterChainDefinitions"/>
+        </property>
+    </bean>
+
+    <!-- 定义Shiro安全管理配置 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="realm"/>
+    </bean>
+
+    <!--装配realm-->
+    <bean id="realm" class="com.simlink.common.security.SystemRealm">
+        <property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property>
+    </bean>
+
+    <!--装配用于验证登录信息的Matcher-->
+    <bean id="hashedCredentialsMatcher" class="com.simlink.common.security.RetryLimitHashedCredentialsMatcher">
+        <property name="hashIterations" value="2"/>
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+
+    <bean id="formAuthenticationFilter"
+          class="com.simlink.common.security.FormAuthenticationFilter">
+    </bean>
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+</beans>

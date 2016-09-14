@@ -16,7 +16,7 @@
     <!--让替代session的拦截器起作用-->
     <context:annotation-config/>
     <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
-        <property name="maxInactiveIntervalInSeconds" value="600"></property>
+        <property name="maxInactiveIntervalInSeconds" value="6000"></property>
     </bean>
     <!--设置redis源-->
     <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" p:hostName="127.0.0.1" p:port="6379" />
