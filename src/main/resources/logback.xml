@@ -7,7 +7,7 @@
     <!--循环输出日志，按照每天生产一个文件的方式-->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>emrLogs/emrlog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${logsPackege}/drugLog.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>

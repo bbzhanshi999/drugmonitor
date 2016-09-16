@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simlink.common.dao.SystemDao">
+
+
+
+
+    <insert id="addUser">
+
+    </insert>
+
+
+    <select id="getUser" resultType="com.simlink.common.entity.User"></select>
+    <select id="getRoles" resultType="com.simlink.common.entity.Role"></select>
+    <select id="getMenus" resultType="com.simlink.common.entity.Menu"></select>
+    <select id="getAllUsers" resultType="com.simlink.common.entity.User"></select>
+</mapper>

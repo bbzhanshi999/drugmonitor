@@ -81,13 +81,8 @@
         <property name="proxyTargetClass" value="true"/>
     </bean>
 
-    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <property name="exceptionMappings">
-            <props>
-                <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-                <prop key="java.lang.Throwable">error/500</prop>
-            </props>
-        </property>
+    <!--控制器异常处理-->
+    <bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
     <!-- 支持Shiro对Controller的方法级AOP安全控制 end -->
 </beans>

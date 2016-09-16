@@ -34,10 +34,9 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		if (password==null){
 			password = "";
 		}
-		boolean rememberMe = isRememberMe(request);
 		String host = StringUtils.getRemoteAddr((HttpServletRequest)request);
 		String captcha = getCaptcha(request);
-		return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha);
+		return new UsernamePasswordToken(username, password.toCharArray(), host, captcha);
 	}
 
 	public String getCaptchaParam() {
