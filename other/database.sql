@@ -1,4 +1,4 @@
-CREATE TABLE DRUG."USER"
+CREATE TABLE DRUG."USERS"
 (
     ID varchar2(32) PRIMARY KEY NOT NULL,
     username varchar2(64),
