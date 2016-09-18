@@ -12,8 +12,10 @@
     <bean name="shiroFilterChainDefinitions" class="java.lang.String">
         <constructor-arg>
             <value>
+                /= anon
                 /static/** = anon
-                /error.jsp=anon
+                /getvcode = anon
+                /error.jsp = anon
                 /login = authc
                 /logout = logout
                 /** = user
@@ -25,7 +27,7 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
         <property name="loginUrl" value="/login" />
-        <property name="successUrl" value="${defaultPath}" />
+        <property name="successUrl" value="${loginSuccess}" />
         <property name="filters">
             <map>
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
@@ -34,12 +36,16 @@
         <property name="filterChainDefinitions">
             <ref bean="shiroFilterChainDefinitions"/>
         </property>
+
     </bean>
 
     <!-- 定义Shiro安全管理配置 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="realm"/>
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
+
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.ServletContainerSessionManager"/>
 
     <!--装配realm-->
     <bean id="realm" class="com.simlink.common.security.SystemRealm">

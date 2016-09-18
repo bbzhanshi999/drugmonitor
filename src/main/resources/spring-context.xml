@@ -31,6 +31,7 @@
         <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
+
     <!--配置文件可以用@value注入-->
     <util:properties id="app_props" location="classpath:app.properties"></util:properties>
 
@@ -54,7 +55,7 @@
     <!-- MyBatis begin -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.simlink.sinosoft.drugmonitor"/>
+        <property name="typeAliasesPackage" value="com.simlink"/>
         <!--<property name="typeAliasesSuperType" value="com.neusoft.emr.common.persistence.BaseEntity"/>-->
         <property name="mapperLocations" value="classpath:/mappings/**/*.xml"/>
         <property name="configLocation" value="classpath:/mybatis-config.xml"/>
@@ -83,7 +84,5 @@
     <!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
-    <!--初始化加载缓存-->
-    <bean class="com.simlink.common.service.postProcessAfterInitialization"/>
 
 </beans>
