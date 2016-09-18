@@ -66,7 +66,7 @@ public class BaseEntity<T> implements Serializable {
         }
         User user = UserUtils.getCurrentUser();
         if (StringUtils.isNotBlank(user.getId())) {
-            this.creator = UserUtils.getCurrentUser();
+            this.creator = user;
         }
         this.updateTime = new Date();
         this.createTime = this.updateTime;
