@@ -19,9 +19,6 @@
 .icon-cut{
 	background:url('icons/cut.png') no-repeat center center;
 }
-.icon-page{
-	background:url('icons/page.png') no-repeat center center;
-}
 .icon-ok{
 	background:url('icons/ok.png') no-repeat center center;
 }
@@ -70,9 +67,7 @@
 .icon-more{
 	background:url('icons/more.png') no-repeat center center;
 }
-.icon-default{
-	background:url('icons/application.png') no-repeat center center;
-}
+
 
 .icon-mini-add{
 	background:url('icons/mini_add.png') no-repeat center center;
