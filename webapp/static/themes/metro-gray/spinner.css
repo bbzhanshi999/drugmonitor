@@ -1,5 +1,5 @@
 .spinner-arrow {
-  background-color: #f5f5f5;
+  background-color: #c7ccd1;
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
@@ -23,7 +23,7 @@
   outline-style: none;
 }
 .spinner-arrow-hover {
-  background-color: #eee;
+  background-color: #E6E6E6;
   opacity: 1.0;
   filter: alpha(opacity=100);
 }
@@ -31,13 +31,13 @@
 .spinner-arrow-down:hover {
   opacity: 1.0;
   filter: alpha(opacity=100);
-  background-color: #eee;
+  background-color: #E6E6E6;
 }
 .textbox-icon-disabled .spinner-arrow-up:hover,
 .textbox-icon-disabled .spinner-arrow-down:hover {
   opacity: 0.6;
   filter: alpha(opacity=60);
-  background-color: #f5f5f5;
+  background-color: #c7ccd1;
   cursor: default;
 }
 .spinner .textbox-icon-disabled {

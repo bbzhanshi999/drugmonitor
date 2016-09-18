@@ -2,16 +2,188 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simlink.common.dao.SystemDao">
 
+    <resultMap id="userMap" type="com.simlink.common.entity.User">
+        <id column="id" property="id"/>
+        <result column="userName" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="name" property="name"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <association property="creator" javaType="com.simlink.common.entity.User">
+            <id column="createId" property="id"/>
+        </association>
+        <association property="updater" javaType="com.simlink.common.entity.User">
+            <id column="updateId" property="id"/>
+        </association>
+        <collection property="roleNames" ofType="java.lang.String">
+            <result column="role_ename"/>
+        </collection>
+        <collection property="roles" ofType="com.simlink.common.entity.Role">
+            <id column="role_id" property="id"/>
+            <result column="role_ename" property="ename"/>
+            <result column="role_name" property="name"/>
+            <result column="role_icon" property="iconCls"/>
+            <result property="updateTime" column="role_updateTime"/>
+            <result property="createTime" column="role_createTime"/>
+            <association property="creator" javaType="com.simlink.common.entity.User">
+                <id column="role_createId" property="id"/>
+            </association>
+            <association property="updater" javaType="com.simlink.common.entity.User">
+                <id column="role_updateId" property="id"/>
+            </association>
+        </collection>
+        <collection property="menuNames" ofType="java.lang.String">
+            <result  column="menu_ename"/>
+        </collection>
+        <collection property="menus" ofType="com.simlink.common.entity.Menu">
+            <id column="menuId" property="id"/>
+            <result column="menu_name" property="menuName"/>
+            <result column="menu_ename" property="permission"/>
+            <result column="menu_icon" property="iconCls"/>
+            <result column="menu_sort" property="index"/>
+            <result column="menu_type" property="type"/>
+            <result column="menu_createTime" property="createTime"/>
+            <result column="menu_updateTime" property="updateTime"/>
+            <association property="parent" javaType="com.simlink.common.entity.Menu">
+                <id column="menu_parent_id" property="id"/>
+                <result column="menu_parent_ename" property="permission"/>
+                <result column="menu_parent_name" property="menuName"/>
+            </association>
+            <association property="creator" javaType="com.simlink.common.entity.User">
+                <id column="menu_createId" property="id"/>
+            </association>
+            <association property="updater" javaType="com.simlink.common.entity.User">
+                <id column="menu_updateId" property="id"/>
+            </association>
+        </collection>
+    </resultMap>
 
+    <sql id="userMapColumns">
+          A.ID AS "id",
+          A.USERNAME AS "userName",
+          A.PASSWORD AS "password",
+          A.SALT AS "salt",
+          A.NAME AS "name",
+          A.CREATE_TIME AS "createTime",
+          A.CREATE_ID AS "createId",
+          A.UPDATE_TIME AS "updateTime",
+          A.UPDATE_ID AS "updateId",
+          R.ID AS "role_id",
+          R.ENAME AS "role_ename",
+          R.NAME AS "role_name",
+          R.ICON AS "role_icon",
+          R.UPDATE_TIME AS "role_updateTime",
+          R.UPDATE_ID AS "role_updateId",
+          R.CREATE_TIME AS "role_createTime",
+          R.CREATE_ID AS "role_createId",
+          M.ID AS "menuId",
+          M.MENU_NAME AS "menu_name",
+          M.ENAME AS "menu_ename",
+          M.ICON AS "menu_icon",
+          M.SORT AS "menu_sort",
+          M.TYPE AS "menu_type",
+          M.CREATE_TIME AS "menu_createTime",
+          M.UPDATE_TIME AS "menu_updateTime",
+          M.CREATE_ID AS "menu_createId",
+          M.UPDATE_ID AS "menu_updateId",
+          MP.ID AS "menu_parent_id",
+          MP.MENU_NAME AS "menu_parent_name",
+          MP.ENAME AS "menu_parent_ename"
+    </sql>
 
+    <sql id="userMapJoin">
+          LEFT JOIN USER_ROLE UR ON UR.USER_ID = A.ID
+          JOIN ROLE R ON R.ID = UR.ROLE_ID
+          JOIN ROLE_MENU RM ON RM.ROLE_ID = R.ID
+          JOIN MENU M ON M.ID = RM.MENU_ID
+          LEFT JOIN MENU MP ON M.PID = MP.ID
+    </sql>
 
-    <insert id="addUser">
+    <sql id="menuColumns">
+          M.ID AS "menuId",
+          M.MENU_NAME AS "menu_name",
+          M.ENAME AS "menu_ename",
+          M.ICON AS "menu_icon",
+          M.SORT AS "menu_sort",
+          M.TYPE AS "menu_type",
+          M.CREATE_TIME AS "menu_createTime",
+          M.UPDATE_TIME AS "menu_updateTime",
+          M.CREATE_ID AS "menu_createId",
+          M.UPDATE_ID AS "menu_updateId",
+          MP.ID AS "menu_parent_id",
+          MP.MENU_NAME AS "menu_parent_name",
+          MP.ENAME AS "menu_parent_ename"
+    </sql>
 
+    <insert id="addUser" parameterType="com.simlink.common.entity.User">
+        INSERT INTO USERS(
+          ID,USERNAME,PASSWORD,SALT,NAME,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
+        ) VALUES (
+          #{id},
+          #{userName},
+          #{password},
+          #{salt},
+          #{name},
+          #{creator.id},
+          #{createTime},
+          #{updater.id},
+          #{updateTime}
+        )
     </insert>
 
+    <update id="updateRoles" parameterType="java.util.Map">
+        INSERT INTO USER_ROLE(
+          ID,ROLE_ID,USER_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
+        )VALUES (
+          #{id},
+          #{roleId},
+          #{userId},
+          #{creator.id},
+          #{createTime},
+          #{updater.id},
+          #{updateTime}
+        )
+    </update>
 
-    <select id="getUser" resultType="com.simlink.common.entity.User"></select>
+
+    <update id="updateMenu">
+        INSERT INTO ROLE_MENU(
+          ID,ROLE_ID,MENU_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
+        )VALUES (
+          #{id},
+          #{roleId},
+          #{menuId},
+          #{creator.id},
+          #{createTime},
+          #{updater.id},
+          #{updateTime}
+        )
+    </update>
+
+    <select id="getUser" resultMap="userMap">
+        SELECT
+        <include refid="userMapColumns"/>
+        FROM USERS A
+        <include refid="userMapJoin"/>
+        WHERE A.USERNAME = #{userName} AND A.DEL_FLAG = '0'
+    </select>
+
+
     <select id="getRoles" resultType="com.simlink.common.entity.Role"></select>
+
     <select id="getMenus" resultType="com.simlink.common.entity.Menu"></select>
-    <select id="getAllUsers" resultType="com.simlink.common.entity.User"></select>
+
+    <select id="getAllUsers" resultMap="userMap">
+        SELECT
+        <include refid="userMapColumns"/>
+        FROM USERS A
+        <include refid="userMapJoin"/>
+        WHERE A.DEL_FLAG = '0'
+    </select>
+
+    <select id="findMenusByUserId" resultType="com.simlink.common.entity.Menu"
+            parameterType="com.simlink.common.entity.Menu">
+
+    </select>
 </mapper>

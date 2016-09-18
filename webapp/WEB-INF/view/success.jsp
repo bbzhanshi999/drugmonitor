@@ -6,5 +6,9 @@
 </head>
 <body>
     <h1>${principal},欢迎您登录成功</h1>
+    <form action="${ctx}/authTest">
+        <input type="text" name="fuck"/>
+        <input type="submit" value="提交">
+    </form>
 </body>
 </html>

@@ -5,13 +5,12 @@ import com.simlink.common.service.SystemService;
 import com.simlink.common.utils.SessionCacheUtils;
 import com.simlink.common.utils.UserUtils;
 import com.simlink.common.web.ValidateCodeServlet;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,17 @@ public class SystemRealm extends AuthorizingRealm {
     @Autowired
     protected SystemService systemService;
 
+
+    /**
+     * 权限控制方法
+     * @param principalCollection
+     * @return
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-
         String princial = (String) principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-
+        User u = (User) SessionCacheUtils.getHttpSession().getAttribute("user");
         User currentUser = UserUtils.getCurrentUser();
         for(String role:currentUser.getRoleNames()){
             info.addRole(role);
@@ -45,19 +49,26 @@ public class SystemRealm extends AuthorizingRealm {
         return info;
     }
 
+
+    /**
+     * 登录验证方法
+     * @param authenticationToken
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        HttpSession session = SessionCacheUtils.getSession();
-        String code = (String)session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
+        Session session1 = SecurityUtils.getSubject().getSession();
+        String code = (String)session1.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
         if (token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code)){
-            throw new AuthenticationException("msg:验证码错误, 请重试.");
+            throw new IncorrectCredentialsException("msg:验证码错误, 请重试.");
         }
         String userName =token.getUsername();
         User user = systemService.getUser(userName);
         if(user==null){
-            throw new AuthenticationException("无用户信息，请检查用户输入是否正确。");
+            throw new UnknownAccountException("无用户信息，请检查用户输入是否正确。");
         }
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userName, user.getPassword(), ByteSource.Util.bytes(userName + user.getSalt()), this.getName());

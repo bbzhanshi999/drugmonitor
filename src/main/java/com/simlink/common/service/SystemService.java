@@ -15,15 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SystemService {
 
-    @Autowired
+    @Autowired(required = true)
     public SystemDao systemDao;
 
-    /**
-     * 容器加载完后，将权限数据注入缓存
-     */
-    public void loadAfterInit(){
-        UserUtils.loadAllUsers();
-    }
 
     /**
      * 根据用户名取得用户信息
