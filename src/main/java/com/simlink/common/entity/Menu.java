@@ -10,6 +10,8 @@ public class Menu extends TreeEntity<Menu,Menu>{
     private String menuName;
     private String url;//访问地址
     private String permission;//shiro权限标识
+    private String userId;
+    private String type;
 
     public String getMenuName() {
         return menuName;
@@ -43,5 +45,21 @@ public class Menu extends TreeEntity<Menu,Menu>{
     @Override
     public void setParent(Menu parent) {
         this.parent = parent;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
