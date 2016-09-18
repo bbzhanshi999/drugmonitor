@@ -1,5 +1,7 @@
 package com.simlink.common.utils;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -28,8 +30,17 @@ public class SessionCacheUtils {
      * 获得当前线程的session
      * @return
      */
-    public static HttpSession getSession(){
+    public static HttpSession getHttpSession(){
         return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static Session getSecuritySession(){
+        Session session = SecurityUtils.getSubject().getSession();
+        return session;
     }
 
 

@@ -3,9 +3,12 @@ package com.simlink.common.security;
 import com.simlink.common.entity.User;
 import com.simlink.common.service.SystemService;
 import com.simlink.common.utils.UserUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -14,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>Version: 1.0
  */
 public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher {
+
+    private static Logger logger = LoggerFactory.getLogger(RetryLimitHashedCredentialsMatcher.class);
 
     @Autowired
     protected SystemService systemService;
@@ -26,6 +31,10 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
         if (matches) {
             User user = UserUtils.getUser(userName);
             UserUtils.addActiveUser(user);
+        }else{
+            AuthenticationException e = new AuthenticationException("密码输入错误");
+            logger.error(e.toString(),e);
+            throw e;
         }
         return matches;
     }
