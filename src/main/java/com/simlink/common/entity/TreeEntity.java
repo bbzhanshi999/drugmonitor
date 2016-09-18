@@ -31,7 +31,6 @@ public abstract class TreeEntity<T,C> extends BaseEntity<T> {
     protected T parent;    // 父级节点
     protected String pids; // 所有父级编号
     protected String parentId;//父节点编号
-    protected String name;    // 机构名称
     protected Integer index;        // 排序
     protected Boolean leaf;//是否为子节点
     protected String iconCls;//图标样式
@@ -127,14 +126,6 @@ public abstract class TreeEntity<T,C> extends BaseEntity<T> {
         this.pids = pids;
     }
 
-    @Length(min = 1, max = 100)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Integer getIndex() {
         return index;
