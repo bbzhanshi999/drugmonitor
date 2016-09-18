@@ -12,6 +12,7 @@ public class User extends BaseEntity<User> {
     private String userName;//登录名
     private String password;//登录密码
     private String salt;
+    private String name;
     private List<Role> roles;
     private List<Menu> menus;
     private List<String> roleNames;//用于权限注入
@@ -71,6 +72,14 @@ public class User extends BaseEntity<User> {
 
     public void setMenuNames(List<String> menuNames) {
         this.menuNames = menuNames;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
 

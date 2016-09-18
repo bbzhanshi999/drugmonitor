@@ -2,12 +2,19 @@ package com.simlink.common.utils;
 
 
 import com.simlink.common.dao.SystemDao;
+import com.simlink.common.entity.Menu;
 import com.simlink.common.entity.User;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +23,8 @@ import java.util.Map;
  * 用户工具类
  * Created by Administrator on 2016/5/3 0003.
  */
+@Service
+@Lazy(false)
 public class UserUtils {
 
     public static final String KEY_ACTIVE_USERS = "activeUsers";
@@ -31,15 +40,17 @@ public class UserUtils {
      */
     public static User getUser(String userName){
         User user = (User) JedisUtils.hget(USERS, userName);
-        if(user==null) user = systemDao.getUser(userName);
+        if(user==null) {
+            user = systemDao.getUser(userName);
+        }
         if(user!=null) addUser(user,false);
-
         return user;
     }
 
     /**
      * 载入所有user信息
      */
+    @PostConstruct
     public static void loadAllUsers(){
         List<User> allUsers = systemDao.getAllUsers();
         for(User user:allUsers){
@@ -60,7 +71,7 @@ public class UserUtils {
      * @return
      */
     public static User getCurrentUser() {
-        User user = (User)((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession().getAttribute("user");
+        User user = (User) SessionCacheUtils.getSecuritySession().getAttribute("user");
         return user;
     }
 
@@ -96,12 +107,20 @@ public class UserUtils {
      */
     public static void logoutUser(){
 
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
+        Session session = SessionCacheUtils.getSecuritySession();
         String userid = getCurrentUser().getId();
         JedisUtils.hdel(KEY_ACTIVE_USERS,userid);
         session.removeAttribute("user");
-        session.invalidate();
+        getSubject().logout();
 
+    }
+
+
+    /**
+     * 获取授权主要对象
+     */
+    public static Subject getSubject(){
+        return SecurityUtils.getSubject();
     }
 
     /**
@@ -133,10 +152,42 @@ public class UserUtils {
      */
     public static void addActiveUser(User user){
 
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
-        session.setAttribute("user", user);
+        Session session = SessionCacheUtils.getSecuritySession();
+        session.setAttribute("user",user);
         long result = JedisUtils.hset(KEY_ACTIVE_USERS,user.getId(),user);
         logger.debug("addUser {},{}",user.getId(),String.valueOf(result));
     }
 
+
+    /**
+     * 获取当前用户授权菜单
+     * @return
+     */
+    public static List<Menu> getMenuList(){
+        List<Menu> menuList = getCurrentUser().getMenus();
+        if (menuList == null){
+            User user = getCurrentUser();
+            Menu m = new Menu();
+            m.setUserId(user.getId());
+            menuList = systemDao.findMenusByUserId(m);
+            user.setMenus(menuList);
+            addActiveUser(user);
+        }
+        return menuList;
+    }
+
+    /**
+     * 根据userId获取当前用户授权菜单
+     * @return
+     */
+    public static List<Menu> getMenuListByUserId(User user){
+
+        Menu m = new Menu();
+        m.setUserId(user.getId());
+        List<Menu> menuList = systemDao.findMenusByUserId(m);
+        user.setMenus(menuList);
+        addActiveUser(user);
+        addUser(user,false);
+        return menuList;
+    }
 }
