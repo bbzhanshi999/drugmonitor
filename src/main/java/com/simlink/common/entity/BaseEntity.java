@@ -22,8 +22,8 @@ public class BaseEntity<T> implements Serializable {
     public static final String DEL_FLAG_NORMAL = "0";
     public static final String DEL_FLAG_DELETE = "1";
 
-    public static final String YES = "Y";
-    public static final String NO = "N";
+    public static final String YES = "1";
+    public static final String NO = "0";
 
 
     public BaseEntity(){

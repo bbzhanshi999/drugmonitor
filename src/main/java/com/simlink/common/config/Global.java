@@ -3,10 +3,14 @@ package com.simlink.common.config;
 import com.google.common.collect.Maps;
 import com.simlink.common.utils.PropertiesLoader;
 import com.simlink.common.utils.StringUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
-import java.io.File;
-import java.io.IOException;
+import org.springframework.core.io.ResourceEditor;
+
+import java.io.*;
 import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * 全局配置类
@@ -14,6 +18,8 @@ import java.util.Map;
  */
 public class Global {
 
+
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(Global.class);
 	/**
 	 * 当前对象实例
 	 */
@@ -71,7 +77,30 @@ public class Global {
 		}
 		return value;
 	}
-	
+
+	/**
+	 * 设置属性
+	 * @param key
+	 * @param value
+     */
+	public static void setConfig(String key,String value){
+		Properties properties = loader.getProperties();
+		properties.setProperty(key, value);
+		OutputStream fos=null;
+		try {
+			fos = new FileOutputStream("app.properties");
+			properties.store(fos,null);
+		} catch (Exception e) {
+			logger.error(e.toString(),e);
+		}finally {
+			try {
+				fos.close();
+			} catch (IOException e) {
+				logger.error(e.toString(),e);
+			}
+		}
+	}
+
 	/**
 	 * 获取管理端根路径
 	 */

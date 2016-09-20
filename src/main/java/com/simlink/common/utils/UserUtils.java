@@ -15,6 +15,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,15 @@ public class UserUtils {
     }
 
     /**
+     * 从当前线程当中获取线程user
+     * @return
+     */
+    public static User getCurrentUser(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        return user;
+    }
+
+    /**
      * 获得在线用户
      * @param id
      * @return
@@ -88,8 +98,6 @@ public class UserUtils {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-
-
         return user;
     }
 

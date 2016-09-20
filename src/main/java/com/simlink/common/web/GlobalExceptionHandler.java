@@ -20,7 +20,6 @@ public class GlobalExceptionHandler {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ExceptionHandler(value=Exception.class)
-
     @ResponseBody
     public Map<String,Object> throwableHandler(Exception e){
 

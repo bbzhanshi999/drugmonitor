@@ -5,9 +5,11 @@ package com.simlink.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据Entity类
@@ -32,12 +34,14 @@ public abstract class TreeEntity<T,C> extends BaseEntity<T> {
     protected String pids; // 所有父级编号
     protected String parentId;//父节点编号
     protected Integer index;        // 排序
-    protected Boolean leaf;//是否为子节点
+    protected String leaf;//是否为子节点
     protected String iconCls;//图标样式
     protected String id;//id
     protected Boolean expandable =true;//是否可扩展
     protected Boolean loaded=false;//前台treelist必要属性，默认表示已经加载完毕
     protected List<C> children = Lists.newArrayList(); //子节点集合
+    protected Map<String,Object> attributes = Maps.newHashMap(); //属性集合
+
 
     public List<C> getChildren() {
         return children;
@@ -58,11 +62,11 @@ public abstract class TreeEntity<T,C> extends BaseEntity<T> {
         this.parentId = parentId;
     }
 
-    public Boolean getLeaf() {
+    public String getLeaf() {
         return leaf;
     }
 
-    public void setLeaf(Boolean leaf) {
+    public void setLeaf(String leaf) {
         this.leaf = leaf;
     }
 
@@ -139,5 +143,12 @@ public abstract class TreeEntity<T,C> extends BaseEntity<T> {
        return parentId;
     }
 
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
 
 }

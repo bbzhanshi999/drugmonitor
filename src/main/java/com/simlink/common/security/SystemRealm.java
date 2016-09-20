@@ -27,7 +27,6 @@ public class SystemRealm extends AuthorizingRealm {
     @Autowired
     protected SystemService systemService;
 
-
     /**
      * 权限控制方法
      * @param principalCollection
@@ -48,7 +47,6 @@ public class SystemRealm extends AuthorizingRealm {
 
         return info;
     }
-
 
     /**
      * 登录验证方法

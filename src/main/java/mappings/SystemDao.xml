@@ -8,6 +8,8 @@
         <result column="password" property="password"/>
         <result column="salt" property="salt"/>
         <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
         <result column="createTime" property="createTime"/>
         <result column="updateTime" property="updateTime"/>
         <association property="creator" javaType="com.simlink.common.entity.User">
@@ -39,12 +41,18 @@
         <collection property="menus" ofType="com.simlink.common.entity.Menu">
             <id column="menuId" property="id"/>
             <result column="menu_name" property="menuName"/>
+            <result column="menu_name" property="text"/>
             <result column="menu_ename" property="permission"/>
             <result column="menu_icon" property="iconCls"/>
             <result column="menu_sort" property="index"/>
             <result column="menu_type" property="type"/>
+            <result column="menu_url" property="url"/>
+            <result column="menu_is_show" property="isShow"/>
+            <result column="menu_is_default" property="isDefault"/>
+            <result column="menu_is_leaf" property="leaf"/>
             <result column="menu_createTime" property="createTime"/>
             <result column="menu_updateTime" property="updateTime"/>
+            <result column="menu_parent_id" property="parentId"/>
             <association property="parent" javaType="com.simlink.common.entity.Menu">
                 <id column="menu_parent_id" property="id"/>
                 <result column="menu_parent_ename" property="permission"/>
@@ -60,44 +68,51 @@
     </resultMap>
 
     <sql id="userMapColumns">
-          A.ID AS "id",
-          A.USERNAME AS "userName",
-          A.PASSWORD AS "password",
-          A.SALT AS "salt",
-          A.NAME AS "name",
-          A.CREATE_TIME AS "createTime",
-          A.CREATE_ID AS "createId",
-          A.UPDATE_TIME AS "updateTime",
-          A.UPDATE_ID AS "updateId",
-          R.ID AS "role_id",
-          R.ENAME AS "role_ename",
-          R.NAME AS "role_name",
-          R.ICON AS "role_icon",
-          R.UPDATE_TIME AS "role_updateTime",
-          R.UPDATE_ID AS "role_updateId",
-          R.CREATE_TIME AS "role_createTime",
-          R.CREATE_ID AS "role_createId",
-          M.ID AS "menuId",
-          M.MENU_NAME AS "menu_name",
-          M.ENAME AS "menu_ename",
-          M.ICON AS "menu_icon",
-          M.SORT AS "menu_sort",
-          M.TYPE AS "menu_type",
-          M.CREATE_TIME AS "menu_createTime",
-          M.UPDATE_TIME AS "menu_updateTime",
-          M.CREATE_ID AS "menu_createId",
-          M.UPDATE_ID AS "menu_updateId",
-          MP.ID AS "menu_parent_id",
-          MP.MENU_NAME AS "menu_parent_name",
-          MP.ENAME AS "menu_parent_ename"
+        A.ID AS "id",
+        A.USERNAME AS "userName",
+        A.PASSWORD AS "password",
+        A.SALT AS "salt",
+        A.NAME AS "name",
+        A.EMAIL AS "email",
+        A.PHONE AS "phone",
+        A.CREATE_TIME AS "createTime",
+        A.CREATE_ID AS "createId",
+        A.UPDATE_TIME AS "updateTime",
+        A.UPDATE_ID AS "updateId",
+        R.ID AS "role_id",
+        R.ENAME AS "role_ename",
+        R.NAME AS "role_name",
+        R.ICON AS "role_icon",
+        R.UPDATE_TIME AS "role_updateTime",
+        R.UPDATE_ID AS "role_updateId",
+        R.CREATE_TIME AS "role_createTime",
+        R.CREATE_ID AS "role_createId",
+        M.ID AS "menuId",
+        M.MENU_NAME AS "menu_name",
+        M.ENAME AS "menu_ename",
+        M.ICON AS "menu_icon",
+        M.SORT AS "menu_sort",
+        M.TYPE AS "menu_type",
+        M.URL AS "menu_url",
+        M.IS_SHOW AS "menu_is_show",
+        M.IS_DEFAULT AS "menu_is_default",
+        M.LEAF AS "menu_is_leaf",
+        M.CREATE_TIME AS "menu_createTime",
+        M.UPDATE_TIME AS "menu_updateTime",
+        M.CREATE_ID AS "menu_createId",
+        M.UPDATE_ID AS "menu_updateId",
+        MP.ID AS "menu_parent_id",
+        MP.MENU_NAME AS "menu_parent_name",
+        MP.ENAME AS "menu_parent_ename"
     </sql>
 
     <sql id="userMapJoin">
-          LEFT JOIN USER_ROLE UR ON UR.USER_ID = A.ID
-          JOIN ROLE R ON R.ID = UR.ROLE_ID
-          JOIN ROLE_MENU RM ON RM.ROLE_ID = R.ID
-          JOIN MENU M ON M.ID = RM.MENU_ID
-          LEFT JOIN MENU MP ON M.PID = MP.ID
+        LEFT JOIN USER_ROLE UR ON UR.USER_ID = A.ID
+        JOIN ROLE R ON R.ID = UR.ROLE_ID
+        JOIN ROLE_MENU RM ON RM.ROLE_ID = R.ID
+        JOIN MENU M ON M.ID = RM.MENU_ID
+        JOIN (SELECT ID FROM MENU ORDER BY SORT) M_SORT ON M.ID = M_SORT.ID
+        LEFT JOIN MENU MP ON M.PID = MP.ID
     </sql>
 
     <sql id="menuColumns">
@@ -107,6 +122,10 @@
           M.ICON AS "menu_icon",
           M.SORT AS "menu_sort",
           M.TYPE AS "menu_type",
+          M.URL AS "menu_url",
+          M.IS_SHOW AS "menu_is_show",
+          M.IS_DEFAULT AS "menu_is_default",
+          M.LEAF  AS "menu_is_leaf",
           M.CREATE_TIME AS "menu_createTime",
           M.UPDATE_TIME AS "menu_updateTime",
           M.CREATE_ID AS "menu_createId",

@@ -2,7 +2,7 @@
 <configuration>
 
     <!--引入项目配置文件-->
-    <property file="app.properties"/>
+    <property resource="app.properties"/>
 
     <!--循环输出日志，按照每天生产一个文件的方式-->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">

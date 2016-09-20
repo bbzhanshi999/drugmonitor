@@ -1,68 +1,49 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="/WEB-INF/view/include/taglib.jsp"%>
+<%@ include file="/WEB-INF/view/include/taglib.jsp" %>
+<%@ include file="/WEB-INF/view/include/head.jsp" %>
 <html>
 <head>
-    <title>登录页</title>
-    <link href="${ctxStatic}/style/main.css" type="text/css" rel="stylesheet" />
-    <link href="${ctxStatic}/themes/metro-gray/easyui.css" type="text/css" rel="stylesheet" />
-    <script src="${ctxStatic}/jquery.min.js" type="text/javascript"></script>
-    <script src="${ctxStatic}/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="${ctxStatic}/easyui-lang-zh_CN.js" type="text/javascript"></script>
-    <script src="${ctxStatic}/jquery.validate.min.js" type="text/javascript"></script>
+    <title>主页</title>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('form').form({
-                url:'${ctx}/login',
+        $(document).ready(function () {
 
-                success:function(data){
-                    data = $.parseJSON(data);
-                    if(data.error){
-                        $('#messageBox').val(data.error);
-                    }else if (data.success){
-                        window.location.href ='${ctx}'+data.url;
-                    }
-                }
-            });
-
-
-            $('#submit').on('click',function(){
-                $('form').submit();
-            });
-
-
-            $('#code').click(function(){
-                var src = $(this).prop('src') ;
-                $(this).prop('src',src+'?r='+Math.random());
-            });
         });
     </script>
-    <style type="text/css">
-        body{margin:0px;padding:0px;}
-        .text{margin:0px;padding:0px;width:220px;}
-        .btn{margin:0px;padding:0px;border:0px;width:60px}
-    </style>
 </head>
-<body>
-<img src="${ctxStatic}/images/background.jpg" style="width:100%;height:100%;position: absolute;left: 0;top: 0;"/>
-<div id="dd" class="easyui-dialog" title="登录界面" style="width:400px;height:200px;"
-     data-options="iconCls:'icon-save',resizable:true,modal:true,closable:false">
-    <form id="form" method="post" style="padding-top: 10px">
-        <div class="form-line">
-            <label for="username">用户名:</label>
-            <input class="easyui-textbox" data-options="required:true,iconCls:'icon-man'" name="username" id="username"/>
-            <a id="submit" href="#" class="easyui-linkbutton">提 交</a>
+<body class="easyui-layout" style="text-align:left">
+<div region="north" border="false" class="group wrap header" style="height:66px;font-size:100%">
+    <div class="content">
+        <div class="navigation-toggle" data-tools="navigation-toggle" data-target="#navbar-1">
+            <span>EasyUI</span>
         </div>
-        <div class="form-line">
-            <label for="password">密码:</label>
-            <input class="easyui-textbox" data-options="required:true,iconCls:'icon-lock',type:'password'" type="password" name="password" id="password"/>
+        <div id="elogo" class="navbar navbar-left">
+            <ul>
+                <li>
+                    <span href="#" style="color:white"><i class="e-icon fa fa-2x fa-medkit"></i>&nbsp;&nbsp;&nbsp;Drug Monitor System</span>
+                </li>
+            </ul>
         </div>
-        <div class="form-line">
-            <label for="validateCode">验证码:</label>
-            <input class="easyui-textbox" data-options="required:true,iconCls:'icon-lock'" name="validateCode" id="validateCode"/>
-            <img id="code" src="${ctx}/getvcode" style="width: 80px; height: 25px;vertical-align: middle" alt="点击更换验证码" />
+        <div id="navbar-1" class="navbar navbar-right">
+            <ul>
+                <li><a href="javascript:void(0);">Home</a></li>
+                <li><a href="javascript:void(0);">Demo</a></li>
+                <li><a href="javascript:void(0);">Tutorial</a></li>
+                <li><a href="javascript:void(0);">Documentation</a></li>
+                <li><a href="javascript:void(0);">Download</a></li>
+                <li><a href="javascript:void(0);">Extension</a></li>
+                <li><a href="javascript:void(0);">Contact</a></li>
+                <li><a href="javascript:void(0);">Forum</a></li>
+            </ul>
         </div>
-        <div class="form-line" id="messageBox" style="color: red">
-        </div>
-    </form>
+        <div style="clear:both"></div>
+    </div>
+</div>
+<div region="west" split="true" title="系统管理" style="width:20%;min-width:180px;padding:5px;">
+    <ul class="menu-tree"></ul>
+</div>
+<div region="center">
+    <div id="mainTabs" class="easyui-tabs" fit="true" border="false" plain="true">
+        <div title="welcome" class="content-doc" data-options="iconCls:'e-icon fa fa-edit'"></div>
+    </div>
 </div>
 </body>

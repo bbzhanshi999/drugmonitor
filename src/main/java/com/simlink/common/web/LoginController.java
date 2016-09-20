@@ -1,7 +1,7 @@
 package com.simlink.common.web;
 
-
 import com.google.common.collect.Maps;
+import com.simlink.common.entity.Menu;
 import com.simlink.common.entity.User;
 import com.simlink.common.service.SystemService;
 import com.simlink.common.utils.StringUtils;
@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -105,8 +106,9 @@ public class LoginController {
      */
     @RequestMapping(value = "${defaultPath}")
     public String index(HttpServletRequest request, HttpServletResponse response, Model model){
-
-
+        List<Menu> origin = UserUtils.getCurrentUser().getMenus();
+        List<Menu> menus = Menu.buildList(origin);
+        model.addAttribute("menu",menus);
         return "index";
     }
 
@@ -146,11 +148,11 @@ public class LoginController {
     /**
      * 测试权限
      */
-    @RequiresPermissions("permission:role")
+    /*@RequiresPermissions("permission:role")
     @RequestMapping("/authTest")
     public void authTest(HttpSession session){
         System.out.println(session.getAttribute("user"));
-    }
+    }*/
 
     /**
      * 获取验证码
