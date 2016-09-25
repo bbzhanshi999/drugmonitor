@@ -16,6 +16,7 @@ public class Menu extends TreeEntity<Menu,Menu>{
     private String menuName;
     private String url;//访问地址
     private String permission;//shiro权限标识
+    private String ename;
     private String userId;
     private String type;
     private String isShow;
@@ -104,7 +105,7 @@ public class Menu extends TreeEntity<Menu,Menu>{
         for(Menu m :orginList){
             if(menu.getId().equals(m.getParentId())){
                 children.add(m);
-                if(TreeEntity.NO.equals(m.getType())){
+                if(TreeEntity.NO.equals(m.getLeaf())){
                     buildChildren(orginList, m);
                 }
             }
@@ -147,5 +148,13 @@ public class Menu extends TreeEntity<Menu,Menu>{
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public String getEname() {
+        return ename;
+    }
+
+    public void setEname(String ename) {
+        this.ename = ename;
     }
 }

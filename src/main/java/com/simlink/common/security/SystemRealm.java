@@ -68,7 +68,9 @@ public class SystemRealm extends AuthorizingRealm {
         if(user==null){
             throw new UnknownAccountException("无用户信息，请检查用户输入是否正确。");
         }
-
+        if(systemService.getInitPassword().equals(user.getPassword())){
+            throw new InitPasswordException("请修改初始化密码。");
+        }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userName, user.getPassword(), ByteSource.Util.bytes(userName + user.getSalt()), this.getName());
         return info;
     }

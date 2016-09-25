@@ -6,28 +6,53 @@
     <title>登录页</title>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('form').form({
+            $('#form').form({
                 url:'${ctx}/login',
-
                 success:function(data){
+                    debugger;
                     data = $.parseJSON(data);
                     if(data.error){
                         $('#messageBox').text(data.error);
                     }else if (data.success){
                         window.location.href ='${ctx}'+data.url;
+                    }else if(data.initPassword){
+                        $('#dd').dialog('close');
+                        $('#initPasswordDiag').dialog('open');
+                        $('#initPasswordUser').val(data.userName);
+                        $('#credential').val(data.credential);
                     }
                 }
             });
 
+            $('#initPasswordForm').form({
+                url:'${ctx}/updateInitPassword',
+                success:function(data){
+                    debugger;
+                    data = $.parseJSON(data);
+                    if(data.error){
+                        $.messager.alert('错误信息',data.error,'error',function(){
+                            window.location.reload();
+                        });
+                    }else if (data.success){
+                        $.messager.alert('信息','密码修改成功，请重新登录!','info',function(){
+                            window.location.reload();
+                        });
+                    }
+                }
+            });
 
             $('#submit').on('click',function(){
-                $('form').submit();
+                $('#form').submit();
             });
 
 
             $('#code').click(function(){
                 var src = $(this).prop('src') ;
                 $(this).prop('src',src+'?r='+Math.random());
+            });
+
+            $('#initPasswordSubmit').on('click',function(){
+                $('#initPasswordForm').submit();
             });
         });
     </script>
@@ -52,6 +77,19 @@
             <img id="code" src="${ctx}/getvcode" style="width: 80px; height: 25px;vertical-align: middle" alt="点击更换验证码" />
         </div>
         <div class="form-line" id="messageBox" style="color: red">
+        </div>
+    </form>
+</div>
+<div id="initPasswordDiag" class="easyui-dialog" title="密码初始化" style="width:400px;height:200px;"
+     data-options="iconCls:'icon-save',resizable:true,modal:true,closable:false,modal:false,closed:true">
+    <form id="initPasswordForm" method="post" style="padding-top: 10px">
+        <p style="margin-left:10px;font-family: 'Microsoft YaHei UI'">您是首次登录，请修改初始化密码后重新登录。</p>
+        <div class="form-line">
+            <label for="initPassword" style="width:100px">请修改初始化密码:</label>
+            <input type="hidden" name="initPasswordUser" id="initPasswordUser"/>
+            <input type="hidden" name="credential" id="credential"/>
+            <input  class="easyui-passwordbox" prompt="输入新密码" data-options="required:true,tipPosition:'top',validType:'password',validateOnCreate:false" name="initPassword" id="initPassword"/>
+            <a id="initPasswordSubmit" href="#" class="easyui-linkbutton">修改</a>
         </div>
     </form>
 </div>

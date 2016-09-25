@@ -42,56 +42,6 @@ public abstract class BaseController {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
-     * 管理基础路径
-     */
-    @Value("${adminPath}")
-    protected String adminPath;
-
-    /**
-     * 前端基础路径
-     */
-    @Value("${frontPath}")
-    protected String frontPath;
-
-    /**
-     * 前端URL后缀
-     */
-    @Value("${urlSuffix}")
-    protected String urlSuffix;
-
-    /**
-     * 验证Bean实例对象
-     */
-    @Autowired
-    protected Validator validator;
-
-
-
-    /**
-     * 添加Model消息
-     * @param message
-     */
-    protected void addMessage(Model model, String... messages) {
-        StringBuilder sb = new StringBuilder();
-        for (String message : messages){
-            sb.append(message).append(messages.length>1?"<br/>":"");
-        }
-        model.addAttribute("message", sb.toString());
-    }
-
-    /**
-     * 添加Flash消息
-     * @param message
-     */
-    protected void addMessage(RedirectAttributes redirectAttributes, String... messages) {
-        StringBuilder sb = new StringBuilder();
-        for (String message : messages){
-            sb.append(message).append(messages.length>1?"<br/>":"");
-        }
-        redirectAttributes.addFlashAttribute("message", sb.toString());
-    }
-
-    /**
      * 客户端返回JSON字符串
      * @param response
      * @param object

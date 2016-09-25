@@ -14,10 +14,10 @@
             <value>
                 /= anon
                 /static/** = anon
+                /updateInitPassword = anon
                 /getvcode = anon
                 /error.jsp = anon
                 /login = authc
-                /logout = logout
                 /** = user
             </value>
         </constructor-arg>

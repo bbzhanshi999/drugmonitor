@@ -24,23 +24,7 @@ public class SessionCacheUtils {
 
 
     protected static Logger logger = LoggerFactory.getLogger(SessionCacheUtils.class);
-    private static SystemDao systemDao = SpringContextHolder.getBean(SystemDao.class);
 
-    private static final String MENULIST ="menus";
-    private static final String ROLELIST="roles";
-
-
-    /**
-     * 载入所有角色及menu信息
-     */
-    @PostConstruct
-    public static void initLoad(){
-        List menus = systemDao.getMenus(null);
-        List roles = systemDao.getRoles(null);
-        JedisUtils.setObjectList(MENULIST,menus,0);
-        JedisUtils.setObjectList(ROLELIST,roles,0);
-
-    }
 
     /**
      * 获得当前线程的session
@@ -59,14 +43,6 @@ public class SessionCacheUtils {
         return session;
     }
 
-
-
-    /**
-     * 清空当前角色相关缓存内容
-     */
-    public static void flushCurrRoleRelated(HttpSession session){
-        session.removeAttribute(MENULIST);
-    }
 
 
 }

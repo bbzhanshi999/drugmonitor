@@ -3,15 +3,13 @@ package com.simlink.common.web;
 import com.google.common.collect.Maps;
 import com.simlink.common.entity.Menu;
 import com.simlink.common.entity.User;
+import com.simlink.common.security.InitPasswordException;
 import com.simlink.common.service.SystemService;
-import com.simlink.common.utils.StringUtils;
-import com.simlink.common.utils.UserUtils;
-import com.simlink.common.utils.ValidateCode;
+import com.simlink.common.utils.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
@@ -55,7 +53,7 @@ public class LoginController {
      */
     @RequestMapping(value="/login")
     @ResponseBody
-    public Map<String,Object> login(HttpServletRequest req){
+    public Map<String,Object> login(HttpServletRequest req,String username){
         HashMap<String, Object> map = Maps.newHashMap();
         String principal = (String) SecurityUtils.getSubject().getPrincipal();
         if(StringUtils.isNotBlank(principal)){
@@ -66,6 +64,7 @@ public class LoginController {
             return map;
         }
         String exceptionClassName = (String)req.getAttribute("shiroLoginFailure");
+    /*    String message = (String)req.getAttribute("message");*/
         String error;
         if(UnknownAccountException.class.getName().equals(exceptionClassName)) {
             error = "用户名不存在";
@@ -73,6 +72,13 @@ public class LoginController {
             error = "验证码输入错误";
         } else if(AuthenticationException.class.getName().equals(exceptionClassName)) {
             error = "密码输入错误";
+        }else if(InitPasswordException.class.getName().equals(exceptionClassName)){
+            map.put("initPassword",true);
+            map.put("userName", username);
+            String credential = IdGen.uuid();
+            map.put("credential", credential);
+            req.getSession().setAttribute("credential", credential);
+            return map;
         }else{
             error = "系统错误，请尝试重新登录";
         }
@@ -93,6 +99,27 @@ public class LoginController {
         HashMap<String, Object> map = Maps.newHashMap();
         map.put("success",true);
         map.put("url",defaultPath);
+        return map;
+    }
+
+    /**
+     * 初始化密码
+     * @param session
+     * @param initPassword
+     * @param initPasswordUser
+     * @param credential
+     * @return
+     */
+    @RequestMapping("updateInitPassword")
+    @ResponseBody
+    public Map<String,Object> updateInitPassword(HttpSession session,String initPassword,String initPasswordUser,String credential){
+        HashMap<String, Object> map = Maps.newHashMap();
+        String cre = (String) session.getAttribute("credential");
+        if(StringUtils.isBlank(cre)||StringUtils.isBlank(credential)||!cre.equals(credential)){
+            map.put("error","您没有权限设置密码！");
+        }
+        systemService.updatePassword(initPasswordUser,initPassword);
+        map.put("success",true);
         return map;
     }
 
@@ -131,7 +158,7 @@ public class LoginController {
         user.preInsert();
         systemService.createUser(user);
 
-        return "redirect:login";
+        return "redirect:/";
     }
 
 
@@ -139,10 +166,10 @@ public class LoginController {
      * 退出登录
      * @return
      */
+    @RequestMapping("logout")
     public String logout(){
-        SecurityUtils.getSubject().logout();
         UserUtils.logoutUser();
-        return "redirect:login";
+        return "redirect:/";
     }
 
     /**

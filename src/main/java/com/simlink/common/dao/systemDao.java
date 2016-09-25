@@ -3,6 +3,7 @@ package com.simlink.common.dao;
 import com.simlink.common.annotation.MyBatisDao;
 import com.simlink.common.entity.Menu;
 import com.simlink.common.entity.Role;
+import com.simlink.common.entity.RoleQueryAndView;
 import com.simlink.common.entity.User;
 
 import java.util.List;
@@ -13,9 +14,9 @@ public interface SystemDao {
 
     public User getUser(String userName);
 
-    public List<Role> getRoles(User user);
+    public List<Role> getRoles(Role role);
 
-    public List<Menu> getMenus(Role role);
+    public List<Menu> getMenus(Menu menu);
 
     public List<User> getAllUsers();
 
@@ -26,4 +27,8 @@ public interface SystemDao {
     public void updateMenu(Map<String,String> map);
 
     public List<Menu> findMenusByUserId(Menu menu);
+
+    public void assignRole(RoleQueryAndView role);
+
+    public void updateUser(User user);
 }

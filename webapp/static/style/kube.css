@@ -900,6 +900,7 @@ kbd {
   float: left;
 }
 .navbar.navbar-right {
+  font-family: 'Microsoft YaHei UI';
   float: right;
 }
 .navbar ul {
@@ -922,7 +923,7 @@ kbd {
 }
 .navbar.navbar-right li {
   margin-right: 0;
-  margin-left: 1.65em;
+  margin-left: 0.8em;
 }
 .navbar a,
 .navbar span {

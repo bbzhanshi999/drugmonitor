@@ -596,13 +596,11 @@ public class JedisUtils {
 		Jedis jedis = null;
 		try {
 			jedis = getResource();
-			if (jedis.exists(getBytesKey(key))) {
-
+			if (StringUtils.isNotBlank(field)&&jedis.exists(getBytesKey(key))) {
 				if(jedis.hexists(getBytesKey(key),getBytesKey(field))){
 					value = toObject(jedis.hget(getBytesKey(key),getBytesKey(field)));
 					logger.debug("getHashObject {},{} = {}", key, field,value);
 				}
-
 			}
 		} catch (Exception e) {
 			logger.warn("getObject {},{} = {}", key,field, value, e);
@@ -611,6 +609,30 @@ public class JedisUtils {
 		}
 
 		return value;
+	}
+
+	/**
+	 * 获取整个hashmap
+	 * @param key
+	 * @return
+	 */
+	public static List hgetAll(String key){
+		List values = Lists.newArrayList();
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+			Map<byte[], byte[]> map = jedis.hgetAll(getBytesKey(key));
+			for(byte[] byteKey:map.keySet()){
+				Object result = toObject(map.get(byteKey));
+				values.add(result);
+			}
+		} catch (Exception e) {
+			logger.warn("getObject {},{} = {}", key, values, e);
+		} finally {
+			returnResource(jedis);
+		}
+
+		return values;
 	}
 
 	/**

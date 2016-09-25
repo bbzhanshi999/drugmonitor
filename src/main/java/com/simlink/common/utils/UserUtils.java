@@ -54,6 +54,7 @@ public class UserUtils {
     @PostConstruct
     public static void loadAllUsers(){
         List<User> allUsers = systemDao.getAllUsers();
+        JedisUtils.del(USERS);
         for(User user:allUsers){
             JedisUtils.hset(USERS,user.getUserName(),user);
         }
@@ -61,11 +62,23 @@ public class UserUtils {
 
     /**
      * 添加user
+     * @param persist 是否持久化
      */
     public static void addUser(User user,Boolean persist){
         JedisUtils.hset(USERS,user.getUserName(),user);
         if(persist) systemDao.addUser(user);
     }
+
+    /**
+     * 添加user
+     * @param userName
+     * @return
+     */
+    public static void addUser(String userName){
+        User user = systemDao.getUser(userName);
+        if(user!=null) addUser(user,false);
+    }
+
 
     /**
      * 从当前线程当中获取线程user
@@ -114,13 +127,9 @@ public class UserUtils {
      * 移除当前在线用户
      */
     public static void logoutUser(){
-
-        Session session = SessionCacheUtils.getSecuritySession();
         String userid = getCurrentUser().getId();
         JedisUtils.hdel(KEY_ACTIVE_USERS,userid);
-        session.removeAttribute("user");
         getSubject().logout();
-
     }
 
 

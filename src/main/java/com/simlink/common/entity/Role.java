@@ -56,4 +56,5 @@ public class Role extends TreeEntity<Role,Role>{
     public void setMenus(List<Menu> menus) {
         this.menus = menus;
     }
+
 }

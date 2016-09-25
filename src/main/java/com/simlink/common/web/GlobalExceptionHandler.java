@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     public Map<String,Object> throwableHandler(Exception e){
 
         Map<String,Object> errMsg = Maps.newHashMap();
-        errMsg.put("errMsg",e.toString());
+        errMsg.put("error",e.toString());
         logger.error(e.toString(),e);
         return errMsg;
     }

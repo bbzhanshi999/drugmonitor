@@ -36,13 +36,14 @@
             </association>
         </collection>
         <collection property="menuNames" ofType="java.lang.String">
-            <result  column="menu_ename"/>
+            <result  column="menu_permission"/>
         </collection>
         <collection property="menus" ofType="com.simlink.common.entity.Menu">
             <id column="menuId" property="id"/>
             <result column="menu_name" property="menuName"/>
             <result column="menu_name" property="text"/>
-            <result column="menu_ename" property="permission"/>
+            <result column="menu_permission" property="permission"/>
+            <result column="menu_ename" property="ename"/>
             <result column="menu_icon" property="iconCls"/>
             <result column="menu_sort" property="index"/>
             <result column="menu_type" property="type"/>
@@ -55,7 +56,7 @@
             <result column="menu_parent_id" property="parentId"/>
             <association property="parent" javaType="com.simlink.common.entity.Menu">
                 <id column="menu_parent_id" property="id"/>
-                <result column="menu_parent_ename" property="permission"/>
+                <result column="menu_parent_permission" property="permission"/>
                 <result column="menu_parent_name" property="menuName"/>
             </association>
             <association property="creator" javaType="com.simlink.common.entity.User">
@@ -89,6 +90,7 @@
         R.CREATE_ID AS "role_createId",
         M.ID AS "menuId",
         M.MENU_NAME AS "menu_name",
+        M.PERMISSION AS "menu_permission",
         M.ENAME AS "menu_ename",
         M.ICON AS "menu_icon",
         M.SORT AS "menu_sort",
@@ -103,47 +105,61 @@
         M.UPDATE_ID AS "menu_updateId",
         MP.ID AS "menu_parent_id",
         MP.MENU_NAME AS "menu_parent_name",
-        MP.ENAME AS "menu_parent_ename"
+        MP.PERMISSION AS "menu_parent_permission"
     </sql>
 
     <sql id="userMapJoin">
         LEFT JOIN USER_ROLE UR ON UR.USER_ID = A.ID
-        JOIN ROLE R ON R.ID = UR.ROLE_ID
-        JOIN ROLE_MENU RM ON RM.ROLE_ID = R.ID
-        JOIN MENU M ON M.ID = RM.MENU_ID
-        JOIN (SELECT ID FROM MENU ORDER BY SORT) M_SORT ON M.ID = M_SORT.ID
+        LEFT JOIN ROLE R ON R.ID = UR.ROLE_ID
+        LEFT JOIN ROLE_MENU RM ON RM.ROLE_ID = R.ID
+        LEFT JOIN MENU M ON M.ID = RM.MENU_ID
+        LEFT JOIN (SELECT ID FROM MENU ORDER BY SORT ASC) M_SORT ON M.ID = M_SORT.ID
         LEFT JOIN MENU MP ON M.PID = MP.ID
     </sql>
 
+    <sql id="RoleColumns">
+        R.ID AS "id",
+        R.ENAME AS "ename",
+        R.NAME AS "name",
+        R.ICON AS "iconCls",
+        R.UPDATE_TIME AS "updateTime",
+        R.UPDATE_ID AS "updater.id",
+        R.CREATE_TIME AS "createTime",
+        R.CREATE_ID AS "creator.id"
+    </sql>
+
     <sql id="menuColumns">
-          M.ID AS "menuId",
-          M.MENU_NAME AS "menu_name",
-          M.ENAME AS "menu_ename",
-          M.ICON AS "menu_icon",
-          M.SORT AS "menu_sort",
-          M.TYPE AS "menu_type",
-          M.URL AS "menu_url",
-          M.IS_SHOW AS "menu_is_show",
-          M.IS_DEFAULT AS "menu_is_default",
-          M.LEAF  AS "menu_is_leaf",
-          M.CREATE_TIME AS "menu_createTime",
-          M.UPDATE_TIME AS "menu_updateTime",
-          M.CREATE_ID AS "menu_createId",
-          M.UPDATE_ID AS "menu_updateId",
-          MP.ID AS "menu_parent_id",
-          MP.MENU_NAME AS "menu_parent_name",
-          MP.ENAME AS "menu_parent_ename"
+          M.ID AS "id",
+          M.MENU_NAME AS "menuName",
+          M.PERMISSION AS "permission",
+          M.ENAME AS "ename",
+          M.ICON AS "iconCls",
+          M.SORT AS "index",
+          M.TYPE AS "type",
+          M.URL AS "url",
+          M.IS_SHOW AS "isShow",
+          M.IS_DEFAULT AS "isDefault",
+          M.LEAF  AS "leaf",
+          M.CREATE_TIME AS "createTime",
+          M.UPDATE_TIME AS "updateTime",
+          M.CREATE_ID AS "creator.id",
+          M.UPDATE_ID AS "updater.id",
+          MP.ID AS "parent.id",
+          MP.MENU_NAME AS "parent.menuName",
+          MP.PERMISSION AS "parent.permission"
     </sql>
 
     <insert id="addUser" parameterType="com.simlink.common.entity.User">
         INSERT INTO USERS(
-          ID,USERNAME,PASSWORD,SALT,NAME,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
+          ID,USERNAME,PASSWORD,SALT,NAME,PHONE,EMAIL,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
         ) VALUES (
           #{id},
           #{userName},
           #{password},
           #{salt},
           #{name},
+          #{phone},
+          #{email},
           #{creator.id},
           #{createTime},
           #{updater.id},
@@ -180,6 +196,42 @@
         )
     </update>
 
+    <update id="updateUser">
+        UPDATE USERS SET
+        <if test="email!=null and email!=''">
+            EMAIL=#{email},
+        </if>
+        <if test="name!=null and name!=''">
+            NAME=#{name},
+        </if>
+        <if test="password!=null and password!='' and salt!=null and salt!=''">
+            PASSWORD=#{password},
+            SALT=#{salt},
+        </if>
+        <if test="phone!=null and phone!=''">
+            PHONE=#{phone},
+        </if>
+        <if test="userName!=null and userName!=''">
+            USERNAME=#{userName},
+        </if>
+            UPDATE_TIME = #{updateTime},
+            UPDATE_ID = #{updater.id}
+        WHERE ID=#{id}
+    </update>
+
+
+    <insert id="assignRole" parameterType="com.simlink.common.entity.RoleQueryAndView">
+        INSERT INTO USER_ROLE(ID,ROLE_ID,USER_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES (
+          #{id},
+          #{roleId},
+          #{userId},
+          #{creator.id},
+          #{createTime},
+          #{updater.id},
+          #{updateTime}
+        )
+    </insert>
+
     <select id="getUser" resultMap="userMap">
         SELECT
         <include refid="userMapColumns"/>
@@ -189,9 +241,30 @@
     </select>
 
 
-    <select id="getRoles" resultType="com.simlink.common.entity.Role"></select>
+    <select id="getRoles" resultType="com.simlink.common.entity.Role" parameterType="com.simlink.common.entity.Role">
+        SELECT <include refid="RoleColumns"/>
+        FROM ROLE R
+        <where>
+            R.DEL_FLAG = '0'
+            <if test="id!=null and id!=''">
+                and R.ID=#{id}
+            </if>
+        </where>
+        ORDER BY R.UPDATE_TIME ASC
+    </select>
 
-    <select id="getMenus" resultType="com.simlink.common.entity.Menu"></select>
+    <select id="getMenus" resultType="com.simlink.common.entity.Menu">
+        SELECT <include refid="menuColumns"/>
+        FROM MENU M
+        LEFT JOIN MENU MP ON M.PID = MP.ID
+        <where>
+            M.DEL_FLAG = '0'
+            <if test="id!=null and id!=''">
+                and M.ID=#{id}
+            </if>
+        </where>
+        ORDER BY M.SORT
+    </select>
 
     <select id="getAllUsers" resultMap="userMap">
         SELECT
