@@ -1,7 +1,5 @@
 package com.simlink.sinosoft.drugmonitor.utils;
 
-import com.simlink.common.dao.SystemDao;
-import com.simlink.common.entity.User;
 import com.simlink.common.utils.Collections3;
 import com.simlink.common.utils.JedisUtils;
 import com.simlink.common.utils.SpringContextHolder;
