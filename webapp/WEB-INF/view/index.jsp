@@ -52,7 +52,7 @@
         <div style="clear:both"></div>
     </div>
 </div>
-<div region="west" split="true" title="系统管理" style="width:20%;min-width:180px;padding:5px;">
+<div region="west" split="true" title="系统菜单" style="width:20%;min-width:180px;padding:5px;">
     <ul class="menu-tree"></ul>
 </div>
 <div region="center">

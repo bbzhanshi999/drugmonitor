@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simlink.sinosoft.drugmonitor.dao.DataClientDao">
+    
+    <sql id="dataClientColumns">
+        C.ID AS "id",
+        C.CLIENT_NAME AS "clientName",
+        C.PASSWORD AS "password",
+        C.ORGANIZATION AS "organization.id",
+        C.AREA AS "area.id",
+        C.UPDATE_TIME AS "updateTime",
+        C.UPDATE_ID AS "updater.id",
+        C.CREATE_TIME AS "createTime",
+        C.CREATE_ID AS "creator.id",
+        O.ORGAN_NAME AS "organization.organName",
+        O.ORGAN_ENAME AS "organization.organEname",
+        O.ORGAN_CODE AS "organization.organCode",
+        O.UPDATE_TIME AS "organization.updateTime",
+        O.UPDATE_ID AS "organization.updater.id",
+        O.CREATE_TIME AS "organization.createTime",
+        O.CREATE_ID AS "organization.creator.id",
+        A.AREA_NAME AS "area.areaName",
+        A.AREA_ENAME AS "area.areaEname",
+        A.AREA_CODE AS "area.areaCode",
+        A.UPDATE_TIME AS "organization.updateTime",
+        A.UPDATE_ID AS "organization.updater.id",
+        A.CREATE_TIME AS "organization.createTime",
+        A.CREATE_ID AS "organization.creator.id"
+    </sql>
+
+    <sql id="dataClientJoin">
+        LEFT JOIN ORGANIZATION O ON O.ID = C.ORGANIZATION
+        LEFT JOIN AREA A ON A.ID = C.AREA
+    </sql>
+
+    <insert id="addClient">
+        INSERT INTO DATA_CLIENT(ID,CLIENT_NAME,PASSWORD,AREA,ORGANIZATION,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME)
+        VALUES(
+          #{id},#{clientName},#{password},#{area.id},#{organization.id},#{creator.id},#{createTime},#{updater.id},#{updateTime}
+        )
+    </insert>
+
+    <update id="deleteClient">
+        UPDATE DATA_CLIENT SET
+        DEL_FLAG = '1' WHERE ID = #{id}
+    </update>
+
+    <update id="updateClient">
+        UPDATE DATA_CLIENT SET
+        <if test="clientName!=null and clientName != ''">
+            CLIENT_NAME = #{clientName},
+        </if>
+        <if test="password!=null and password != ''">
+            PASSWORD = #{password},
+        </if>
+        <if test="organization!=null and organization.id!=null and organization.id != ''">
+            ORGANIZATION = #{organization.id},
+        </if>
+        <if test="area!=null and area.id!=null and area.id != ''">
+            AREA = #{area.id},
+        </if>
+        UPDATE_TIME = #{updateTime},
+        UPDATE_ID = #{updater.id}
+        WHERE ID=#{id}
+    </update>
+
+    <select id="getAllClients" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
+        SELECT <include refid="dataClientColumns"/>
+        FROM DATA_CLIENT C
+        <include refid="dataClientJoin"/>
+        WHERE C.DEL_FLAG='0' AND A.DEL_FLAG='0' AND O.DEL_FLAG='0' ORDER BY C.UPDATE_TIME ASC
+    </select>
+
+    <select id="getClient" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
+        SELECT <include refid="dataClientColumns"/>
+        FROM DATA_CLIENT C
+        <include refid="dataClientJoin"/>
+        WHERE C.DEL_FLAG='0' AND A.DEL_FLAG='0' AND O.DEL_FLAG='0' AND C.CLIENT_NAME = #{clientName}
+    </select>
+
+    <select id="findClients" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
+        SELECT <include refid="dataClientColumns"/>
+        FROM DATA_CLIENT C
+        <include refid="dataClientJoin"/>
+        <where>
+            C.DEL_FLAG='0' AND A.DEL_FLAG='0' AND O.DEL_FLAG='0'
+            <if test="clientName!=null and clientName!=''">
+                C.CLIENT_NAME = #{clientName}
+            </if>
+            <if test="organization!=null and organization.id!=null and organization.id!=''">
+                C.ORGANIZATION = #{organization.id}
+            </if>
+            <if test="area!=null and area.id!=null and area.id != ''">
+                C.AREA = #{area.id}
+            </if>
+        </where>
+        ORDER BY C.UPDATE_TIME ASC
+    </select>
+</mapper>
