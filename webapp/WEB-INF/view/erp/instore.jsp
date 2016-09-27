@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
-    <header><i class='fa fa-user'></i>   入库信息汇总统计</header>
+    <header><span class="tab-inside-title">入库信息汇总统计</span></header>
     <div class="chart-container year instore"></div>
     <div class="chart-container season instore"></div>
     <div class="chart-container month instore"></div>

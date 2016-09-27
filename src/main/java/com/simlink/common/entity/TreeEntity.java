@@ -35,6 +35,7 @@ public abstract class TreeEntity<T,C> extends BaseEntity<T> {
     protected String parentId;//父节点编号
     protected Integer index;        // 排序
     protected String leaf;//是否为子节点
+    protected Boolean checked = false;//是否为子节点
     protected String iconCls;//图标样式
     protected String id;//id
     protected Boolean expandable =true;//是否可扩展
@@ -151,4 +152,11 @@ public abstract class TreeEntity<T,C> extends BaseEntity<T> {
         this.attributes = attributes;
     }
 
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
 }

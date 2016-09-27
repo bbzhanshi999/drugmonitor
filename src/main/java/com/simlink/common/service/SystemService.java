@@ -1,9 +1,9 @@
 package com.simlink.common.service;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.google.common.collect.Lists;
 import com.simlink.common.dao.SystemDao;
-import com.simlink.common.entity.Role;
-import com.simlink.common.entity.RoleQueryAndView;
-import com.simlink.common.entity.User;
+import com.simlink.common.entity.*;
 import com.simlink.common.utils.StringUtils;
 import com.simlink.common.utils.UserUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 系统服务类
@@ -105,5 +105,67 @@ public class SystemService {
         user.setPassword(hash.toString());
         user.setSalt(salt);
         updateUser(user);
+    }
+
+    /**
+     * 获得角色列表
+     * @param roleQuery
+     * @param pb
+     * @return
+     */
+    public List<Role> getRoles(Role roleQuery, PageBounds pb) {
+        List<Role> roles = systemDao.getRoles(roleQuery,pb);
+        for(Role role:roles){
+            List<Menu> menus = systemDao.getMenusByRoleId(role.getId());
+            role.setMenus(menus);
+            List<String> menuNames  = Lists.newArrayList();
+            for(Menu menu:menus){
+                menuNames.add(menu.getMenuName());
+            }
+            role.setMenuNames(menuNames);
+        }
+        return  roles;
+    }
+
+    /**
+     * 获取所有菜单权限
+     * @return
+     */
+    public List<Menu> getAllMenus() {
+        return systemDao.getMenus(new Menu());
+    }
+
+    /**
+     * 创建新角色
+     * @param role
+     */
+    @Transactional(readOnly = false)
+    public void createRole(Role role) {
+        role.preInsert();
+        systemDao.addRole(role);
+        assginMenu(role);
+    }
+
+
+    @Transactional(readOnly = false)
+    private void assginMenu(Role role) {
+        systemDao.deleteMenuRole(role.getId());
+        for(Menu menu:role.getMenus()){
+            MenuQueryAndView mqv = new MenuQueryAndView(role.getId(),menu.getId());
+            mqv.preInsert();
+            systemDao.assignMenu(mqv);
+        }
+    }
+
+    public void updateRole(Role role) {
+        role.preUpdate();
+        systemDao.updateRole(role);
+        assginMenu(role);
+        UserUtils.loadAllUsers();
+    }
+
+    public void deleteRole(String id){
+        systemDao.deleteRole(id);
+        UserUtils.loadAllUsers();
     }
 }

@@ -1,10 +1,8 @@
 package com.simlink.common.dao;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.simlink.common.annotation.MyBatisDao;
-import com.simlink.common.entity.Menu;
-import com.simlink.common.entity.Role;
-import com.simlink.common.entity.RoleQueryAndView;
-import com.simlink.common.entity.User;
+import com.simlink.common.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +12,7 @@ public interface SystemDao {
 
     public User getUser(String userName);
 
-    public List<Role> getRoles(Role role);
+    public List<Role> getRoles(Role role,PageBounds pb);
 
     public List<Menu> getMenus(Menu menu);
 
@@ -31,4 +29,16 @@ public interface SystemDao {
     public void assignRole(RoleQueryAndView role);
 
     public void updateUser(User user);
+
+    public List<Menu> getMenusByRoleId(String roleId);
+
+    public void addRole(Role role);
+
+    public void assignMenu(MenuQueryAndView mqv);
+
+    public void updateRole(Role role);
+
+    public void deleteMenuRole(String id);
+
+    public void deleteRole(String id);
 }

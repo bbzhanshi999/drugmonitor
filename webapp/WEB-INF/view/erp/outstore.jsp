@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
-    <header><i class='fa fa-user'></i>   出库信息汇总统计</header>
+    <header>出库信息汇总统计</header>
     <div class="chart-container year outstore" style="width: 500px;height:500px"></div>
     <div class="chart-container month outstore" style="width: 500px;height:500px"></div>
 </div>

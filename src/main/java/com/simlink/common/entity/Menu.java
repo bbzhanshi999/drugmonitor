@@ -2,6 +2,7 @@ package com.simlink.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
+import com.simlink.common.utils.Collections3;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -87,7 +88,9 @@ public class Menu extends TreeEntity<Menu,Menu>{
     @JsonIgnore
     public static List<Menu> buildList(List<Menu> orginList){
         List<Menu> list = Lists.newArrayList();
-
+        if(Collections3.isEmpty(orginList)){
+            return null;
+        }
         for(Menu m:orginList){
             if(StringUtils.isBlank(m.getParentId())||ROOTNODE.equals(m.getParentId())){
                 buildChildren(orginList,m);

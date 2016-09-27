@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="easyui-panel"  data-options="fit:true,border:false,footer:'#createUserFooter'" style="padding-left: 10%">
-        <header ><i class='fa fa-user'></i>   创建用户</header>
+        <header ><span class="tab-inside-title">创建用户</span></header>
         <form id="createUserForm"  method="post" style="padding-top: 10px">
             <div class="form-line wide">
                 <label for="userName">用户名:</label>

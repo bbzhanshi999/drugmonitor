@@ -10,4 +10,5 @@
 <script src="${ctxStatic}/jquery.min.js" type="text/javascript"></script>
 <script src="${ctxStatic}/jquery.easyui.min.js" type="text/javascript"></script>
 <script src="${ctxStatic}/easyui-lang-zh_CN.js" type="text/javascript"></script>
+<script src="${ctxStatic}/datagrid-filter.js" type="text/javascript"></script>
 <script src="${ctxStatic}/js/main.js" type="text/javascript"></script>

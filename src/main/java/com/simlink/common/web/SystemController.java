@@ -44,7 +44,6 @@ public class SystemController extends BaseController{
             return null;
         }
 
-
         List<Role> roles = Lists.newArrayList();
         for(int x=0;x<role.length;x++){
             Role r = new Role();

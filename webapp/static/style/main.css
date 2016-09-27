@@ -46,6 +46,11 @@ header.panel-header {
     font-size: 12px
 }
 
+.tab-inside-title{
+    display: inline-block;
+    margin-left: 20px;
+}
+
 .chart-container {
     width: 45%;
     height: 300px;

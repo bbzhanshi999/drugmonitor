@@ -13,6 +13,7 @@ public class Role extends TreeEntity<Role,Role>{
     private String ename;
     private String type;
     private List<Menu> menus;
+    private List<String> menuNames;
 
 
     @Override
@@ -57,4 +58,11 @@ public class Role extends TreeEntity<Role,Role>{
         this.menus = menus;
     }
 
+    public List<String> getMenuNames() {
+        return menuNames;
+    }
+
+    public void setMenuNames(List<String> menuNames) {
+        this.menuNames = menuNames;
+    }
 }

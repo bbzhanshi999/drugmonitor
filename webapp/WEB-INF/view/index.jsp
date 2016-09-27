@@ -56,7 +56,7 @@
     <ul class="menu-tree"></ul>
 </div>
 <div region="center">
-    <div id="mainTabs" class="easyui-tabs" fit="true" border="false" plain="true">
+    <div id="mainTabs">
         <div title="welcome" class="content-doc" data-options="iconCls:'e-icon fa fa-edit'">
             <%--<div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
                 <header><i class='fa fa-user'></i>   入库信息汇总统计</header>

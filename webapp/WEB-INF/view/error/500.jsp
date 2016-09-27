@@ -1,15 +1,16 @@
-
-<%@page contentType="text/html;charset=UTF-8" isErrorPage="true"%>
-
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/WEB-INF/view/include/taglib.jsp"%>
+<%@ include file="/WEB-INF/view/include/head.jsp"%>
 <html>
 <head>
-	<title>500 - 系统内部错误</title>
-
+	<title>错误页</title>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$.messager.alert('错误信息','${error}','error',function(){
+				window.location.href='${ctx}';
+			});
+		})
+	</script>
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="page-header"><h1>系统内部错误.</h1></div>
-	</div>
 </body>
-</html>

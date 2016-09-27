@@ -42,6 +42,21 @@ $(document).ready(function () {
         }
     });
 
+
+    $('#mainTabs').tabs({
+        fit:true,
+        border:false,
+        plain:true,
+        onBeforeClose:function(title,index){
+            var tab = $(this).tabs('getTab',title);
+            if('menu_rolePermission'===tab.panel('options').id){
+                roleManagerMenuTree.combotree('destroy');
+                $('#roleManager_form').form('clear');
+                $('#roleManager_dialog').dialog('destroy');
+            }
+        }
+    });
+
     /**
      * 生成菜单树
      */

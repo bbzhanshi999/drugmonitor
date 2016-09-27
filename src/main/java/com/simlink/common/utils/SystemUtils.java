@@ -1,5 +1,6 @@
 package com.simlink.common.utils;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.simlink.common.dao.SystemDao;
 import com.simlink.common.entity.Menu;
 import com.simlink.common.entity.Role;
@@ -45,7 +46,7 @@ public class SystemUtils {
     }
 
     public static void setAllRoles(){
-        List<Role> roles = systemDao.getRoles(null);
+        List<Role> roles = systemDao.getRoles(null,new PageBounds());
         for(Role role:roles){
             JedisUtils.hset(ROLELIST,role.getId(),role);
         }

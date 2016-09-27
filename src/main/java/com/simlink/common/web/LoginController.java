@@ -82,6 +82,7 @@ public class LoginController {
         }else{
             error = "系统错误，请尝试重新登录";
         }
+        if(StringUtils.isNotBlank(error)) throw new AuthenticationException(error);
         map.put("error",error);
         return map;
     }
