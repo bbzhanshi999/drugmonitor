@@ -74,4 +74,31 @@ public class DataClientUtil {
     public static void removeClient(DataClient client) {
         JedisUtils.hdel(CLIENTS,client.getClientName());
     }
+
+    /**
+     * 判断用户名是否存在
+     * @param client
+     * @return
+     */
+    public static Boolean clientNameExist(DataClient client){
+        if(StringUtils.isNotBlank(client.getId())){
+            DataClient client1 = dataClientDao.getClientById(client.getId());
+            if(client.getClientName().equals(client1.getClientName())){
+                return false;
+            }else{
+                DataClient client2 = getClient(client.getClientName());
+                if(client2!=null&&StringUtils.isNotBlank(client2.getId())){
+                    if(!client2.getId().equals(client1.getId())){
+                        return true;
+                    }
+                }
+            }
+        }else{
+            DataClient client1 = getClient(client.getClientName());
+            if(client!=null&&StringUtils.isNotBlank(client1.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
 }

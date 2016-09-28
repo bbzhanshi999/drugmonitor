@@ -4,13 +4,21 @@ $(document).ready(function () {
     $.extend($.fn.validatebox.defaults.rules, {
         username: {
             validator: function (value, param) {
-
                 var regStr = '^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){' + param[0] + ',' + param[1] + '}$';
                 var pattern = new RegExp(regStr, '');
                 if (!pattern.exec(value)) return false;
                 return true;
             },
             message: '用户名为{0}-{1}个以字母开头、可带数字、“_”、“.”的字符组成'
+        },
+        clientName: {
+            validator: function (value, param) {
+                var regStr = '^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){' + param[0] + ',' + param[1] + '}$';
+                var pattern = new RegExp(regStr, '');
+                if (!pattern.exec(value)) return false;
+                return true;
+            },
+            message: '用户名为{0}-{1}个以字母开头、可带数字、“_”、“.”的字符组成，用户名不能重复'
         },
         usernameExists:{
             validator: function (value, param) {

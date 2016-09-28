@@ -13,6 +13,15 @@ public class Area extends BaseEntity<Area> {
     private String areaEname;
     private String areaCode;
 
+    public Area() {
+        super();
+    }
+
+    public Area(String id, String areaName) {
+        this.id = id;
+        this.areaName = areaName;
+    }
+
     public String getAreaName() {
         return areaName;
     }

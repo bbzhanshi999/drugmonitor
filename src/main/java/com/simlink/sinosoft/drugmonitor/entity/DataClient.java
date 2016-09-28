@@ -15,6 +15,8 @@ public class DataClient extends BaseEntity<DataClient> {
     private Area area;//地区id
     private String organId;
     private String organName;
+    private String areaId;
+    private String areaName;
 
     public String getClientName() {
         return clientName;
@@ -32,13 +34,6 @@ public class DataClient extends BaseEntity<DataClient> {
         this.password = password;
     }
 
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
 
     public Area getArea() {
         return area;
@@ -62,5 +57,29 @@ public class DataClient extends BaseEntity<DataClient> {
 
     public void setOrganName(String organName) {
         this.organName = organName;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 }

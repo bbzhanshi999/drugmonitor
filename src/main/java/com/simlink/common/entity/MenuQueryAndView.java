@@ -8,6 +8,10 @@ public class MenuQueryAndView extends Menu {
     private String roleId;
     private String menuId;
 
+    public MenuQueryAndView(){
+        super();
+    }
+
     public MenuQueryAndView(String roleId, String menuId) {
         this.menuId = menuId;
         this.roleId = roleId;

@@ -51,16 +51,22 @@
         <where>
             O.DEL_FLAG = '0'
             <if test="organCode!= null and organCode!=''">
-                O.ORGAN_CODE = #{areaCode}
+                AND  O.ORGAN_CODE = #{areaCode}
             </if>
             <if test="organName!= null and organName!=''">
-                O.ORGAN_NAME = #{organName}
+                AND  O.ORGAN_NAME = #{organName}
             </if>
             <if test="organEname!= null and organEname!=''">
-                O.ORGAN_ENAME = #{organEname}
+                AND O.ORGAN_ENAME = #{organEname}
             </if>
         </where>
         ORDER BY O.UPDATE_TIME ASC
     </select>
 
+    <select id="findAllOrganizations" resultType="com.simlink.sinosoft.drugmonitor.entity.Organization">
+        SELECT <include refid="organizationColumns"/>
+        FROM ORGANIZATION O
+        WHERE O.DEL_FLAG = '0'
+        ORDER BY O.UPDATE_TIME ASC
+    </select>
 </mapper>

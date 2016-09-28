@@ -108,7 +108,7 @@
 			onAfterEdit: function(index, row){
 				delAutoGrid(this);
 				opts.editIndex = -1;
-				var url = row.isNewRecord ? opts.saveUrl : opts.updateUrl;
+				var url = row.newRecord ? opts.saveUrl : opts.updateUrl;
 				if (url){
 					var changed = false;
 					var fields = $(this).edatagrid('getColumnFields',true).concat($(this).edatagrid('getColumnFields'));
@@ -131,7 +131,7 @@
 								opts.onError.call(target, index, data);
 								return;
 							}
-							data.isNewRecord = null;
+							data.newRecord = null;
 							$(target).datagrid('updateRow', {
 								index: index,
 								row: data
@@ -160,7 +160,7 @@
 						opts.onSave.call(target, index, row);
 					}
 				} else {
-					row.isNewRecord = false;
+					row.newRecord = false;
 					opts.onSave.call(target, index, row);
 				}
 				if (opts.onAfterEdit) opts.onAfterEdit.call(target, index, row);
@@ -168,7 +168,7 @@
 			onCancelEdit: function(index, row){
 				delAutoGrid(this);
 				opts.editIndex = -1;
-				if (row.isNewRecord) {
+				if (row.newRecord) {
 					$(this).datagrid('deleteRow', index);
 				}
 				if (opts.onCancelEdit) opts.onCancelEdit.call(target, index, row);
@@ -345,9 +345,9 @@
 					}
 				}
 				if (typeof index == 'object'){
-					_add(index.index, $.extend(index.row, {isNewRecord:true}))
+					_add(index.index, $.extend(index.row, {newRecord:true}))
 				} else {
-					_add(index, {isNewRecord:true});
+					_add(index, {newRecord:true});
 				}
 								
 				dg.datagrid('beginEdit', opts.editIndex);
@@ -423,7 +423,7 @@
 				function _del(row){
 					var index = dg.datagrid('getRowIndex', row);
 					if (index == -1){return}
-					if (row.isNewRecord){
+					if (row.newRecord){
 						dg.datagrid('cancelEdit', index);
 					} else {
 						if (opts.destroyUrl){

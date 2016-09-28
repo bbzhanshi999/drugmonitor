@@ -19,7 +19,7 @@
 </div>
 <script>
     $(document).ready(function () {
-
+        var clientNameFilter='',organIdFilter='',areaIdFilter='';
         var dataClientManageGrid = $('#dataClientManage_dataGrid').edatagrid({
             url: ctx + '/dataPermission/getClients',
             saveUrl: ctx + '/dataPermission/createClient',
@@ -46,11 +46,13 @@
                     width: 200,
                     editor: {
                         type: 'textbox',
-                        required: true,
-                        validType: ['username[4,19]', 'clientNameExists'],
-                        validateOnCreate: false,
-                        delay: 1000,
-                        validateOnBlur: false
+                        options:{
+                            required: true,
+                            validType: 'clientName[4,19]',
+                            validateOnCreate: false,
+                            delay: 1000,
+                            validateOnBlur: false
+                        }
                     }
                 }, {
                     field: 'password',
@@ -58,10 +60,12 @@
                     width: 200,
                     editor: {
                         type: 'textbox',
-                        required: true,
-                        validType:'password',
-                        validateOnCreate:false,
-                        validateOnBlur:false
+                        options:{
+                            required: true,
+                            validType:'password',
+                            validateOnCreate:false,
+                            validateOnBlur:false
+                        }
                     }
                 }, {
                     field: 'organId',
@@ -76,17 +80,17 @@
                         options: {
                             valueField: 'id',
                             textField: 'organName',
-                            method: 'get',
-                            url: ctx + '/dataPermission/getOrganizations',
-                            /*required: true*/
+                            method: 'post',
+                            url: ctx + '/dataPermission/getAllOrganizations',
+                            required: true
                         }
                     }
                 }, {
-                    field: 'area',
+                    field: 'areaId',
                     width: 100,
                     title: '所属区域',
                     formatter: function (value, row) {
-                        return row.area.areaName;
+                        return row.areaName;
                     },
                     editor: {
                         type: 'combobox',
@@ -94,15 +98,74 @@
                             valueField: 'id',
                             textField: 'areaName',
                             method: 'post',
-                            url: ctx + '/dataPermission/getAreas',
+                            url: ctx + '/dataPermission/getAllAreas',
                             required: true
                         }
                     }
                 }
             ]],
-            remoteFilter: true
+            remoteFilter: true,
+            filterStringify:function(data){
+                console.log(data);
+
+                return data[0].value
+            },
+
+            onSuccess:function(index,row){
+                debugger;
+                $(this).edatagrid('reload');
+            }
         });
-        dataClientManageGrid.datagrid('enableFilter');
+        dataClientManageGrid.datagrid('enableFilter', [{
+            field:'organId',
+            type:'combobox',
+            options:{
+                valueField:'id',
+                textField:'organName',
+                url:ctx + '/dataPermission/getAllOrganizations',
+                onChange:function(newValue,oldValue){
+                    if (newValue == ''){
+                        dataClientManageGrid.datagrid('removeFilterRule', 'organId');
+                    } else {
+                        dataClientManageGrid.datagrid('addFilterRule', {
+                            field: 'organId',
+                            op: 'equal',
+                            value: newValue
+                        });
+                    }
+                    dataClientManageGrid.datagrid('doFilter');
+                }
+            }
+        },{
+            field:'password',
+            type:'validatebox',
+            options:{
+                disabled:true
+            }
+        },{
+            field: 'areaId',
+            type: 'combobox',
+            options:{
+                valueField:'id',
+                textField:'areaName',
+                url:ctx + '/dataPermission/getAllAreas',
+                onChange:function(newValue,oldValue){
+                    if (newValue == ''){
+                        dataClientManageGrid.datagrid('removeFilterRule', 'areaId');
+                    } else {
+                        dataClientManageGrid.datagrid('addFilterRule', {
+                            field: 'areaId',
+                            op: 'equal',
+                            value: newValue
+                        });
+                    }
+                    dataClientManageGrid.datagrid('doFilter');
+                }
+            }
+         },{
+            field:'clientName',
+            type:'validatebox'
+        }]);
     });
 
 

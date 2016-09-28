@@ -4,6 +4,7 @@
 
 
     <sql id="areaColumns">
+        A.ID AS "id",
         A.AREA_NAME AS "areaName",
         A.AREA_ENAME AS "areaEname",
         A.AREA_CODE AS "areaCode",
@@ -19,18 +20,25 @@
         <where>
             A.DEL_FLAG = '0'
             <if test="areaCode!= null and areaCode!=''">
-                A.AREA_CODE = #{areaCode}
+                AND  A.AREA_CODE = #{areaCode}
             </if>
             <if test="areaEname!= null and areaEname!=''">
-                A.AREA_ENAME = #{areaEname}
+                AND  A.AREA_ENAME = #{areaEname}
             </if>
             <if test="areaName!= null and areaName!=''">
-                A.AREA_NAME = #{areaName}
+                AND  A.AREA_NAME = #{areaName}
             </if>
         </where>
         ORDER BY A.UPDATE_TIME ASC
     </select>
-    
+
+    <select id="findAllAreas" resultType="com.simlink.sinosoft.drugmonitor.entity.Area">
+        SELECT <include refid="areaColumns"/>
+        FROM AREA A
+        WHERE A.DEL_FLAG = '0'
+        ORDER BY A.UPDATE_TIME ASC
+    </select>
+
     <insert id="createArea">
         INSERT INTO AREA(
           ID,AREA_NAME,AREA_ENAME,AREA_CODE,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME

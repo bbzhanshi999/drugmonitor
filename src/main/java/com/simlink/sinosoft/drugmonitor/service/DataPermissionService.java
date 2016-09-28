@@ -44,7 +44,7 @@ public class DataPermissionService {
 
     @Transactional(readOnly = false)
     public void updateClient(DataClient client) {
-        client.preInsert();
+        client.preUpdate();
         dataClientDao.updateClient(client);
         DataClientUtil.addClient(client,false);
     }
@@ -98,5 +98,13 @@ public class DataPermissionService {
     @Transactional(readOnly = false)
     public void deleteOrganization(String id) {
         organizationDao.deleteOrganization(id);
+    }
+
+    public List<Area> getAllAreas() {
+        return areaDao.findAllAreas();
+    }
+
+    public List<Organization> getAllOrganizations() {
+        return organizationDao.findAllOrganizations();
     }
 }

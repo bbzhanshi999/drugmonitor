@@ -12,6 +12,15 @@ public class Organization extends BaseEntity<Organization> {
     private String organName;
     private String organEname;
 
+    public Organization(){
+        super();
+    }
+
+    public Organization(String id, String organName) {
+        this.id = id;
+        this.organName = organName;
+    }
+
     public String getOrganCode() {
         return organCode;
     }

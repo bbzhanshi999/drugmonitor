@@ -1,6 +1,8 @@
 package com.simlink.sinosoft.drugmonitor.web;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.simlink.common.entity.User;
 import com.simlink.common.utils.StringUtils;
@@ -38,7 +40,8 @@ public class DataPermissionController extends BaseController {
     @RequestMapping("getClients")
     @RequiresPermissions("data:permission:client")
     @ResponseBody
-    public List<DataClient> getClients(DataClient client,Integer page,Integer rows){
+    public Map<String,Object> getClients(DataClient client,Integer page,Integer rows){
+        Map<String,Object> result = Maps.newHashMap();
         PageBounds pb;
         if(page==null||rows==null){
             pb= new PageBounds();
@@ -46,27 +49,62 @@ public class DataPermissionController extends BaseController {
             pb= new PageBounds(page,rows);
         }
         List<DataClient> clients = dataPermissionService.getClients(client,pb);
-        return clients;
+        PageList pageList = (PageList)clients;
+        Integer totalCount = pageList.getPaginator().getTotalCount();
+        result.put("total",totalCount);
+        result.put("rows",clients);
+        return result;
     }
 
     @RequestMapping("createClient")
     @RequiresPermissions("data:permission:client")
     @ResponseBody
-    public Map<String,Object> createClient(DataClient client){
-        dataPermissionService.createClient(client);
+    public List<Object> createClient(DataClient client){
+        List<Object> results = Lists.newArrayList();
         Map<String,Object> result = Maps.newHashMap();
+        if(DataClientUtil.clientNameExist(client)){
+            result.put("isError",true);
+            result.put("msg","保存失败，用户名已存在");
+            results.add(result);
+            return results;
+        }
+        Organization organization = new Organization(client.getOrganId(),client.getOrganName());
+        client.setOrganization(organization);
+        Area area = new Area(client.getAreaId(),client.getAreaName());
+        client.setArea(area);
+        dataPermissionService.createClient(client);
+
         result.put("success",true);
-        return result;
+        results.add(result);
+        return results;
     }
 
     @RequestMapping("updateClient")
     @RequiresPermissions("data:permission:client")
     @ResponseBody
-    public Map<String,Object> updateClient(DataClient client){
-        dataPermissionService.updateClient(client);
+    public List<Object> updateClient(String id,String organId,String areaId,String clientName,String password){
+        List<Object> results = Lists.newArrayList();
         Map<String,Object> result = Maps.newHashMap();
+        Organization organization = new Organization();
+        organization.setId(organId);
+        Area area  = new Area();
+        area.setId(areaId);
+        DataClient client = new DataClient();
+        client.setArea(area);
+        client.setOrganization(organization);
+        client.setClientName(clientName);
+        client.setPassword(password);
+        client.setId(id);
+        if(DataClientUtil.clientNameExist(client)){
+            result.put("isError",true);
+            result.put("msg","保存失败，用户名已存在");
+            results.add(result);
+            return results;
+        }
+        dataPermissionService.updateClient(client);
         result.put("success",true);
-        return result;
+        results.add(result);
+        return results;
     }
 
     @RequestMapping("deleteClient")
@@ -88,15 +126,28 @@ public class DataPermissionController extends BaseController {
     @RequestMapping("getAreas")
     @RequiresPermissions("data:permission:area")
     @ResponseBody
-    public List<Area> getAreas(Area area,Integer page,Integer rows){
+    public Map<String,Object> getAreas(Area area,Integer page,Integer rows){
+        Map<String,Object> result = Maps.newHashMap();
         PageBounds pb;
         if(page==null||rows==null){
             pb= new PageBounds();
         }else{
             pb= new PageBounds(page,rows);
         }
-        List<Area> result= dataPermissionService.getAreas(area,pb);
+        List<Area> areas= dataPermissionService.getAreas(area,pb);
+        PageList pageList = (PageList)areas;
+        Integer totalCount = pageList.getPaginator().getTotalCount();
+        result.put("total",totalCount);
+        result.put("rows",areas);
         return result;
+    }
+
+    @RequestMapping("getAllAreas")
+    @RequiresPermissions("data:permission:area")
+    @ResponseBody
+    public List<Area> getAllAreas(){
+        List<Area> areas= dataPermissionService.getAllAreas();
+        return areas;
     }
 
     @RequestMapping("createArea")
@@ -112,7 +163,12 @@ public class DataPermissionController extends BaseController {
     @RequestMapping("updateArea")
     @RequiresPermissions("data:permission:area")
     @ResponseBody
-    public Map<String,Object> updateArea(Area area){
+    public Map<String,Object> updateArea(String id,String areaName,String areaEname,String areaCode){
+        Area area = new Area();
+        area.setId(id);
+        area.setAreaCode(areaCode);
+        area.setAreaEname(areaEname);
+        area.setAreaName(areaName);
         dataPermissionService.updateArea(area);
         Map<String,Object> result = Maps.newHashMap();
         result.put("success",true);
@@ -139,15 +195,28 @@ public class DataPermissionController extends BaseController {
     @RequestMapping("getOrganizations")
     @RequiresPermissions("data:permission:organization")
     @ResponseBody
-    public List<Organization> getOrganizations(Organization organization, Integer page, Integer rows){
+    public Map<String,Object> getOrganizations(Organization organization, Integer page, Integer rows){
+        Map<String,Object> result = Maps.newHashMap();
         PageBounds pb;
         if(page==null||rows==null){
             pb= new PageBounds();
         }else{
             pb= new PageBounds(page,rows);
         }
-        List<Organization> result= dataPermissionService.getOrganization(organization,pb);
+        List<Organization> organizations= dataPermissionService.getOrganization(organization,pb);
+        PageList pageList = (PageList)organizations;
+        Integer totalCount = pageList.getPaginator().getTotalCount();
+        result.put("total",totalCount);
+        result.put("rows",organizations);
         return result;
+    }
+
+    @RequestMapping("getAllOrganizations")
+    @RequiresPermissions("data:permission:organization")
+    @ResponseBody
+    public List<Organization> getAllOrganizations(){
+        List<Organization> organizations= dataPermissionService.getAllOrganizations();
+        return organizations;
     }
 
     @RequestMapping("createOrganization")
@@ -163,7 +232,12 @@ public class DataPermissionController extends BaseController {
     @RequestMapping("updateOrganization")
     @RequiresPermissions("data:permission:organization")
     @ResponseBody
-    public Map<String,Object> updateOrganization(Organization organization){
+    public Map<String,Object> updateOrganization(String id,String organName,String organEname,String organCode){
+        Organization organization = new Organization();
+        organization.setId(id);
+        organization.setOrganEname(organEname);
+        organization.setOrganName(organName);
+        organization.setOrganCode(organCode);
         dataPermissionService.updateOrganization(organization);
         Map<String,Object> result = Maps.newHashMap();
         result.put("success",true);

@@ -21,6 +21,8 @@
         O.UPDATE_ID AS "organization.updater.id",
         O.CREATE_TIME AS "organization.createTime",
         O.CREATE_ID AS "organization.creator.id",
+        A.ID AS "areaId",
+        A.AREA_NAME AS "areaName",
         A.AREA_NAME AS "area.areaName",
         A.AREA_ENAME AS "area.areaEname",
         A.AREA_CODE AS "area.areaCode",
@@ -70,7 +72,7 @@
         SELECT <include refid="dataClientColumns"/>
         FROM DATA_CLIENT C
         <include refid="dataClientJoin"/>
-        WHERE C.DEL_FLAG='0' AND A.DEL_FLAG='0' AND O.DEL_FLAG='0' ORDER BY C.UPDATE_TIME ASC
+        WHERE C.DEL_FLAG='0' ORDER BY C.UPDATE_TIME ASC
     </select>
 
     <select id="getClient" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
@@ -78,12 +80,12 @@
         FROM DATA_CLIENT C
         <include refid="dataClientJoin"/>
         <where>
-            C.DEL_FLAG='0' AND A.DEL_FLAG='0' AND O.DEL_FLAG='0'
+            C.DEL_FLAG='0'
             <if test="clientName!=null and clientName !=''">
-                C.CLIENT_NAME = #{clientName}
+               AND C.CLIENT_NAME = #{clientName}
             </if>
             <if test=" id!=null and id !=''">
-                C.ID = #{id}
+              AND  C.ID = #{id}
             </if>
         </where>
     </select>
@@ -93,17 +95,24 @@
         FROM DATA_CLIENT C
         <include refid="dataClientJoin"/>
         <where>
-            C.DEL_FLAG='0' AND A.DEL_FLAG='0' AND O.DEL_FLAG='0'
+            C.DEL_FLAG='0'
             <if test="clientName!=null and clientName!=''">
-                C.CLIENT_NAME = #{clientName}
+                AND C.CLIENT_NAME = #{clientName}
             </if>
             <if test="organization!=null and organization.id!=null and organization.id!=''">
-                C.ORGANIZATION = #{organization.id}
+                AND C.ORGANIZATION = #{organization.id}
             </if>
             <if test="area!=null and area.id!=null and area.id != ''">
-                C.AREA = #{area.id}
+                AND  C.AREA = #{area.id}
             </if>
         </where>
         ORDER BY C.UPDATE_TIME ASC
+    </select>
+
+    <select id="getClientById" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
+        SELECT <include refid="dataClientColumns"/>
+        FROM DATA_CLIENT C
+        <include refid="dataClientJoin"/>
+        WHERE C.DEL_FLAG='0' AND C.ID = #{id}
     </select>
 </mapper>

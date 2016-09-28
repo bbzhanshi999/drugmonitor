@@ -20,4 +20,6 @@ public interface DataClientDao {
     public void updateClient(DataClient client);
 
     public List<DataClient> findClients(DataClient client, PageBounds pb);
+
+    public DataClient getClientById(String id);
 }

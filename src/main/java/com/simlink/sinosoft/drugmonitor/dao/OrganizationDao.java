@@ -19,4 +19,6 @@ public interface OrganizationDao {
     public void updateOrganization(Organization organization);
 
     public void deleteOrganization(String id);
+
+    public List<Organization> findAllOrganizations();
 }
