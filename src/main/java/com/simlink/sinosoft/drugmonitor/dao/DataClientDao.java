@@ -11,7 +11,7 @@ public interface DataClientDao {
 
     public List<DataClient> getAllClients();
 
-    public DataClient getClient(String clientName);
+    public DataClient getClient(DataClient client);
 
     public void addClient(DataClient client);
 

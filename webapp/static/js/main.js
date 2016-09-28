@@ -31,6 +31,25 @@ $(document).ready(function () {
             },
             message: '用户名已存在。'
         },
+        clientNameExists:{
+            validator: function (value, param) {
+                var flag = true;
+
+                $.ajax({
+                        url: ctx+'/dataPermission/clientNameValidate',
+                        data: {clientName:value},
+                        dataType: 'json',
+                        type: 'post',
+                        async:false,
+                        cache: false,
+                        success: function (isExist) {
+                            flag = isExist;
+                        }
+                });
+                return flag;
+            },
+            message: '用户名已存在。'
+        },
         password: {
             validator: function (value, param) {
                 //  var regStr = '^(\w){6,20}$/';
@@ -39,7 +58,7 @@ $(document).ready(function () {
                 return true;
             },
             message: '密码由6-20个字母、数字、下划线 （不能使用初始密码）'
-        }
+        },
     });
 
 

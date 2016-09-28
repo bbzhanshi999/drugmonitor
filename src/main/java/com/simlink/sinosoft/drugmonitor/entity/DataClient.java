@@ -13,6 +13,8 @@ public class DataClient extends BaseEntity<DataClient> {
     private String password;//登录密码
     private Organization organization;//机构id
     private Area area;//地区id
+    private String organId;
+    private String organName;
 
     public String getClientName() {
         return clientName;
@@ -44,5 +46,21 @@ public class DataClient extends BaseEntity<DataClient> {
 
     public void setArea(Area area) {
         this.area = area;
+    }
+
+    public String getOrganId() {
+        return organId;
+    }
+
+    public void setOrganId(String organId) {
+        this.organId = organId;
+    }
+
+    public String getOrganName() {
+        return organName;
+    }
+
+    public void setOrganName(String organName) {
+        this.organName = organName;
     }
 }

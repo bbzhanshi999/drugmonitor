@@ -38,7 +38,9 @@ public class DataClientUtil {
     public static DataClient getClient(String clientName){
         DataClient client = (DataClient) JedisUtils.hget(CLIENTS,clientName);
         if(client==null){
-            client = dataClientDao.getClient(clientName);
+            DataClient query = new DataClient();
+            query.setClientName(clientName);
+            client = dataClientDao.getClient(query);
             if(client!=null && StringUtils.isNotBlank(client.getId())){
                 JedisUtils.hset(CLIENTS,clientName,client);
             }
@@ -46,6 +48,11 @@ public class DataClientUtil {
         return client;
     }
 
+    /**
+     * 添加client入缓存
+     * @param client
+     * @param persist 是否持久化数据
+     */
     public static void addClient(DataClient client,Boolean persist){
         JedisUtils.hset(CLIENTS,client.getClientName(),client);
         if(persist){
@@ -56,9 +63,15 @@ public class DataClientUtil {
     public static List<DataClient> getAllClients(){
         List<DataClient> clients = JedisUtils.hgetAll(CLIENTS);
         if(Collections3.isEmpty(clients)){
-            loadAllClients();
-            clients = JedisUtils.hgetAll(CLIENTS);
+            clients = dataClientDao.getAllClients();
+            if(!Collections3.isEmpty(clients)){
+                loadAllClients();
+            }
         }
         return  clients;
+    }
+
+    public static void removeClient(DataClient client) {
+        JedisUtils.hdel(CLIENTS,client.getClientName());
     }
 }

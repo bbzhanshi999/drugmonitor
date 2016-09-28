@@ -1,4 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.simlink.sinosoft.drugmonitor.dao.OrganizationDao">
+
+    <sql id="organizationColumns">
+        O.ID AS "id",
+        O.ORGAN_NAME AS "organName",
+        O.ORGAN_ENAME AS "organEname",
+        O.ORGAN_CODE AS "organCode",
+        O.UPDATE_TIME AS "updateTime",
+        O.UPDATE_ID AS "updater.id",
+        O.CREATE_TIME AS "createTime",
+        O.CREATE_ID AS "creator.id"
+    </sql>
+
+
+    <insert id="createOrganization">
+        INSERT INTO ORGANIZATION(
+            ID,ORGAN_NAME,ORGAN_ENAME,ORGAN_CODE,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
+        )VALUES(
+            #{id},#{organName},#{organEname},#{organCode},#{creator.id},#{createTime},#{updater.id},#{updateTime}
+        )
+
+    </insert>
+
+    <update id="updateOrganization">
+        UPDATE ORGANIZATION SET
+        <if test="organName!=null and organName != ''">
+            ORGAN_NAME = #{organName},
+        </if>
+        <if test="organEname!=null and organEname != ''">
+            ORGAN_ENAME = #{organEname},
+        </if>
+        <if test="organCode!=null and organCode != ''">
+            ORGAN_CODE = #{organCode},
+        </if>
+        UPDATE_TIME = #{updateTime},
+        UPDATE_ID = #{updater.id}
+        WHERE ID=#{id}
+    </update>
+
+    <update id="deleteOrganization">
+        UPDATE ORGANIZATION SET
+        DEL_FLAG = '1'
+        WHERE ID=#{id}
+    </update>
+
+    <select id="findOrganizations" resultType="com.simlink.sinosoft.drugmonitor.entity.Organization">
+        SELECT <include refid="organizationColumns"/>
+        FROM ORGANIZATION O
+        <where>
+            O.DEL_FLAG = '0'
+            <if test="organCode!= null and organCode!=''">
+                O.ORGAN_CODE = #{areaCode}
+            </if>
+            <if test="organName!= null and organName!=''">
+                O.ORGAN_NAME = #{organName}
+            </if>
+            <if test="organEname!= null and organEname!=''">
+                O.ORGAN_ENAME = #{organEname}
+            </if>
+        </where>
+        ORDER BY O.UPDATE_TIME ASC
+    </select>
+
 </mapper>
