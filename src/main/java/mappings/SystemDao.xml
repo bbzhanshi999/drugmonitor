@@ -184,25 +184,25 @@
     </sql>
 
     <sql id="userMapJoin">
-        LEFT JOIN USER_ROLE UR ON UR.USER_ID = A.ID
-        LEFT JOIN ROLE R ON R.ID = UR.ROLE_ID
-        LEFT JOIN ROLE_MENU RM ON RM.ROLE_ID = R.ID
-        LEFT JOIN MENU M ON M.ID = RM.MENU_ID
-        LEFT JOIN (SELECT ID FROM MENU ORDER BY SORT ASC) M_SORT ON M.ID = M_SORT.ID
-        LEFT JOIN MENU MP ON M.PID = MP.ID
+        LEFT JOIN DRUG_USER_ROLE UR ON UR.USER_ID = A.ID
+        LEFT JOIN DRUG_ROLE R ON R.ID = UR.ROLE_ID
+        LEFT JOIN DRUG_ROLE_MENU RM ON RM.ROLE_ID = R.ID
+        LEFT JOIN DRUG_MENU M ON M.ID = RM.MENU_ID
+        LEFT JOIN (SELECT ID FROM DRUG_MENU ORDER BY SORT ASC) M_SORT ON M.ID = M_SORT.ID
+        LEFT JOIN DRUG_MENU MP ON M.PID = MP.ID
     </sql>
 
     <sql id="roleMapJoin">
-        LEFT JOIN ROLE_MENU RM ON RM.ROLE_ID = R.ID
-        LEFT JOIN MENU M ON M.ID = RM.MENU_ID
-        LEFT JOIN (SELECT ID FROM MENU ORDER BY SORT ASC) M_SORT ON M.ID = M_SORT.ID
-        LEFT JOIN MENU MP ON M.PID = MP.ID
+        LEFT JOIN DRUG_ROLE_MENU RM ON RM.ROLE_ID = R.ID
+        LEFT JOIN DRUG_MENU M ON M.ID = RM.MENU_ID
+        LEFT JOIN (SELECT ID FROM DRUG_MENU ORDER BY SORT ASC) M_SORT ON M.ID = M_SORT.ID
+        LEFT JOIN DRUG_MENU MP ON M.PID = MP.ID
     </sql>
 
     <sql id="roleMenuJoins">
-        LEFT JOIN MENU MP ON M.PID = MP.ID
-        RIGHT JOIN ROLE_MENU RM ON RM.MENU_ID = M.ID
-        RIGHT JOIN ROLE R ON R.ID = RM.ROLE_ID
+        LEFT JOIN DRUG_MENU MP ON M.PID = MP.ID
+        RIGHT JOIN DRUG_ROLE_MENU RM ON RM.MENU_ID = M.ID
+        RIGHT JOIN DRUG_ROLE R ON R.ID = RM.ROLE_ID
     </sql>
 
     <sql id="roleColumns">
@@ -241,7 +241,7 @@
     </sql>
 
     <insert id="addUser" parameterType="com.simlink.common.entity.User">
-        INSERT INTO USERS(
+        INSERT INTO DRUG_USERS(
           ID,USERNAME,PASSWORD,SALT,NAME,PHONE,EMAIL,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
         ) VALUES (
           #{id},
@@ -259,7 +259,7 @@
     </insert>
 
     <update id="updateRoles" parameterType="java.util.Map">
-        INSERT INTO USER_ROLE(
+        INSERT INTO DRUG_USER_ROLE(
           ID,ROLE_ID,USER_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
         )VALUES (
           #{id},
@@ -274,7 +274,7 @@
 
 
     <update id="updateMenu">
-        INSERT INTO ROLE_MENU(
+        INSERT INTO DRUG_ROLE_MENU(
           ID,ROLE_ID,MENU_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
         )VALUES (
           #{id},
@@ -288,7 +288,7 @@
     </update>
 
     <update id="updateUser">
-        UPDATE USERS SET
+        UPDATE DRUG_USERS SET
         <if test="email!=null and email!=''">
             EMAIL=#{email},
         </if>
@@ -311,17 +311,17 @@
     </update>
 
     <delete id="deleteMenuRole">
-        DELETE FROM ROLE_MENU WHERE ROLE_ID = #{id}
+        DELETE FROM DRUG_ROLE_MENU WHERE ROLE_ID = #{id}
     </delete>
 
     <update id="deleteRole">
-        UPDATE ROLE SET
+        UPDATE DRUG_ROLE SET
         DEL_FLAG = '1'
         WHERE ID = #{id}
     </update>
 
     <update id="updateRole">
-        UPDATE ROLE SET
+        UPDATE DRUG_ROLE SET
         <if test="name!=null and name!=''">
             NAME=#{name},
         </if>
@@ -334,7 +334,7 @@
     </update>
 
     <insert id="assignRole" parameterType="com.simlink.common.entity.RoleQueryAndView">
-        INSERT INTO USER_ROLE(ID,ROLE_ID,USER_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES (
+        INSERT INTO DRUG_USER_ROLE(ID,ROLE_ID,USER_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES (
           #{id},
           #{roleId},
           #{userId},
@@ -346,7 +346,7 @@
     </insert>
 
     <insert id="assignMenu" parameterType="com.simlink.common.entity.MenuQueryAndView">
-        INSERT INTO ROLE_MENU(ID,ROLE_ID,MENU_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES (
+        INSERT INTO DRUG_ROLE_MENU(ID,ROLE_ID,MENU_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES (
           #{id},
           #{roleId},
           #{menuId},
@@ -358,7 +358,7 @@
     </insert>
 
     <insert id="addRole">
-        INSERT INTO ROLE(ID,NAME,ENAME,TYPE,ICON,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES(
+        INSERT INTO DRUG_ROLE(ID,NAME,ENAME,TYPE,ICON,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES(
           #{id},
           #{name},
           #{ename},
@@ -374,7 +374,7 @@
     <select id="getUser" resultMap="userMap">
         SELECT
         <include refid="userMapColumns"/>
-        FROM USERS A
+        FROM DRUG_USERS A
         <include refid="userMapJoin"/>
         WHERE A.USERNAME = #{userName} AND A.DEL_FLAG = '0'
     </select>
@@ -383,7 +383,7 @@
     <select id="getRoles" resultType="com.simlink.common.entity.Role">
         SELECT
         <include refid="roleColumns"/>
-        FROM ROLE R
+        FROM DRUG_ROLE R
         <where>
             R.DEL_FLAG = '0'
             <if test="id!=null and id!=''">
@@ -395,8 +395,8 @@
     <select id="getMenus" resultType="com.simlink.common.entity.Menu">
         SELECT
         <include refid="menuColumns"/>
-        FROM MENU M
-        LEFT JOIN MENU MP ON M.PID = MP.ID
+        FROM DRUG_MENU M
+        LEFT JOIN DRUG_MENU MP ON M.PID = MP.ID
         <where>
             M.DEL_FLAG = '0'
             <if test="id!=null and id!=''">
@@ -409,7 +409,7 @@
     <select id="getAllUsers" resultMap="userMap">
         SELECT
         <include refid="userMapColumns"/>
-        FROM USERS A
+        FROM DRUG_USERS A
         <include refid="userMapJoin"/>
         WHERE A.DEL_FLAG = '0'
     </select>
@@ -421,7 +421,7 @@
 
     <select id="getMenusByRoleId" resultType="com.simlink.common.entity.Menu">
         SELECT <include refid="menuColumns"/>
-        FROM MENU M
+        FROM DRUG_MENU M
         <include refid="roleMenuJoins"/>
         where M.DEL_FLAG = '0' AND R.ID = #{roleId}
         ORDER BY M.SORT ASC

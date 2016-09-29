@@ -51,7 +51,7 @@
                        validateOnBlur:false,
                        valueField:'id',
                        textField:'name',
-                       url:'${ctx}/system/getOrganizations'" name="role" id="role"/>
+                       url:'${ctx}/system/getAllRoles'" name="role" id="role"/>
             </div>
         </form>
     </div>

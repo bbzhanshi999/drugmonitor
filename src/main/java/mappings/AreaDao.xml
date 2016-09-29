@@ -16,7 +16,7 @@
 
     <select id="findAreas" resultType="com.simlink.sinosoft.drugmonitor.entity.Area">
         SELECT <include refid="areaColumns"/>
-        FROM AREA A
+        FROM DRUG_AREA A
         <where>
             A.DEL_FLAG = '0'
             <if test="areaCode!= null and areaCode!=''">
@@ -34,13 +34,13 @@
 
     <select id="findAllAreas" resultType="com.simlink.sinosoft.drugmonitor.entity.Area">
         SELECT <include refid="areaColumns"/>
-        FROM AREA A
+        FROM DRUG_AREA A
         WHERE A.DEL_FLAG = '0'
         ORDER BY A.UPDATE_TIME ASC
     </select>
 
     <insert id="createArea">
-        INSERT INTO AREA(
+        INSERT INTO DRUG_AREA(
           ID,AREA_NAME,AREA_ENAME,AREA_CODE,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
         )VALUES(
           #{id},#{areaName},#{areaEname},#{areaCode},#{creator.id},#{createTime},#{updater.id},#{updateTime}
@@ -48,7 +48,7 @@
     </insert>
 
     <update id="updateArea">
-        UPDATE AREA SET
+        UPDATE DRUG_AREA SET
         <if test="areaCode!=null and areaCode != ''">
             AREA_CODE = #{areaCode},
         </if>
@@ -64,7 +64,7 @@
     </update>
 
     <update id="deleteArea">
-        UPDATE AREA SET
+        UPDATE DRUG_AREA SET
         DEL_FLAG = '1'
         WHERE ID=#{id}
     </update>

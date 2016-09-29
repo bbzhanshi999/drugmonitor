@@ -33,24 +33,24 @@
     </sql>
 
     <sql id="dataClientJoin">
-        LEFT JOIN ORGANIZATION O ON O.ID = C.ORGANIZATION
-        LEFT JOIN AREA A ON A.ID = C.AREA
+        LEFT JOIN DRUG_ORGANIZATION O ON O.ID = C.ORGANIZATION
+        LEFT JOIN DRUG_AREA A ON A.ID = C.AREA
     </sql>
 
     <insert id="addClient">
-        INSERT INTO DATA_CLIENT(ID,CLIENT_NAME,PASSWORD,AREA,ORGANIZATION,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME)
+        INSERT INTO DRUG_DATA_CLIENT(ID,CLIENT_NAME,PASSWORD,AREA,ORGANIZATION,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME)
         VALUES(
           #{id},#{clientName},#{password},#{area.id},#{organization.id},#{creator.id},#{createTime},#{updater.id},#{updateTime}
         )
     </insert>
 
     <update id="deleteClient">
-        UPDATE DATA_CLIENT SET
+        UPDATE DRUG_DATA_CLIENT SET
         DEL_FLAG = '1' WHERE ID = #{id}
     </update>
 
     <update id="updateClient">
-        UPDATE DATA_CLIENT SET
+        UPDATE DRUG_DATA_CLIENT SET
         <if test="clientName!=null and clientName != ''">
             CLIENT_NAME = #{clientName},
         </if>
@@ -70,14 +70,14 @@
 
     <select id="getAllClients" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
         SELECT <include refid="dataClientColumns"/>
-        FROM DATA_CLIENT C
+        FROM DRUG_DATA_CLIENT C
         <include refid="dataClientJoin"/>
         WHERE C.DEL_FLAG='0' ORDER BY C.UPDATE_TIME ASC
     </select>
 
     <select id="getClient" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
         SELECT <include refid="dataClientColumns"/>
-        FROM DATA_CLIENT C
+        FROM DRUG_DATA_CLIENT C
         <include refid="dataClientJoin"/>
         <where>
             C.DEL_FLAG='0'
@@ -92,18 +92,18 @@
 
     <select id="findClients" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
         SELECT <include refid="dataClientColumns"/>
-        FROM DATA_CLIENT C
+        FROM DRUG_DATA_CLIENT C
         <include refid="dataClientJoin"/>
         <where>
             C.DEL_FLAG='0'
             <if test="clientName!=null and clientName!=''">
                 AND C.CLIENT_NAME = #{clientName}
             </if>
-            <if test="organization!=null and organization.id!=null and organization.id!=''">
-                AND C.ORGANIZATION = #{organization.id}
+            <if test="organId!=null and organId!=''">
+                AND  C.ORGANIZATION = #{organId}
             </if>
-            <if test="area!=null and area.id!=null and area.id != ''">
-                AND  C.AREA = #{area.id}
+            <if test=" areaId!=null and areaId !=''">
+                AND  C.AREA = #{areaId}
             </if>
         </where>
         ORDER BY C.UPDATE_TIME ASC
@@ -111,7 +111,7 @@
 
     <select id="getClientById" resultType="com.simlink.sinosoft.drugmonitor.entity.DataClient">
         SELECT <include refid="dataClientColumns"/>
-        FROM DATA_CLIENT C
+        FROM DRUG_DATA_CLIENT C
         <include refid="dataClientJoin"/>
         WHERE C.DEL_FLAG='0' AND C.ID = #{id}
     </select>

@@ -89,6 +89,10 @@
             <input type="hidden" name="initPasswordUser" id="initPasswordUser"/>
             <input type="hidden" name="credential" id="credential"/>
             <input  class="easyui-passwordbox" prompt="输入新密码" data-options="required:true,tipPosition:'top',validType:'password',validateOnCreate:false" name="initPassword" id="initPassword"/>
+        </div>
+        <div class="form-line">
+            <label for="validatePwd" style="width:100px">请再次輸入:</label>
+            <input  class="easyui-passwordbox" prompt="再次輸入新密码" data-options="required:true,delay:1000,tipPosition:'top',validType:'validatePwd',validateOnCreate:false" name="validatePwd" id="validatePwd"/>
             <a id="initPasswordSubmit" href="#" class="easyui-linkbutton">修改</a>
         </div>
     </form>

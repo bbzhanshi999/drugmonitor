@@ -106,9 +106,7 @@
             ]],
             remoteFilter: true,
             filterStringify:function(data){
-                console.log(data);
-
-                return data[0].value
+                return data;
             },
 
             onSuccess:function(index,row){

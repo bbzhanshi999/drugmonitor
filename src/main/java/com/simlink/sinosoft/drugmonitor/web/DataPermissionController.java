@@ -5,6 +5,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.simlink.common.entity.User;
+import com.simlink.common.mapper.JsonMapper;
 import com.simlink.common.utils.StringUtils;
 import com.simlink.common.utils.UserUtils;
 import com.simlink.common.web.BaseController;
@@ -17,7 +18,9 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -40,7 +43,7 @@ public class DataPermissionController extends BaseController {
     @RequestMapping("getClients")
     @RequiresPermissions("data:permission:client")
     @ResponseBody
-    public Map<String,Object> getClients(DataClient client,Integer page,Integer rows){
+    public Map<String,Object> getClients(Integer page,Integer rows,DataClient client){
         Map<String,Object> result = Maps.newHashMap();
         PageBounds pb;
         if(page==null||rows==null){
@@ -48,6 +51,11 @@ public class DataPermissionController extends BaseController {
         }else{
             pb= new PageBounds(page,rows);
         }
+
+        Organization organization = new Organization(client.getOrganId(),client.getOrganName());
+        client.setOrganization(organization);
+        Area area = new Area(client.getAreaId(),client.getAreaName());
+        client.setArea(area);
         List<DataClient> clients = dataPermissionService.getClients(client,pb);
         PageList pageList = (PageList)clients;
         Integer totalCount = pageList.getPaginator().getTotalCount();

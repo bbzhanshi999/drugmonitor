@@ -688,11 +688,22 @@
 		};
 		var onBeforeLoad = opts.onBeforeLoad;
 		opts.onBeforeLoad = function(param1, param2){
+			var filterData = opts.filterStringify(opts.filterRules);
 			if (param1){
-				param1.filterRules = opts.filterStringify(opts.filterRules);
+				if(filterData&&filterData.length>0){
+					for(var x=0;x<filterData.length;x++){
+						param1[filterData[x].field] = filterData[x].value;
+					}
+				}
+				//param1.filterRules = opts.filterStringify(opts.filterRules);
 			}
 			if (param2){
-				param2.filterRules = opts.filterStringify(opts.filterRules);
+				if(filterData&&filterData.length>0){
+					for(var x=0;x<filterData.length;x++){
+						param2[filterData[x].field] = filterData[x].value;
+					}
+				}
+				//param2.filterRules = opts.filterStringify(opts.filterRules);
 			}
 			var result = onBeforeLoad.call(this, param1, param2);
 			if (result != false && opts.url){

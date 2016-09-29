@@ -1,12 +1,14 @@
 package com.simlink.common.utils;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.simlink.common.config.Global;
 import com.simlink.common.dao.SystemDao;
 import com.simlink.common.entity.Menu;
 import com.simlink.common.entity.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +36,7 @@ public class SystemUtils {
     public static void initLoad(){
         setAllMenus();
         setAllRoles();
+
     }
 
     public static List<Role> getAllRoles(){
@@ -73,5 +76,23 @@ public class SystemUtils {
      */
     public static void flushCurrRoleRelated(HttpSession session){
         session.removeAttribute(MENULIST);
+    }
+
+
+    /**
+     * 设置系统超时时间
+     * @param interval
+     */
+    public static void setSessionInteval(Integer interval) {
+        RedisOperationsSessionRepository sessionRepository = SpringContextHolder.getBean("sessionRepository");
+        sessionRepository.setDefaultMaxInactiveInterval(interval);
+    }
+
+    public static Integer getSessionInterval() {
+        Integer sessionInterval = (Integer) JedisUtils.getObject("sessionInterval");
+        if(sessionInterval==null){
+            sessionInterval = Integer.parseInt(Global.getConfig("session.maxInactiveInterval"));
+        }
+        return sessionInterval;
     }
 }

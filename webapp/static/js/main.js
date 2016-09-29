@@ -67,6 +67,17 @@ $(document).ready(function () {
             },
             message: '密码由6-20个字母、数字、下划线 （不能使用初始密码）'
         },
+        validatePwd: {
+            validator: function (value, param) {
+                //  var regStr = '^(\w){6,20}$/';
+                var old = $('#initPassword').val();
+                if((old!==value)){
+                    return false;
+                }
+                return true;
+            },
+            message: '两次输入结果不一致'
+        },
     });
 
 

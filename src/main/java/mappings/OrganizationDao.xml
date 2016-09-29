@@ -15,7 +15,7 @@
 
 
     <insert id="createOrganization">
-        INSERT INTO ORGANIZATION(
+        INSERT INTO DRUG_ORGANIZATION(
             ID,ORGAN_NAME,ORGAN_ENAME,ORGAN_CODE,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
         )VALUES(
             #{id},#{organName},#{organEname},#{organCode},#{creator.id},#{createTime},#{updater.id},#{updateTime}
@@ -24,7 +24,7 @@
     </insert>
 
     <update id="updateOrganization">
-        UPDATE ORGANIZATION SET
+        UPDATE DRUG_ORGANIZATION SET
         <if test="organName!=null and organName != ''">
             ORGAN_NAME = #{organName},
         </if>
@@ -40,14 +40,14 @@
     </update>
 
     <update id="deleteOrganization">
-        UPDATE ORGANIZATION SET
+        UPDATE DRUG_ORGANIZATION SET
         DEL_FLAG = '1'
         WHERE ID=#{id}
     </update>
 
     <select id="findOrganizations" resultType="com.simlink.sinosoft.drugmonitor.entity.Organization">
         SELECT <include refid="organizationColumns"/>
-        FROM ORGANIZATION O
+        FROM DRUG_ORGANIZATION O
         <where>
             O.DEL_FLAG = '0'
             <if test="organCode!= null and organCode!=''">
@@ -65,7 +65,7 @@
 
     <select id="findAllOrganizations" resultType="com.simlink.sinosoft.drugmonitor.entity.Organization">
         SELECT <include refid="organizationColumns"/>
-        FROM ORGANIZATION O
+        FROM DRUG_ORGANIZATION O
         WHERE O.DEL_FLAG = '0'
         ORDER BY O.UPDATE_TIME ASC
     </select>

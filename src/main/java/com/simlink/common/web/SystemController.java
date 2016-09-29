@@ -12,6 +12,8 @@ import com.simlink.common.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,6 +32,28 @@ public class SystemController extends BaseController{
 
     @Autowired
     SystemService systemService;
+
+    @RequestMapping("")
+    @RequiresPermissions("system:config")
+    public String system(Model model){
+        model.addAttribute("sessionInterval",SystemUtils.getSessionInterval());
+        return "system/config";
+    }
+
+    @RequestMapping(value="config/{key}")
+    @RequiresPermissions("system:config")
+    @ResponseBody
+    public Map<String,Object> systemConfig(@PathVariable("key") String key,String value){
+        Map<String,Object> result = Maps.newHashMap();
+        if(StringUtils.isNotBlank(key)){
+            if("sessionInterval".equals(key)){
+                Integer interval = Integer.parseInt(value);
+                SystemUtils.setSessionInteval(interval);
+            }
+        }
+        result.put("success","修改成功。");
+        return result;
+    }
 
     @RequestMapping("user/create")
     @RequiresPermissions("system:user:create")

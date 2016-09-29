@@ -95,7 +95,7 @@ public class DataClientUtil {
             }
         }else{
             DataClient client1 = getClient(client.getClientName());
-            if(client!=null&&StringUtils.isNotBlank(client1.getId())){
+            if(client1!=null&&StringUtils.isNotBlank(client1.getId())){
                 return true;
             }
         }

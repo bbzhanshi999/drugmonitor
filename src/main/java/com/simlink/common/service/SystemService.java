@@ -4,12 +4,14 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.google.common.collect.Lists;
 import com.simlink.common.dao.SystemDao;
 import com.simlink.common.entity.*;
+import com.simlink.common.utils.SpringContextHolder;
 import com.simlink.common.utils.StringUtils;
 import com.simlink.common.utils.UserUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -168,4 +170,5 @@ public class SystemService {
         systemDao.deleteRole(id);
         UserUtils.loadAllUsers();
     }
+
 }
