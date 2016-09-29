@@ -175,36 +175,4 @@ public class UserUtils {
         logger.debug("addUser {},{}",user.getId(),String.valueOf(result));
     }
 
-
-    /**
-     * 获取当前用户授权菜单
-     * @return
-     */
-    public static List<Menu> getMenuList(){
-        List<Menu> menuList = getCurrentUser().getMenus();
-        if (menuList == null){
-            User user = getCurrentUser();
-            Menu m = new Menu();
-            m.setUserId(user.getId());
-            menuList = systemDao.findMenusByUserId(m);
-            user.setMenus(menuList);
-            addActiveUser(user);
-        }
-        return menuList;
-    }
-
-    /**
-     * 根据userId获取当前用户授权菜单
-     * @return
-     */
-    public static List<Menu> getMenuListByUserId(User user){
-
-        Menu m = new Menu();
-        m.setUserId(user.getId());
-        List<Menu> menuList = systemDao.findMenusByUserId(m);
-        user.setMenus(menuList);
-        addActiveUser(user);
-        addUser(user,false);
-        return menuList;
-    }
 }

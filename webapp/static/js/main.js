@@ -23,10 +23,10 @@ $(document).ready(function () {
         usernameExists:{
             validator: function (value, param) {
                 var flag = true;
-
+                var id = $('#userManager_form').find('input[name="id"]').val();
                 $.ajax({
                         url: ctx+'/system/userNameValidate',
-                        data: {userName:value},
+                        data: {userName:value,id:id},
                         dataType: 'json',
                         type: 'post',
                         async:false,
@@ -91,6 +91,10 @@ $(document).ready(function () {
                 roleManagerMenuTree.combotree('destroy');
                 $('#roleManager_form').form('clear');
                 $('#roleManager_dialog').dialog('destroy');
+            }else if('menu_userManage'===tab.panel('options').id){
+                userRoleCombo.combobox('destroy');
+                $('#userManager_form').form('clear');
+                $('#userManager_dialog').dialog('destroy');
             }
         }
     });

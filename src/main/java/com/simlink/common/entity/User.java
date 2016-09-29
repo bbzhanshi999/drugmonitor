@@ -20,6 +20,8 @@ public class User extends BaseEntity<User> {
     private List<String> roleNames;//用于权限注入
     private List<String> menuNames;//用于权限注入
 
+    private String roleId;
+
     public String getUserName() {
         return userName;
     }
@@ -98,6 +100,14 @@ public class User extends BaseEntity<User> {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }
 

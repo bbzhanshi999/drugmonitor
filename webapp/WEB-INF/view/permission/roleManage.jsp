@@ -28,8 +28,8 @@
     </form>
 </div>
 <div id="roleManager-dialog-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveRole()" style="width:90px">Save</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#roleManager_dialog').dialog('close')" style="width:90px">Cancel</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveRole()" style="width:90px">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#roleManager_dialog').dialog('close')" style="width:90px">取消</a>
 </div>
 <script>
     var roleMangeUrl,roleManagerMenuTree;
@@ -86,7 +86,7 @@
                         if (result.success){
                             $.messager.show({
                                 title:'信息提示',
-                                msg:'保存成功。',
+                                msg:'删除角色成功。',
                                 showType:'show'
                             });
                             $('#roleManager_dataGrid').datagrid('reload');    // reload the user data
@@ -234,10 +234,6 @@
                         tree.tree('check', node1.target);
                     }
                 }
-            },
-            onLoadSuccess:function(node, data){
-                console.log(node);
-                console.log(data);
             }
         });
 

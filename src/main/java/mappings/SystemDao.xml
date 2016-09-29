@@ -240,6 +240,20 @@
           MP.PERMISSION AS "parent.permission"
     </sql>
 
+    <sql id="userColumns">
+        A.ID AS "id",
+        A.USERNAME AS "userName",
+        A.PASSWORD AS "password",
+        A.SALT AS "salt",
+        A.NAME AS "name",
+        A.EMAIL AS "email",
+        A.PHONE AS "phone",
+        A.CREATE_TIME AS "createTime",
+        A.CREATE_ID AS "createId",
+        A.UPDATE_TIME AS "updateTime",
+        A.UPDATE_ID AS "updateId"
+    </sql>
+
     <insert id="addUser" parameterType="com.simlink.common.entity.User">
         INSERT INTO DRUG_USERS(
           ID,USERNAME,PASSWORD,SALT,NAME,PHONE,EMAIL,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME
@@ -314,6 +328,10 @@
         DELETE FROM DRUG_ROLE_MENU WHERE ROLE_ID = #{id}
     </delete>
 
+    <update id="deleteUser">
+        UPDATE DRUG_USERS SET DEL_FLAG ='1' WHERE ID = #{id}
+    </update>
+
     <update id="deleteRole">
         UPDATE DRUG_ROLE SET
         DEL_FLAG = '1'
@@ -332,6 +350,14 @@
         UPDATE_ID = #{updater.id}
         WHERE ID=#{id}
     </update>
+
+    <update id="resetPassword">
+      UPDATE DRUG_USERS SET PASSWORD='666666',SALT='' WHERE ID = #{id}
+    </update>
+
+    <delete id="removeAssginRole">
+        DELETE FROM DRUG_USER_ROLE WHERE USER_ID = #{id}
+    </delete>
 
     <insert id="assignRole" parameterType="com.simlink.common.entity.RoleQueryAndView">
         INSERT INTO DRUG_USER_ROLE(ID,ROLE_ID,USER_ID,CREATE_ID,CREATE_TIME,UPDATE_ID,UPDATE_TIME) VALUES (
@@ -414,10 +440,6 @@
         WHERE A.DEL_FLAG = '0'
     </select>
 
-    <select id="findMenusByUserId" resultType="com.simlink.common.entity.Menu"
-            parameterType="com.simlink.common.entity.Menu">
-
-    </select>
 
     <select id="getMenusByRoleId" resultType="com.simlink.common.entity.Menu">
         SELECT <include refid="menuColumns"/>
@@ -425,5 +447,31 @@
         <include refid="roleMenuJoins"/>
         where M.DEL_FLAG = '0' AND R.ID = #{roleId}
         ORDER BY M.SORT ASC
+    </select>
+
+    <select id="findUsers" resultType="com.simlink.common.entity.User">
+        SELECT
+        <include refid="userColumns"/>
+        FROM DRUG_USERS A
+        <where>
+            A.DEL_FLAG = '0'
+            <if test="userName!=null and userName!=''">
+                AND A.USERNAME LIKE '%'||#{userName}||'%'
+            </if>
+            <if test="name!=null and name!=''">
+                AND A.NAME LIKE '%'||#{name}||'%'
+            </if>
+            <if test="phone!=null and phone!=''">
+                AND A.PHONE = #{phone}
+            </if>
+        </where>
+        ORDER BY A.UPDATE_TIME ASC
+    </select>
+
+    <select id="findRolesByUserId" resultType="com.simlink.common.entity.Role">
+        SELECT <include refid="roleColumns"/>
+        FROM DRUG_ROLE R
+        RIGHT JOIN DRUG_USER_ROLE UR ON UR.ROLE_ID = R.ID
+        WHERE R.DEL_FLAG = '0' AND UR.USER_ID = #{id}
     </select>
 </mapper>

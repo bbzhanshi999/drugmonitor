@@ -4,6 +4,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.google.common.collect.Lists;
 import com.simlink.common.dao.SystemDao;
 import com.simlink.common.entity.*;
+import com.simlink.common.utils.Collections3;
 import com.simlink.common.utils.SpringContextHolder;
 import com.simlink.common.utils.StringUtils;
 import com.simlink.common.utils.UserUtils;
@@ -65,6 +66,7 @@ public class SystemService {
 
     @Transactional(readOnly = false)
     public void assginRole(User user){
+        systemDao.removeAssginRole(user.getId());
         for(Role role:user.getRoles()){
             RoleQueryAndView rqv = new RoleQueryAndView(user.getId(),role.getId());
             rqv.preInsert();
@@ -85,12 +87,15 @@ public class SystemService {
      * @param user
      */
     @Transactional(readOnly = false)
-    public void updateUser(User user) {
+    public void updateUser(User user,Boolean cascade) {
         user.preUpdate();
         if(user.getUpdater()==null){
             user.setUpdater(user);
         }
         systemDao.updateUser(user);
+        if(cascade){
+            assginRole(user);
+        }
         UserUtils.addUser(user,false);
     }
 
@@ -106,7 +111,7 @@ public class SystemService {
         SimpleHash hash = new SimpleHash("md5",initPassword,user.getUserName()+salt,2);
         user.setPassword(hash.toString());
         user.setSalt(salt);
-        updateUser(user);
+        updateUser(user,false);
     }
 
     /**
@@ -159,6 +164,7 @@ public class SystemService {
         }
     }
 
+    @Transactional(readOnly = false)
     public void updateRole(Role role) {
         role.preUpdate();
         systemDao.updateRole(role);
@@ -166,9 +172,39 @@ public class SystemService {
         UserUtils.loadAllUsers();
     }
 
+    @Transactional(readOnly = false)
     public void deleteRole(String id){
         systemDao.deleteRole(id);
         UserUtils.loadAllUsers();
     }
 
+
+    public List<User> getUsers(User user, PageBounds pb) {
+        List<User> users = systemDao.findUsers(user, pb);
+        if(!Collections3.isEmpty(users)){
+            for(User u:users){
+                List<Role> roles = systemDao.findRolesByUserId(u.getId());
+                if(!Collections3.isEmpty(roles)){
+                    List<String> roleNames = Lists.newArrayList();
+                    for(Role r:roles){
+                        roleNames.add(r.getName());
+                    }
+                    u.setRoles(roles);
+                    u.setRoleNames(roleNames);
+                }
+            }
+        }
+        return users;
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteUser(String id) {
+        systemDao.deleteUser(id);
+        UserUtils.loadAllUsers();
+    }
+    @Transactional(readOnly = false)
+    public void resetPassword(String id) {
+        systemDao.resetPassword(id);
+        UserUtils.loadAllUsers();
+    }
 }

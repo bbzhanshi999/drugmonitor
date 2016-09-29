@@ -36,7 +36,6 @@ public class SystemUtils {
     public static void initLoad(){
         setAllMenus();
         setAllRoles();
-
     }
 
     public static List<Role> getAllRoles(){
@@ -86,6 +85,7 @@ public class SystemUtils {
     public static void setSessionInteval(Integer interval) {
         RedisOperationsSessionRepository sessionRepository = SpringContextHolder.getBean("sessionRepository");
         sessionRepository.setDefaultMaxInactiveInterval(interval);
+        JedisUtils.setObject("sessionInterval",interval,0);
     }
 
     public static Integer getSessionInterval() {
