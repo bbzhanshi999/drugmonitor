@@ -24,7 +24,7 @@ public interface SystemDao {
 
     public void updateMenu(Map<String,String> map);
 
-    public List<Menu> findMenusByUserId(Menu menu);
+    public List<Role> findRolesByUserId(String id);
 
     public void assignRole(RoleQueryAndView role);
 
@@ -41,4 +41,12 @@ public interface SystemDao {
     public void deleteMenuRole(String id);
 
     public void deleteRole(String id);
+
+    public List<User> findUsers(User user, PageBounds pb);
+
+    public void deleteUser(String id);
+
+    public void removeAssginRole(String id);
+
+    public void resetPassword(String id);
 }

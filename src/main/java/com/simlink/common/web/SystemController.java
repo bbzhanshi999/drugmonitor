@@ -174,7 +174,7 @@ public class SystemController extends BaseController{
     }
 
     /**
-     * 删除用户
+     * 重置密码
      * @return
      */
     @RequestMapping("user/resetPassword")
