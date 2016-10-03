@@ -1,6 +1,7 @@
 package com.simlink.common.web;
 
 import com.google.common.collect.Maps;
+import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -22,14 +24,16 @@ public class GlobalExceptionHandler {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    @ExceptionHandler(value=AuthenticationException.class)
-    public String authenticationExceptionHandler(Exception e,Model model){
+    @ExceptionHandler(value=ShiroException.class)
+    @ResponseBody
+    public Map<String,Object> authenticationExceptionHandler(Exception e, HttpServletRequest request){
 
         Map<String,Object> errMsg = Maps.newHashMap();
-        errMsg.put("error",e.toString());
+        String contextPath = request.getContextPath();
+        errMsg.put("error","您没有权限访问该资源！请重新登录：<a href='"+contextPath+"'>登录</a>");
+        errMsg.put("authcError",true);
         logger.error(e.toString(),e);
-        model.addAttribute("error","您没有访问资源权限！");
-        return "error/500";
+        return errMsg;
     }
 
     @ExceptionHandler(value=Exception.class)

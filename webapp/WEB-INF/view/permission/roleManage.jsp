@@ -129,7 +129,7 @@
             fit: true,
             border: false,
             striped:true,
-            /*fitColumns: true,*/
+            fitColumns: true,
             toolbar: [{
                 text: '新增角色',
                 iconCls: 'fa fa-plus',
