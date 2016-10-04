@@ -129,7 +129,7 @@
             fit: true,
             border: false,
             striped:true,
-            fitColumns: true,
+            /*fitColumns: true,*/
             toolbar: [{
                 text: '新增角色',
                 iconCls: 'fa fa-plus',
@@ -150,7 +150,7 @@
                 {field: 'menuIds', hidden:true},
                 {field: 'name', title: '角色名称', width: 200},
                 {field: 'ename', title: '英文简称', width: 200},
-                {field: 'menuNames', title: '菜单权限'/* width: 80*/}
+                {field: 'menuNames', title: '菜单权限' ,width: 400}
             ]],
             remoteFilter:true,
             loadFilter:function(data){

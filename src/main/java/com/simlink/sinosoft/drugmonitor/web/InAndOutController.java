@@ -69,7 +69,7 @@ public class InAndOutController extends BaseController {
     }
 
     @RequestMapping("getDrugNames")
-    @RequiresPermissions("business")
+    @RequiresPermissions("business:inAndOut")
     @ResponseBody
     public List<Map<String,Object>> getDrugNames(){
         List<Map<String,Object>> results = inAndOutService.getDrugNames();

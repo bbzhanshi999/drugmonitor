@@ -2,29 +2,29 @@
 <%@ include file="/WEB-INF/view/include/taglib.jsp" %>
 <html>
 <head>
-    <title>药品出统计</title>
+    <title>药品采购统计</title>
 </head>
 <body>
 <div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
-    <header><span class="tab-inside-title">药品出统计</span></header>
+    <header><span class="tab-inside-title">药品采购统计</span></header>
     <div class="form-line wide">
-        <label for="drugOutDrugName">药品名称:</label>
-        <select id="drugOutDrugName" style="width: 90px"></select>
-        <label for="drugOutYear">年份:</label>
+        <label for="supplyDrugDrugName">药品名称:</label>
+        <select id="supplyDrugDrugName" style="width: 90px"></select>
+        <label for="supplyDrugYear">年份:</label>
         <input class="easyui-numberspinner" prompt="年份" data-options="value:${initYear},
-                min:2000,max:2199" name="drugOutYear" id="drugOutYear" style="width: 60px"/>
-        <label for="drugOutSeason">季度:</label>
-        <select id="drugOutSeason" style="width: 60px"></select>
-        <label for="drugOutMonth">月份:</label>
-        <select id="drugOutMonth" style="width: 60px"></select>
+                min:2000,max:2199" name="supplyDrugYear" id="supplyDrugYear" style="width: 60px"/>
+        <label for="supplyDrugSeason">季度:</label>
+        <select id="supplyDrugSeason" style="width: 60px"></select>
+        <label for="supplyDrugMonth">月份:</label>
+        <select id="supplyDrugMonth" style="width: 60px"></select>
         <span class="interval" style="width: 10px"></span>
-        <a href="#" id="drugOutSearch" style="width: 50px;">查询</a>
+        <a href="#" id="supplyDrugSearch" style="width: 50px;">查询</a>
     </div>
-    <div class="chart-container drugOut amount" style="width: 45%;height:80%"></div>
-    <div class="chart-container drugOut count" style="width: 45%;height:80%"></div>
+    <div class="chart-container supplyDrug amount" style="width: 45%;height:80%"></div>
+    <div class="chart-container supplyDrug count" style="width: 45%;height:80%"></div>
 </div>
 <script>
-    var drugOutAmountOptsModel = {
+    var supplyDrugAmountOptsModel = {
         title : {
             text: '',
             /*待修改*/
@@ -54,7 +54,7 @@
             }
         ]
     };
-    var drugOutCountOptsModel = {
+    var supplyDrugCountOptsModel = {
         title : {
             text: '',
             /*待修改*/
@@ -85,20 +85,20 @@
         ]
     };
     $(document).ready(function () {
-        $('#drugOutDrugName').combobox({
+        $('#supplyDrugDrugName').combobox({
             valueField: 'drugName',
             textField: 'drugName',
-            url:'${ctx}/inAndOut/getDrugNames',
+            url:'${ctx}/supply/getDrugNames',
             prompt:'药品名'
         });
 
-        $('#drugOutMonth').combobox({
+        $('#supplyDrugMonth').combobox({
             valueField: 'label',
             textField: 'value',
             prompt:'月份'
         });
 
-        $('#drugOutSeason').combobox({
+        $('#supplyDrugSeason').combobox({
             valueField: 'label',
             textField: 'value',
             prompt:'季度',
@@ -107,7 +107,7 @@
                     var val = parseInt(record.value);
                     switch (val) {
                         case 1:
-                            $('#drugOutMonth').combobox('loadData', [{
+                            $('#supplyDrugMonth').combobox('loadData', [{
                                 label: '1',
                                 value: '1'
                             }, {
@@ -119,7 +119,7 @@
                             }]).combobox('clear');
                             break;
                         case 2:
-                            $('#drugOutMonth').combobox('loadData', [{
+                            $('#supplyDrugMonth').combobox('loadData', [{
                                 label: '4',
                                 value: '4'
                             }, {
@@ -131,7 +131,7 @@
                             }]).combobox('clear');
                             break;
                         case 3:
-                            $('#drugOutMonth').combobox('loadData', [{
+                            $('#supplyDrugMonth').combobox('loadData', [{
                                 label: '7',
                                 value: '7'
                             }, {
@@ -143,7 +143,7 @@
                             }]).combobox('clear');
                             break;
                         case 4:
-                            $('#drugOutMonth').combobox('loadData', [{
+                            $('#supplyDrugMonth').combobox('loadData', [{
                                 label: '10',
                                 value: '10'
                             }, {
@@ -155,7 +155,7 @@
                             }]).combobox('clear');
                             break;
                         default:
-                            $('#drugOutMonth').combobox('loadData', [{
+                            $('#supplyDrugMonth').combobox('loadData', [{
                                 label: '1',
                                 value: '1'
                             }, {
@@ -198,7 +198,7 @@
             }
         });
 
-        $('#drugOutSeason').combobox('loadData',[{
+        $('#supplyDrugSeason').combobox('loadData',[{
             label: '1',
             value: '1'
         }, {
@@ -211,22 +211,22 @@
             label: '4',
             value: '4'
         }]);
-        $('#drugOutSeason').combobox('setValue','${initSeason}');
-        $('#drugOutMonth').combobox('setValue','${initMonth}');
+        $('#supplyDrugSeason').combobox('setValue','${initSeason}');
+        $('#supplyDrugMonth').combobox('setValue','${initMonth}');
 
-        $('#drugOutSearch').linkbutton({
+        $('#supplyDrugSearch').linkbutton({
             onClick:function(){
-                var drugName = $('#drugOutDrugName').combobox('getValue');
-                var year  = $('#drugOutYear').numberspinner('getValue');
-                var season = $('#drugOutSeason').combobox('getValue');
-                var month = $('#drugOutMonth').combobox('getValue');
-                drugOutSearch(year,season,month,drugName);
+                var drugName = $('#supplyDrugDrugName').combobox('getValue');
+                var year  = $('#supplyDrugYear').numberspinner('getValue');
+                var season = $('#supplyDrugSeason').combobox('getValue');
+                var month = $('#supplyDrugMonth').combobox('getValue');
+                supplyDrugSearch(year,season,month,drugName);
             }
         })
     });
 
-    function drugOutSearch(year,season,month,drugName){
-        $.post(ctx + '/inAndOut/outData', {year: year,season:season,month:month,drugName:drugName}, function (result) {
+    function supplyDrugSearch(year,season,month,drugName){
+        $.post(ctx + '/supply/drugData', {year: year,season:season,month:month,drugName:drugName}, function (result) {
             debugger;
             var amountSeries = [], lengendData = [],countSeries=[],subTitle;
             if($.trim(year)&&$.trim(season)&&$.trim(month)){
@@ -236,35 +236,35 @@
             }else if($.trim(year)&&!$.trim(season)&&!$.trim(month)){
                 subTitle=year+'年度统计';
             }
-            drugOutAmountOptsModel.title.subtext = subTitle;//xAxis.data,series.data
-            drugOutCountOptsModel.title.subtext = subTitle;//xAxis.data,series.data
+            supplyDrugAmountOptsModel.title.subtext = subTitle;//xAxis.data,series.data
+            supplyDrugCountOptsModel.title.subtext = subTitle;//xAxis.data,series.data
             if(drugName){
-                drugOutAmountOptsModel.title.text ='药品出金额统计'+'('+drugName+')';
-                drugOutCountOptsModel.title.text ='药品出数量统计'+'('+drugName+')';
+                supplyDrugAmountOptsModel.title.text ='药品采购金额统计'+'('+drugName+')';
+                supplyDrugCountOptsModel.title.text ='药品采购数量统计'+'('+drugName+')';
             }else{
-                drugOutAmountOptsModel.title.text ='药品出金额统计(汇总)';
-                drugOutCountOptsModel.title.text ='药品出金额统计(汇总)';
+                supplyDrugAmountOptsModel.title.text ='药品采购金额统计(汇总)';
+                supplyDrugCountOptsModel.title.text ='药品采购数量统计(汇总)';
             }
             for(var x= 0;x<result.length;x++){
                 amountSeries.push({value:result[x].amount,name:result[x].area});
                 lengendData.push(result[x].area);
                 countSeries.push({value:result[x].count,name:result[x].area});
             }
-            drugOutAmountOptsModel.legend.data = lengendData;
-            drugOutCountOptsModel.legend.data = lengendData;
-            drugOutAmountOptsModel.series[0].data = amountSeries;
-            drugOutCountOptsModel.series[0].data = countSeries;
-            var drugOutAmountChart  =require('echarts').init($('.chart-container.drugOut.amount')[0],echartTheme);
-            drugOutAmountChart.setOption(drugOutAmountOptsModel);
-            var drugOutCountChart  =require('echarts').init($('.chart-container.drugOut.count')[0],echartTheme);
-            drugOutCountChart.setOption(drugOutCountOptsModel);
+            supplyDrugAmountOptsModel.legend.data = lengendData;
+            supplyDrugCountOptsModel.legend.data = lengendData;
+            supplyDrugAmountOptsModel.series[0].data = amountSeries;
+            supplyDrugCountOptsModel.series[0].data = countSeries;
+            var supplyDrugAmountChart  =require('echarts').init($('.chart-container.supplyDrug.amount')[0],echartTheme);
+            supplyDrugAmountChart.setOption(supplyDrugAmountOptsModel);
+            var supplyDrugCountChart  =require('echarts').init($('.chart-container.supplyDrug.count')[0],echartTheme);
+            supplyDrugCountChart.setOption(supplyDrugCountOptsModel);
 
             /*var ecConfig = require('echarts/config');
-             drugOutChart.on(ecConfig.EVENT.CLICK, eConsole);*/
+             supplyDrugChart.on(ecConfig.EVENT.CLICK, eConsole);*/
         }, 'json');
     }
 
-    drugOutSearch('${initYear}','${initSeason}','${initMonth}');
+    supplyDrugSearch('${initYear}','${initSeason}','${initMonth}');
 </script>
 </body>
 </html>

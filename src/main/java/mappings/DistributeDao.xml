@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simlink.sinosoft.drugmonitor.dao.DistributeDao">
+
+    <select id="drugData" resultType="java.util.HashMap">
+        SELECT
+        C.AREA_NAME       AS "area",
+        SUM(N_DRUGAMOUNT) AS "amount",
+        SUM(N_DRUGNUMBER) AS "count"
+        FROM (SELECT
+        SD.N_DRUGNUMBER,
+        SD.N_DRUGAMOUNT,
+        SD.C_COMMONNAME,
+        A.AREA_NAME
+        FROM T_SIIP_SENDLISTCOLLECT SD LEFT JOIN DRUG_AREA A ON A.ID = SD.AREA
+        <where>
+            SD.CREATETIME &gt;= #{startDate} AND SD.CREATETIME &lt;= #{endDate}
+            <if test="drugName!=null and drugName!=''">
+                AND SD.C_COMMONNAME=#{drugName}
+            </if>
+        </where>
+        ) C
+        GROUP BY C.AREA_NAME
+        ORDER BY SUM(N_DRUGAMOUNT)
+    </select>
+
+    <select id="getDrugNames" resultType="java.util.HashMap">
+        SELECT DISTINCT C_COMMONNAME AS "drugName" FROM T_SIIP_SENDLISTCOLLECT ORDER BY C_COMMONNAME
+    </select>
+</mapper>

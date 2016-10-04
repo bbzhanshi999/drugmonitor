@@ -2,26 +2,28 @@
 <%@ include file="/WEB-INF/view/include/taglib.jsp" %>
 <html>
 <head>
-    <title>出库统计</title>
+    <title>中西药品采购统计</title>
 </head>
 <body>
 <div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
-    <header><span class="tab-inside-title">出库信息汇总统计</span></header>
+    <header><span class="tab-inside-title">中西药品采购统计</span></header>
     <div class="form-line wide">
-        <label for="outstoreYear">年份:</label>
+        <label for="categorySupplyCategory">药品种类:</label>
+        <select id="categorySupplyCategory" style="width: 90px"></select>
+        <label for="categorySupplyYear">年份:</label>
         <input class="easyui-numberspinner" prompt="年份" data-options="value:${initYear},
-                min:2000,max:2199" name="outstoreYear" id="outstoreYear" style="width: 60px"/>
-        <label for="outstoreSeason">季度:</label>
-        <select id="outstoreSeason" style="width: 60px"></select>
-        <label for="outstoreMonth">月份:</label>
-        <select id="outstoreMonth" style="width: 60px"></select>
+                min:2000,max:2199" name="categorySupplyYear" id="categorySupplyYear" style="width: 60px"/>
+        <label for="categorySupplySeason">季度:</label>
+        <select id="categorySupplySeason" style="width: 60px"></select>
+        <label for="categorySupplyMonth">月份:</label>
+        <select id="categorySupplyMonth" style="width: 60px"></select>
         <span class="interval" style="width: 10px"></span>
-        <a href="#" id="outstoreSearch" style="width: 50px;">查询</a>
+        <a href="#" id="categorySupplySearch" style="width: 50px;">查询</a>
     </div>
-    <div class="chart-container outstore"></div>
+    <div class="chart-container categorySupply"></div>
 </div>
 <script>
-    var outstoreOptsModel = {
+    var categorySupplyOptsModel = {
         tooltip: {
             showDelay: 0,
             hideDelay: 50,
@@ -36,7 +38,7 @@
             text: ''
         },
         legend: {
-            data: ['出库总金额']
+            data: ['采购总金额']
         },
         grid: {
             x: 60,
@@ -111,7 +113,7 @@
         ],
         series: [
             {
-                "name": "出库总金额",
+                "name": "采购总金额",
                 "type": "bar",
                 /*待设置*/
                 "data": []
@@ -119,12 +121,19 @@
         ]
     };
     $(document).ready(function () {
-        $('#outstoreMonth').combobox({
+        $('#categorySupplyCategory').combobox({
+            valueField: 'label',
+            textField: 'value',
+            data:[{label:'中药',value:'中药'},{label:'西药',value:'西药'}],
+            prompt:'药品种类'
+        });
+
+        $('#categorySupplyMonth').combobox({
             valueField: 'label',
             textField: 'value'
         });
 
-        $('#outstoreSeason').combobox({
+        $('#categorySupplySeason').combobox({
             valueField: 'label',
             textField: 'value',
             onSelect: function (record) {
@@ -132,7 +141,7 @@
                     var val = parseInt(record.value);
                     switch (val) {
                         case 1:
-                            $('#outstoreMonth').combobox('loadData', [{
+                            $('#categorySupplyMonth').combobox('loadData', [{
                                 label: '1',
                                 value: '1'
                             }, {
@@ -144,7 +153,7 @@
                             }]).combobox('clear');
                             break;
                         case 2:
-                            $('#outstoreMonth').combobox('loadData', [{
+                            $('#categorySupplyMonth').combobox('loadData', [{
                                 label: '4',
                                 value: '4'
                             }, {
@@ -156,7 +165,7 @@
                             }]).combobox('clear');
                             break;
                         case 3:
-                            $('#outstoreMonth').combobox('loadData', [{
+                            $('#categorySupplyMonth').combobox('loadData', [{
                                 label: '7',
                                 value: '7'
                             }, {
@@ -168,7 +177,7 @@
                             }]).combobox('clear');
                             break;
                         case 4:
-                            $('#outstoreMonth').combobox('loadData', [{
+                            $('#categorySupplyMonth').combobox('loadData', [{
                                 label: '10',
                                 value: '10'
                             }, {
@@ -180,7 +189,7 @@
                             }]).combobox('clear');
                             break;
                         default:
-                            $('#outstoreMonth').combobox('loadData', [{
+                            $('#categorySupplyMonth').combobox('loadData', [{
                                 label: '1',
                                 value: '1'
                             }, {
@@ -223,7 +232,7 @@
             }
         });
 
-        $('#outstoreSeason').combobox('loadData',[{
+        $('#categorySupplySeason').combobox('loadData',[{
             label: '1',
             value: '1'
         }, {
@@ -236,21 +245,22 @@
             label: '4',
             value: '4'
         }]);
-        $('#outstoreSeason').combobox('setValue','${initSeason}');
-        $('#outstoreMonth').combobox('setValue','${initMonth}');
+        $('#categorySupplySeason').combobox('setValue','${initSeason}');
+        $('#categorySupplyMonth').combobox('setValue','${initMonth}');
 
-        $('#outstoreSearch').linkbutton({
+        $('#categorySupplySearch').linkbutton({
             onClick:function(){
-                var year  = $('#outstoreYear').numberspinner('getValue');
-                var season = $('#outstoreSeason').combobox('getValue');
-                var month = $('#outstoreMonth').combobox('getValue');
-                outstoreSearch(year,season,month);
+                var year  = $('#categorySupplyYear').numberspinner('getValue');
+                var season = $('#categorySupplySeason').combobox('getValue');
+                var month = $('#categorySupplyMonth').combobox('getValue');
+                var category = $('#categorySupplyCategory').combobox('getValue');
+                categorySupplySearch(year,season,month,category);
             }
         })
     });
 
-    function outstoreSearch(year,season,month){
-        $.post(ctx + '/erp/outstoreData', {year: year,season:season,month:month}, function (result) {
+    function categorySupplySearch(year,season,month,category){
+        $.post(ctx + '/category/supplyData', {year: year,season:season,month:month,category:category}, function (result) {
             debugger;
             var series = [],xdata = [],title;
             if($.trim(year)&&$.trim(season)&&$.trim(month)){
@@ -260,17 +270,17 @@
             }else if($.trim(year)&&!$.trim(season)&&!$.trim(month)){
                 title=year+'年度统计';
             }
-            outstoreOptsModel.title.text = title;//xAxis.data,series.data
+            categorySupplyOptsModel.title.text = title;//xAxis.data,series.data
             for(var x= 0;x<result.length;x++){
                 series.push(result[x].amount);
                 xdata.push(result[x].area);
             }
-            outstoreOptsModel.xAxis[0].data = xdata;
-            outstoreOptsModel.series[0].data = series;
-            var outstoreChart  =require('echarts').init($('.chart-container.outstore')[0],echartTheme);
-            outstoreChart.setOption(outstoreOptsModel);
+            categorySupplyOptsModel.xAxis[0].data = xdata;
+            categorySupplyOptsModel.series[0].data = series;
+            var categorySupplyChart  =require('echarts').init($('.chart-container.categorySupply')[0],echartTheme);
+            categorySupplyChart.setOption(categorySupplyOptsModel);
             /*var ecConfig = require('echarts/config');
-             outstoreChart.on(ecConfig.EVENT.CLICK, eConsole);*/
+             categorySupplyChart.on(ecConfig.EVENT.CLICK, eConsole);*/
         }, 'json');
     }
 
@@ -284,7 +294,7 @@
         console.log(mes);
     }
 
-    outstoreSearch('${initYear}','${initSeason}','${initMonth}');
+    categorySupplySearch('${initYear}','${initSeason}','${initMonth}');
 </script>
 </body>
 </html>

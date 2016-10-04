@@ -2,11 +2,11 @@
 <%@ include file="/WEB-INF/view/include/taglib.jsp" %>
 <html>
 <head>
-    <title>入库统计</title>
+    <title>药品入统计</title>
 </head>
 <body>
 <div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
-    <header><span class="tab-inside-title">入库信息汇总统计</span></header>
+    <header><span class="tab-inside-title">药品入统计</span></header>
     <div class="form-line wide">
         <label for="drugInDrugName">药品名称:</label>
         <select id="drugInDrugName" style="width: 90px"></select>
