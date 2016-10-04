@@ -58,8 +58,8 @@ header.panel-header {
 }
 
 .chart-container {
-    width: 45%;
-    height: 300px;
+    width: 70%;
+    height: 70%;
     display:inline-block;
     margin:20px 20px;
 }

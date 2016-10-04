@@ -2,26 +2,26 @@
 <%@ include file="/WEB-INF/view/include/taglib.jsp" %>
 <html>
 <head>
-    <title>入库统计</title>
+    <title>库存信息汇总</title>
 </head>
 <body>
 <div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
-    <header><span class="tab-inside-title">入库信息汇总统计</span></header>
+    <header><span class="tab-inside-title">库存信息汇总统计</span></header>
     <div class="form-line wide">
-        <label for="instoreYear">年份:</label>
+        <label for="storageYear">年份:</label>
         <input class="easyui-numberspinner" prompt="年份" data-options="value:${initYear},
-                min:2000,max:2199" name="instoreYear" id="instoreYear"  style="width: 60px"/>
-        <label for="instoreSeason">季度:</label>
-        <select id="instoreSeason" style="width: 60px"></select>
-        <label for="instoreMonth">月份:</label>
-        <select id="instoreMonth" style="width: 60px"></select>
+                min:2000,max:2199" name="storageYear" id="storageYear" style="width: 60px"/>
+        <label for="storageSeason">季度:</label>
+        <select id="storageSeason" style="width: 60px"></select>
+        <label for="storageMonth">月份:</label>
+        <select id="storageMonth" style="width: 60"></select>
         <span class="interval" style="width: 10px"></span>
-        <a href="#" id="instoreSearch" style="width: 50px;">查询</a>
+        <a href="#" id="storageSearch" style="width: 50px;">查询</a>
     </div>
-    <div class="chart-container instore"></div>
+    <div class="chart-container storage"></div>
 </div>
 <script>
-    var instoreOptsModel = {
+    var storageOptsModel = {
         tooltip: {
             showDelay: 0,
             hideDelay: 50,
@@ -119,12 +119,12 @@
         ]
     };
     $(document).ready(function () {
-        $('#instoreMonth').combobox({
+        $('#storageMonth').combobox({
             valueField: 'label',
             textField: 'value'
         });
 
-        $('#instoreSeason').combobox({
+        $('#storageSeason').combobox({
             valueField: 'label',
             textField: 'value',
             onSelect: function (record) {
@@ -132,7 +132,7 @@
                     var val = parseInt(record.value);
                     switch (val) {
                         case 1:
-                            $('#instoreMonth').combobox('loadData', [{
+                            $('#storageMonth').combobox('loadData', [{
                                 label: '1',
                                 value: '1'
                             }, {
@@ -144,7 +144,7 @@
                             }]).combobox('clear');
                             break;
                         case 2:
-                            $('#instoreMonth').combobox('loadData', [{
+                            $('#storageMonth').combobox('loadData', [{
                                 label: '4',
                                 value: '4'
                             }, {
@@ -156,7 +156,7 @@
                             }]).combobox('clear');
                             break;
                         case 3:
-                            $('#instoreMonth').combobox('loadData', [{
+                            $('#storageMonth').combobox('loadData', [{
                                 label: '7',
                                 value: '7'
                             }, {
@@ -168,7 +168,7 @@
                             }]).combobox('clear');
                             break;
                         case 4:
-                            $('#instoreMonth').combobox('loadData', [{
+                            $('#storageMonth').combobox('loadData', [{
                                 label: '10',
                                 value: '10'
                             }, {
@@ -180,7 +180,7 @@
                             }]).combobox('clear');
                             break;
                         default:
-                            $('#instoreMonth').combobox('loadData', [{
+                            $('#storageMonth').combobox('loadData', [{
                                 label: '1',
                                 value: '1'
                             }, {
@@ -223,7 +223,7 @@
             }
         });
 
-        $('#instoreSeason').combobox('loadData',[{
+        $('#storageSeason').combobox('loadData',[{
             label: '1',
             value: '1'
         }, {
@@ -236,21 +236,21 @@
             label: '4',
             value: '4'
         }]);
-        $('#instoreSeason').combobox('setValue','${initSeason}');
-        $('#instoreMonth').combobox('setValue','${initMonth}');
+        $('#storageSeason').combobox('setValue','${initSeason}');
+        $('#storageMonth').combobox('setValue','${initMonth}');
 
-        $('#instoreSearch').linkbutton({
+        $('#storageSearch').linkbutton({
             onClick:function(){
-                var year  = $('#instoreYear').numberspinner('getValue');
-                var season = $('#instoreSeason').combobox('getValue');
-                var month = $('#instoreMonth').combobox('getValue');
-                instoreSearch(year,season,month);
+                var year  = $('#storageYear').numberspinner('getValue');
+                var season = $('#storageSeason').combobox('getValue');
+                var month = $('#storageMonth').combobox('getValue');
+                storageSearch(year,season,month);
             }
         })
     });
 
-    function instoreSearch(year,season,month){
-        $.post(ctx + '/erp/instoreData', {year: year,season:season,month:month}, function (result) {
+    function storageSearch(year,season,month){
+        $.post(ctx + '/erp/storageData', {year: year,season:season,month:month}, function (result) {
             debugger;
             var series = [],xdata = [],title;
             if($.trim(year)&&$.trim(season)&&$.trim(month)){
@@ -260,17 +260,17 @@
             }else if($.trim(year)&&!$.trim(season)&&!$.trim(month)){
                 title=year+'年度统计';
             }
-            instoreOptsModel.title.text = title;//xAxis.data,series.data
+            storageOptsModel.title.text = title;//xAxis.data,series.data
             for(var x= 0;x<result.length;x++){
                 series.push(result[x].amount);
                 xdata.push(result[x].area);
             }
-            instoreOptsModel.xAxis[0].data = xdata;
-            instoreOptsModel.series[0].data = series;
-            var instoreChart  =require('echarts').init($('.chart-container.instore')[0],echartTheme);
-            instoreChart.setOption(instoreOptsModel);
+            storageOptsModel.xAxis[0].data = xdata;
+            storageOptsModel.series[0].data = series;
+            var storageChart  =require('echarts').init($('.chart-container.storage')[0],echartTheme);
+            storageChart.setOption(storageOptsModel);
             /*var ecConfig = require('echarts/config');
-            instoreChart.on(ecConfig.EVENT.CLICK, eConsole);*/
+             storageChart.on(ecConfig.EVENT.CLICK, eConsole);*/
         }, 'json');
     }
 
@@ -284,7 +284,7 @@
         console.log(mes);
     }
 
-    instoreSearch('${initYear}','${initSeason}','${initMonth}');
+    storageSearch('${initYear}','${initSeason}','${initMonth}');
 </script>
 </body>
 </html>

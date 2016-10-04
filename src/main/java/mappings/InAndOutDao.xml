@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simlink.sinosoft.drugmonitor.dao.InAndOutDao">
+
+    <select id="drugInData" resultType="java.util.HashMap">
+        SELECT
+        C.AREA_NAME       AS "area",
+        SUM(N_DRUGAMOUNT) AS "amount",
+        SUM(N_DRUGCOUNT) AS "count"
+        FROM (SELECT
+        DI.N_DRUGCOUNT,
+        DI.N_DRUGAMOUNT,
+        DI.C_COMMONNAME,
+        A.AREA_NAME
+        FROM T_SIIP_DRUGINSTOREDETAIL DI LEFT JOIN DRUG_AREA A ON A.ID = DI.AREA
+        <where>
+            DI.CREATETIME &gt;= #{startDate} AND DI.CREATETIME &lt;= #{endDate}
+            <if test="drugName!=null and drugName!=''">
+              AND DI.C_COMMONNAME=#{drugName}
+            </if>
+        </where>
+        ) C
+        GROUP BY C.AREA_NAME
+        ORDER BY SUM(N_DRUGAMOUNT)
+    </select>
+
+    <select id="getDrugNames" resultType="java.util.HashMap">
+        SELECT DISTINCT C_COMMONNAME AS "drugName" FROM T_SIIP_DRUGINSTOREDETAIL ORDER BY C_COMMONNAME
+    </select>
+
+    <select id="drugOutData" resultType="java.util.HashMap">
+        SELECT
+        C.AREA_NAME       AS "area",
+        SUM(N_DRUGAMOUNT) AS "amount",
+        SUM(N_DRUGCOUNT) AS "count"
+        FROM (SELECT
+        DO.N_DRUGCOUNT,
+        DO.N_DRUGAMOUNT,
+        DO.C_COMMONNAME,
+        A.AREA_NAME
+        FROM T_SIIP_DRUGOUTSTOREDETAIL DO LEFT JOIN DRUG_AREA A ON A.ID = DO.AREA
+        <where>
+            DO.CREATETIME &gt;= #{startDate} AND DO.CREATETIME &lt;= #{endDate}
+            <if test="drugName!=null and drugName!=''">
+                AND DO.C_COMMONNAME=#{drugName}
+            </if>
+        </where>
+        ) C
+        GROUP BY C.AREA_NAME
+        ORDER BY SUM(N_DRUGAMOUNT)
+    </select>
+
+</mapper>

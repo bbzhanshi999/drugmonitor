@@ -103,4 +103,14 @@ public abstract class BaseController {
         });
     }
 
+
+    protected void defaultDate(Model model) {
+        Date date = new Date();
+        int year = DateUtils.getYear(date)-1;
+        int month = 12;
+        int season = 4;
+        model.addAttribute("initYear",year);
+        model.addAttribute("initMonth",month);
+        model.addAttribute("initSeason",season);
+    }
 }

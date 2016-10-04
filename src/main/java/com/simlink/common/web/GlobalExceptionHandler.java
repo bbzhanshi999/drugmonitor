@@ -30,7 +30,10 @@ public class GlobalExceptionHandler {
 
         Map<String,Object> errMsg = Maps.newHashMap();
         String contextPath = request.getContextPath();
-        errMsg.put("error","您没有权限访问该资源！请重新登录：<a href='"+contextPath+"'>登录</a>");
+        if("系统错误，请尝试重新登录".equals(e.getMessage()))
+            errMsg.put("error","您没有权限访问该资源！请重新登录：<a href='"+contextPath+"'>登录</a>");
+        else
+            errMsg.put("error",e.getMessage());
         errMsg.put("authcError",true);
         logger.error(e.toString(),e);
         return errMsg;

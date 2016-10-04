@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simlink.sinosoft.drugmonitor.dao.ErpDataDao">
+
+
+    <select id="instoreData" resultType="java.util.HashMap">
+        SELECT
+        C.AREA_NAME       AS "area",
+        SUM(N_DRUGAMOUNT) AS "amount"
+        FROM (SELECT
+        A.AREA_NAME,
+        I.N_DRUGAMOUNT,I.D_ACCEPTDATETIME
+        FROM T_SIIP_DRUGINSTORE I LEFT JOIN DRUG_AREA A ON A.ID = I.AREA
+        where I.D_ACCEPTDATETIME &gt;= #{startDate}
+        AND  I.D_ACCEPTDATETIME &lt;= #{endDate})  C
+        GROUP BY C.AREA_NAME
+        ORDER BY SUM(N_DRUGAMOUNT)
+    </select>
+
+    <select id="outstoreData" resultType="java.util.HashMap">
+        SELECT
+        C.AREA_NAME       AS "area",
+        SUM(N_DRUGAMOUNT) AS "amount"
+        FROM (SELECT
+        A.AREA_NAME,
+        O.N_DRUGAMOUNT,O.D_OUTDATETIME
+        FROM T_SIIP_DRUGOUTSTORE O LEFT JOIN DRUG_AREA A ON A.ID = O.AREA
+        where O.D_OUTDATETIME &gt;= #{startDate}
+        AND  O.D_OUTDATETIME &lt;= #{endDate})  C
+        GROUP BY C.AREA_NAME
+        ORDER BY SUM(N_DRUGAMOUNT)
+    </select>
+
+    <select id="storageData" resultType="java.util.HashMap">
+        SELECT
+        C.AREA_NAME       AS "area",
+        SUM(N_AFTERINVAMOUNT) AS "amount"
+        FROM (SELECT
+        A.AREA_NAME,
+        S.N_AFTERINVAMOUNT,S.D_INVSTORETIME
+        FROM T_SIIP_INVDRUGSTORE S LEFT JOIN DRUG_AREA A ON A.ID = S.AREA
+        where S.D_INVSTORETIME &gt;= #{startDate}
+        AND  S.D_INVSTORETIME &lt;= #{endDate})  C
+        GROUP BY C.AREA_NAME
+        ORDER BY SUM(N_AFTERINVAMOUNT)
+    </select>
+
+
+</mapper>

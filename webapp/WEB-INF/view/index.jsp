@@ -19,11 +19,30 @@
 <body class="easyui-layout" style="text-align:left">
 <script src="${ctxStatic}/echarts/dist/echarts.js"></script>
 <script type="text/javascript">
+    var echartTheme;
     require.config({
         paths: {
             echarts: '${ctxStatic}/echarts/dist'
         }
     });
+    require(
+            [
+                'echarts',
+                'echarts/theme/helianthus',
+                'echarts/chart/bar',
+                'echarts/chart/pie'
+            ],
+            function (ec, theme) {
+                // 基于准备好的dom，初始化echarts图表
+                echartTheme = theme;
+                /*var instoreChart = ec.init($('.chart-container.instore')[0], theme);
+
+                instoreChart.setOption(instoreOptsModel);
+
+                var ecConfig = require('echarts/config');
+                instoreChart.on(ecConfig.EVENT.CLICK, eConsole);*/
+            }
+    );
 </script>
 <div region="north" border="false" class="group wrap header" style="height:66px;font-size:100%">
     <div class="content">

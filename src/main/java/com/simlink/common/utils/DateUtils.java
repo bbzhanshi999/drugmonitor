@@ -503,6 +503,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 		public DateRange(Date startDate, Date endDate) {
 			this.startDate = startDate;
 			this.endDate = endDate;
+			this.startDateStr = formatDate(startDate);
+			this.endDateStr = formatDate(endDate);
 		}
 
 		public Date getStartDate() {
@@ -523,5 +525,23 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
 		private Date startDate;
 		private Date endDate;
+		private String startDateStr;
+		private String endDateStr;
+
+		public String getStartDateStr() {
+			return startDateStr;
+		}
+
+		public void setStartDateStr(String startDateStr) {
+			this.startDateStr = startDateStr;
+		}
+
+		public String getEndDateStr() {
+			return endDateStr;
+		}
+
+		public void setEndDateStr(String endDateStr) {
+			this.endDateStr = endDateStr;
+		}
 	}
 }

@@ -115,7 +115,7 @@ $(document).ready(function () {
                 tab = $('#mainTabs').tabs('add', {
                     id: node.ename,
                     title: node.text,
-                    href: ctx + node.url,
+                    href: ctx + node.url+'?r='+Math.random(),
                     closable: true,
                     iconCls: 'e-icon ' + node.iconCls
                 });
