@@ -2,6 +2,7 @@ package com.simlink.sinosoft.drugmonitor.web;
 
 import com.google.common.collect.Maps;
 import com.simlink.common.utils.DateUtils;
+import com.simlink.common.utils.StringUtils;
 import com.simlink.common.web.BaseController;
 import com.simlink.sinosoft.drugmonitor.service.InAndOutService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,13 +36,14 @@ public class InAndOutController extends BaseController {
     @RequestMapping("inData")
     @RequiresPermissions("business:inAndOut:in")
     @ResponseBody
-    public List<Map<String,Object>> inData(String year, String season, String month,String drugName){
+    public List<Map<String,Object>> inData(String year, String season, String month,String drugName,String areaName){
         List<Map<String,Object>> results;
         Map<String,Object> query = Maps.newHashMap();
         DateUtils.DateRange dateRange = DateUtils.getDateRange(year, season, month);
         query.put("endDate",dateRange.getEndDate());
         query.put("startDate",dateRange.getStartDate());
         query.put("drugName",drugName);
+        query.put("areaName",areaName);
         results = inAndOutService.drugInData(query);
         return results;
     }

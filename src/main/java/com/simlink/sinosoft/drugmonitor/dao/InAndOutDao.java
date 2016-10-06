@@ -13,4 +13,5 @@ public interface InAndOutDao {
 
     List<Map<String,Object>> getDrugNames();
 
+    List<Map<String,Object>> drugInDataGroupByArea(Map<String, Object> query);
 }

@@ -269,12 +269,11 @@
             instoreOptsModel.series[0].data = series;
             var instoreChart  =require('echarts').init($('.chart-container.instore')[0],echartTheme);
             instoreChart.setOption(instoreOptsModel);
-            /*var ecConfig = require('echarts/config');
-            instoreChart.on(ecConfig.EVENT.CLICK, eConsole);*/
+            instoreChart.on(ecConfig.EVENT.CLICK, eConsole);
         }, 'json');
     }
 
-    function eConsole(param) {
+    function instoreDetailByOrganization(param) {
         var mes = '【' + param.type + '】';
         if (typeof param.seriesIndex != 'undefined') {
             mes += '  seriesIndex : ' + param.seriesIndex;

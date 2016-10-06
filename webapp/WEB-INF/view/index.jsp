@@ -43,6 +43,7 @@
                 instoreChart.on(ecConfig.EVENT.CLICK, eConsole);*/
             }
     );
+    var ecConfig = require('echarts/config');
 </script>
 <div region="north" border="false" class="group wrap header" style="height:66px;font-size:100%">
     <div class="content">

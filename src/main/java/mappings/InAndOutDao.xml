@@ -24,6 +24,30 @@
         ORDER BY SUM(N_DRUGAMOUNT)
     </select>
 
+    <select id="drugInDataGroupByArea" resultType="java.util.HashMap">
+        SELECT
+        C.ORGAN_NAME AS "area",
+        SUM(N_DRUGAMOUNT) AS "amount",
+        SUM(N_DRUGCOUNT)  AS "count"
+        FROM
+        (SELECT
+        DI.N_DRUGCOUNT,
+        DI.N_DRUGAMOUNT,
+        ORGAN.ORGAN_NAME
+        FROM T_SIIP_DRUGINSTOREDETAIL DI
+        LEFT JOIN DRUG_ORGANIZATION ORGAN ON ORGAN.ID = DI.INSTITUTION
+        WHERE DI.CREATETIME &gt;= #{startDate}
+        AND DI.CREATETIME &lt;= #{endDate}
+        AND DI.AREA IN ( SELECT ID
+        FROM DRUG_AREA
+        WHERE AREA_NAME = #{areaName})
+        <if test="drugName!=null and drugName!=''">
+            AND DI.C_COMMONNAME=#{drugName}
+        </if>) C
+        GROUP BY C.ORGAN_NAME
+        ORDER BY SUM(N_DRUGAMOUNT)
+    </select>
+
     <select id="getDrugNames" resultType="java.util.HashMap">
         SELECT DISTINCT C_COMMONNAME AS "drugName" FROM T_SIIP_DRUGINSTOREDETAIL ORDER BY C_COMMONNAME
     </select>
@@ -49,5 +73,6 @@
         GROUP BY C.AREA_NAME
         ORDER BY SUM(N_DRUGAMOUNT)
     </select>
+
 
 </mapper>

@@ -7,7 +7,7 @@
 <body>
 <div class="easyui-panel" data-options="fit:true,border:false" style="text-align: center">
     <header><span class="tab-inside-title">药品入统计</span></header>
-    <div class="form-line wide">
+    <div class="form-line wide" id="drugInSearchBox">
         <label for="drugInDrugName">药品名称:</label>
         <select id="drugInDrugName" style="width: 90px"></select>
         <label for="drugInYear">年份:</label>
@@ -20,6 +20,7 @@
         <span class="interval" style="width: 10px"></span>
         <a href="#" id="drugInSearch" style="width: 50px;">查询</a>
     </div>
+    <h2 id="drugInOrganDetailTitle" style="display: none;margin-top: 20px"></h2>
     <div class="chart-container drugIn amount" style="width: 45%;height:80%"></div>
     <div class="chart-container drugIn count" style="width: 45%;height:80%"></div>
 </div>
@@ -33,7 +34,7 @@
         },
         tooltip : {
             trigger: 'item',
-            formatter: "{b} : {c}万元 ({d}%)"
+            formatter: ''
         },
         legend: {
             orient : 'vertical',
@@ -63,7 +64,7 @@
         },
         tooltip : {
             trigger: 'item',
-            formatter: "{b} : {c} ({d}%)"
+            formatter: ''
         },
         legend: {
             orient : 'vertical',
@@ -225,10 +226,10 @@
         })
     });
 
-    function drugInSearch(year,season,month,drugName){
-        $.post(ctx + '/inAndOut/inData', {year: year,season:season,month:month,drugName:drugName}, function (result) {
+    function drugInSearch(year,season,month,drugName,areaName){
+        $.post(ctx + '/inAndOut/inData', {year: year,season:season,month:month,drugName:drugName,areaName:areaName}, function (result) {
             debugger;
-            var amountSeries = [], lengendData = [],countSeries=[],subTitle;
+            var amountSeries = [], lengendData = [],countSeries=[],subTitle,countTitle ='',amountTitle ='';
             if($.trim(year)&&$.trim(season)&&$.trim(month)){
                 subTitle=year+'年'+season+'季度'+month+'月统计';
             }else if($.trim(year)&&$.trim(season)&&!$.trim(month)){
@@ -238,13 +239,31 @@
             }
             drugInAmountOptsModel.title.subtext = subTitle;//xAxis.data,series.data
             drugInCountOptsModel.title.subtext = subTitle;//xAxis.data,series.data
-            if(drugName){
-                drugInAmountOptsModel.title.text ='药品入金额统计'+'('+drugName+')';
-                drugInCountOptsModel.title.text ='药品入数量统计'+'('+drugName+')';
+
+            if($.trim(areaName)){
+                countTitle = areaName;
+                amountTitle = areaName;
+                drugInAmountOptsModel.tooltip.formatter = "{b} : {c}万元 ({d}%)<br/><span style='color: red'>点击离开区域详情</span>";
+                drugInCountOptsModel.tooltip.formatter = "{b} : {c} ({d}%)<br/><span style='color: red'>点击离开区域详情</span>";
+                $('#drugInSearchBox').hide();
+                $('#drugInOrganDetailTitle').show();
+                $('#drugInOrganDetailTitle').text(areaName+'详情');
             }else{
-                drugInAmountOptsModel.title.text ='药品入金额统计(汇总)';
-                drugInCountOptsModel.title.text ='药品入金额统计(汇总)';
+                drugInAmountOptsModel.tooltip.formatter = "{b} : {c}万元 ({d}%)<br/><span style='color: red'>点击进入区域详情</span>";
+                drugInCountOptsModel.tooltip.formatter = "{b} : {c} ({d}%)<br/><span style='color: red'>点击进入区域详情</span>";
+                $('#drugInSearchBox').show();
+                $('#drugInOrganDetailTitle').hide();
             }
+            if($.trim(drugName)){
+                amountTitle =amountTitle+'药品入金额统计'+'('+drugName+')';
+                countTitle =countTitle+'药品入数量统计'+'('+drugName+')';
+            }else{
+                amountTitle =amountTitle+'药品入金额统计(汇总)';
+                countTitle =countTitle+'药品入数量统计(汇总)';
+            }
+            drugInCountOptsModel.title.text =countTitle;
+            drugInAmountOptsModel.title.text =amountTitle;
+
             for(var x= 0;x<result.length;x++){
                 amountSeries.push({value:result[x].amount,name:result[x].area});
                 lengendData.push(result[x].area);
@@ -259,10 +278,36 @@
             var drugInCountChart  =require('echarts').init($('.chart-container.drugIn.count')[0],echartTheme);
             drugInCountChart.setOption(drugInCountOptsModel);
 
-            /*var ecConfig = require('echarts/config');
-             drugInChart.on(ecConfig.EVENT.CLICK, eConsole);*/
+            if($.trim(areaName)){
+                drugInCountChart.un(ecConfig.EVENT.CLICK, drugInDetailByOrganization);
+                drugInAmountChart.un(ecConfig.EVENT.CLICK, drugInDetailByOrganization);
+                drugInCountChart.on(ecConfig.EVENT.CLICK, drugInDetailCancel);
+                drugInAmountChart.on(ecConfig.EVENT.CLICK, drugInDetailCancel);
+            }else{
+                drugInCountChart.un(ecConfig.EVENT.CLICK, drugInDetailCancel);
+                drugInAmountChart.un(ecConfig.EVENT.CLICK, drugInDetailCancel);
+                drugInCountChart.on(ecConfig.EVENT.CLICK, drugInDetailByOrganization);
+                drugInAmountChart.on(ecConfig.EVENT.CLICK, drugInDetailByOrganization);
+            }
         }, 'json');
     }
+
+    function drugInDetailByOrganization(param){
+        var drugName = $('#drugInDrugName').combobox('getValue');
+        var year  = $('#drugInYear').numberspinner('getValue');
+        var season = $('#drugInSeason').combobox('getValue');
+        var month = $('#drugInMonth').combobox('getValue');
+        drugInSearch(year,season,month,drugName,param.name);
+    }
+
+    function drugInDetailCancel(param){
+        var drugName = $('#drugInDrugName').combobox('getValue');
+        var year  = $('#drugInYear').numberspinner('getValue');
+        var season = $('#drugInSeason').combobox('getValue');
+        var month = $('#drugInMonth').combobox('getValue');
+        drugInSearch(year,season,month,drugName);
+    }
+
 
     drugInSearch('${initYear}','${initSeason}','${initMonth}');
 </script>
