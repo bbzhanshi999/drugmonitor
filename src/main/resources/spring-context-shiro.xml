@@ -17,6 +17,7 @@
                 /updateInitPassword = anon
                 /getvcode = anon
                 /error.jsp = anon
+                /clientService = anon
                 /login = authc
                 /** = user
             </value>
