@@ -1,6 +1,7 @@
 package com.simlink.common.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.simlink.common.utils.IdGen;
 import com.simlink.common.utils.UserUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -93,6 +94,7 @@ public class BaseEntity<T> implements Serializable {
 
     protected String delFlag;//删除标记位
 
+    @JsonIgnore
     public String getDelFlag() {
         return delFlag;
     }
@@ -109,6 +111,7 @@ public class BaseEntity<T> implements Serializable {
         this.id = id;
     }
 
+    @JsonIgnore
     public User getCreator() {
         return creator;
     }
@@ -117,6 +120,7 @@ public class BaseEntity<T> implements Serializable {
         this.creator = creator;
     }
 
+    @JsonIgnore
     public User getUpdater() {
         return updater;
     }
@@ -125,6 +129,7 @@ public class BaseEntity<T> implements Serializable {
         this.updater = updater;
     }
 
+    @JsonIgnore
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -133,6 +138,7 @@ public class BaseEntity<T> implements Serializable {
         this.updateTime = updateTime;
     }
 
+    @JsonIgnore
     public Date getCreateTime() {
         return createTime;
     }

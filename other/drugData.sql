@@ -1,4 +1,3 @@
-
 /* Drop Tables */
 
 DROP TABLE T_SIIP_DRUGINSTORE CASCADE CONSTRAINTS;
@@ -14,651 +13,778 @@ DROP TABLE T_SIIP_SENDLISTCOLLECT CASCADE CONSTRAINTS;
 DROP TABLE T_SIIP_SENDLISTDETAIL CASCADE CONSTRAINTS;
 
 
-
-
 /* Create Tables */
 
 CREATE TABLE T_SIIP_DRUGINSTORE
 (
-	-- 入库单号
-	C_ACCEPTBILLCD nvarchar2(100) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 相关单号
-	C_OUTSTOREBILLUPCD nvarchar2(100) NOT NULL,
-	-- 入库时间
-	D_ACCEPTDATETIME date NOT NULL,
-	-- 入库类型
-	C_ACCEPTTYPE nvarchar2(30) NOT NULL,
-	-- 单据处理状态 0:未处理 1:已处理 9:已删除
-	N_DEELSTATUS number(2,0) NOT NULL,
-	-- 单据接口发送状态 0：未发送  1：已发送
-	N_SENDSTATUS number(2,0) NOT NULL,
-	-- 相关部门编码
-	C_SENDDEPTCD nvarchar2(40) NOT NULL,
-	-- 相关部门名称
-	C_OUTSTORENAME nvarchar2(100) NOT NULL,
-	-- 入库药房编码
-	C_ACCEPTDEPTCD nvarchar2(40) NOT NULL,
-	-- 入库药房名称
-	C_INSTORENAME nvarchar2(100) NOT NULL,
-	-- 入库品种数
-	N_ACCEPTCOUNT number(5,0) NOT NULL,
-	-- 药品总金额
-	N_DRUGAMOUNT number(10,4) NOT NULL,
-	-- 入库操作员编码
-	C_ACCEPTOPERCD nvarchar2(40),
-	-- 修改操作员编码
-	C_UPTOPERCD nvarchar2(40),
-	-- 更新时间
-	D_UPTDATETIME date,
-	-- 入库操作员名称
-	C_ACCEPTOPERNAME nvarchar2(40),
-	-- 修改操作员名称
-	C_UPTOPERNAME nvarchar2(40),
-	-- 备注
-	C_REMARK nvarchar2(100),
-	-- 审核人姓名
-	C_AUDITORNAME nvarchar2(40),
-	-- 上架人姓名
-	C_SHELFUPPEOPLE nvarchar2(40),
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL,
-	-- 区域
-	AREA varchar2(128) NOT NULL
+  -- 入库单号
+  C_ACCEPTBILLCD     NVARCHAR2(100) NOT NULL,
+  -- 创建者编号
+  CREATORCD          NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME        NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME         DATE           NOT NULL,
+  -- 相关单号
+  C_OUTSTOREBILLUPCD NVARCHAR2(100) NOT NULL,
+  -- 入库时间
+  D_ACCEPTDATETIME   DATE           NOT NULL,
+  -- 入库类型
+  C_ACCEPTTYPE       NVARCHAR2(30)  NOT NULL,
+  -- 单据处理状态 0:未处理 1:已处理 9:已删除
+  N_DEELSTATUS       NUMBER(2, 0)   NOT NULL,
+  -- 单据接口发送状态 0：未发送  1：已发送
+  N_SENDSTATUS       NUMBER(2, 0)   NOT NULL,
+  -- 相关部门编码
+  C_SENDDEPTCD       NVARCHAR2(40)  NOT NULL,
+  -- 相关部门名称
+  C_OUTSTORENAME     NVARCHAR2(100) NOT NULL,
+  -- 入库药房编码
+  C_ACCEPTDEPTCD     NVARCHAR2(40)  NOT NULL,
+  -- 入库药房名称
+  C_INSTORENAME      NVARCHAR2(100) NOT NULL,
+  -- 入库品种数
+  N_ACCEPTCOUNT      NUMBER(5, 0)   NOT NULL,
+  -- 药品总金额
+  N_DRUGAMOUNT       NUMBER(10, 4)  NOT NULL,
+  -- 入库操作员编码
+  C_ACCEPTOPERCD     NVARCHAR2(40),
+  -- 修改操作员编码
+  C_UPTOPERCD        NVARCHAR2(40),
+  -- 更新时间
+  D_UPTDATETIME      DATE,
+  -- 入库操作员名称
+  C_ACCEPTOPERNAME   NVARCHAR2(40),
+  -- 修改操作员名称
+  C_UPTOPERNAME      NVARCHAR2(40),
+  -- 备注
+  C_REMARK           NVARCHAR2(100),
+  -- 审核人姓名
+  C_AUDITORNAME      NVARCHAR2(40),
+  -- 上架人姓名
+  C_SHELFUPPEOPLE    NVARCHAR2(40),
+  -- 机构
+  INSTITUTION        VARCHAR2(128)  NOT NULL,
+  -- 区域
+  AREA               VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_DRUGINSTOREDETAIL
 (
-	-- 序号
-	ID nvarchar2(60) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 入库单号
-	C_ACCEPTBILLCD nvarchar2(100) NOT NULL,
-	-- 药品编号
-	C_DRUGCD nvarchar2(60) NOT NULL,
-	-- 药品商品名称
-	C_TRADENAME nvarchar2(100) NOT NULL,
-	-- 药品通用名称
-	C_COMMONNAME nvarchar2(100) NOT NULL,
-	-- 生产厂家名称
-	C_FACTORYNAME nvarchar2(100) NOT NULL,
-	-- 药品规格
-	C_DRUGSPEC nvarchar2(60),
-	-- 剂型
-	C_FIGURENAME nvarchar2(40) NOT NULL,
-	-- 批次编号
-	C_BATCHCD nvarchar2(100) NOT NULL,
-	-- 批次详细信息
-	C_BATCHDETAIL nvarchar2(600),
-	-- 货位储存号
-	C_POSITIONCD nvarchar2(100),
-	-- 药品包装单位编码
-	C_PACKUNITCD varchar2(40) NOT NULL,
-	-- 药品包装单位名称
-	C_PACKUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品出库明细表
-	N_PACKUNITPRICE number(12,4) NOT NULL,
-	-- 药品使用单位单价
-	N_USEUNITPRICE number(18,4) NOT NULL,
-	-- 药品使用单位编码
-	C_USEUNITCD nvarchar2(40) NOT NULL,
-	-- 药品使用单位名称
-	C_USEUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品入库单位编码
-	C_INSTOREUNITCD nvarchar2(40) NOT NULL,
-	-- 药品入库单位名称
-	C_INSTOREUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品入库单位单价
-	N_INSTOREUNITPRICE number(12,4) NOT NULL,
-	-- 药品入库数量
-	N_DRUGCOUNT number(5,0) NOT NULL,
-	-- 药品入库金额
-	N_DRUGAMOUNT number(10,4) NOT NULL,
-	-- 更新时间
-	D_UPTDATETIME date,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL,
-	-- 区域
-	AREA varchar2(128) NOT NULL
+  -- 序号
+  ID                 NVARCHAR2(60)  NOT NULL,
+  -- 创建者编号
+  CREATORCD          NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME        NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME         DATE           NOT NULL,
+  -- 入库单号
+  C_ACCEPTBILLCD     NVARCHAR2(100) NOT NULL,
+  -- 药品编号
+  C_DRUGCD           NVARCHAR2(60)  NOT NULL,
+  -- 药品商品名称
+  C_TRADENAME        NVARCHAR2(100) NOT NULL,
+  -- 药品通用名称
+  C_COMMONNAME       NVARCHAR2(100) NOT NULL,
+  -- 生产厂家名称
+  C_FACTORYNAME      NVARCHAR2(100) NOT NULL,
+  -- 药品规格
+  C_DRUGSPEC         NVARCHAR2(60),
+  -- 剂型
+  C_FIGURENAME       NVARCHAR2(40)  NOT NULL,
+  -- 批次编号
+  C_BATCHCD          NVARCHAR2(100) NOT NULL,
+  -- 批次详细信息
+  C_BATCHDETAIL      NVARCHAR2(600),
+  -- 货位储存号
+  C_POSITIONCD       NVARCHAR2(100),
+  -- 药品包装单位编码
+  C_PACKUNITCD       VARCHAR2(40)   NOT NULL,
+  -- 药品包装单位名称
+  C_PACKUNITNAME     NVARCHAR2(40)  NOT NULL,
+  -- 药品出库明细表
+  N_PACKUNITPRICE    NUMBER(12, 4)  NOT NULL,
+  -- 药品使用单位单价
+  N_USEUNITPRICE     NUMBER(18, 4)  NOT NULL,
+  -- 药品使用单位编码
+  C_USEUNITCD        NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位名称
+  C_USEUNITNAME      NVARCHAR2(40)  NOT NULL,
+  -- 药品入库单位编码
+  C_INSTOREUNITCD    NVARCHAR2(40)  NOT NULL,
+  -- 药品入库单位名称
+  C_INSTOREUNITNAME  NVARCHAR2(40)  NOT NULL,
+  -- 药品入库单位单价
+  N_INSTOREUNITPRICE NUMBER(12, 4)  NOT NULL,
+  -- 药品入库数量
+  N_DRUGCOUNT        NUMBER(5, 0)   NOT NULL,
+  -- 药品入库金额
+  N_DRUGAMOUNT       NUMBER(10, 4)  NOT NULL,
+  -- 更新时间
+  D_UPTDATETIME      DATE,
+  -- 机构
+  INSTITUTION        VARCHAR2(128)  NOT NULL,
+  -- 区域
+  AREA               VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_DRUGOUTSTORE
 (
-	-- 出库单号
-	C_OUTBILLCD nvarchar2(40) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 相关单号
-	C_INSTOREBILLUPCD nvarchar2(100) NOT NULL,
-	-- 出库时间
-	D_OUTDATETIME date NOT NULL,
-	-- 出库类型
-	C_OUTTYPE nvarchar2(30) NOT NULL,
-	-- 单据处理状态 0:未处理 1:已处理 9:已删除
-	N_DEELSTATUS number(2,0) NOT NULL,
-	-- 单据接口发送状态
-	N_SENDSTATUS number(2,0) NOT NULL,
-	-- 相关库房编码
-	C_ACCEPTDEPTCD nvarchar2(20) NOT NULL,
-	-- 相关库房名称
-	C_ACCEPTDEPTNAME nvarchar2(100) NOT NULL,
-	-- 出库药房编码
-	C_OUTDEPTCD nvarchar2(20) NOT NULL,
-	-- 出库药房名称
-	C_OUTDEPTNAME nvarchar2(100) NOT NULL,
-	-- 出库品种数
-	N_OUTCOUNT number(5,0) NOT NULL,
-	-- 药品总金额
-	N_DRUGAMOUNT number(10,4) NOT NULL,
-	-- 出库操作员编码
-	C_OUTOPERCD nvarchar2(40),
-	-- 相关操作员编码
-	C_ACCEPTOPERCD nvarchar2(40),
-	-- 修改操作员编码
-	C_UPTOPERCD nvarchar2(40),
-	-- 更新时间
-	D_UPTDATETIME date,
-	-- 出库操作员名称
-	C_OUTOPERNAME nvarchar2(40),
-	-- 相关操作员名称
-	C_ACCEPTOPERNAME nvarchar2(40),
-	-- 修改操作员名称
-	C_UPTOPERNAME nvarchar2(40),
-	-- 备注
-	C_REMARK nvarchar2(100),
-	-- 审核人姓名
-	C_AUDITORNAME nvarchar2(40),
-	-- 下架人姓名
-	C_SHELFDOWNPEOPLE nvarchar2(40),
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL,
-	-- 区域
-	AREA varchar2(128) NOT NULL
+  -- 出库单号
+  C_OUTBILLCD       NVARCHAR2(40)  NOT NULL,
+  -- 创建者编号
+  CREATORCD         NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME       NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME        DATE           NOT NULL,
+  -- 相关单号
+  C_INSTOREBILLUPCD NVARCHAR2(100) NOT NULL,
+  -- 出库时间
+  D_OUTDATETIME     DATE           NOT NULL,
+  -- 出库类型
+  C_OUTTYPE         NVARCHAR2(30)  NOT NULL,
+  -- 单据处理状态 0:未处理 1:已处理 9:已删除
+  N_DEELSTATUS      NUMBER(2, 0)   NOT NULL,
+  -- 单据接口发送状态
+  N_SENDSTATUS      NUMBER(2, 0)   NOT NULL,
+  -- 相关库房编码
+  C_ACCEPTDEPTCD    NVARCHAR2(20)  NOT NULL,
+  -- 相关库房名称
+  C_ACCEPTDEPTNAME  NVARCHAR2(100) NOT NULL,
+  -- 出库药房编码
+  C_OUTDEPTCD       NVARCHAR2(20)  NOT NULL,
+  -- 出库药房名称
+  C_OUTDEPTNAME     NVARCHAR2(100) NOT NULL,
+  -- 出库品种数
+  N_OUTCOUNT        NUMBER(5, 0)   NOT NULL,
+  -- 药品总金额
+  N_DRUGAMOUNT      NUMBER(10, 4)  NOT NULL,
+  -- 出库操作员编码
+  C_OUTOPERCD       NVARCHAR2(40),
+  -- 相关操作员编码
+  C_ACCEPTOPERCD    NVARCHAR2(40),
+  -- 修改操作员编码
+  C_UPTOPERCD       NVARCHAR2(40),
+  -- 更新时间
+  D_UPTDATETIME     DATE,
+  -- 出库操作员名称
+  C_OUTOPERNAME     NVARCHAR2(40),
+  -- 相关操作员名称
+  C_ACCEPTOPERNAME  NVARCHAR2(40),
+  -- 修改操作员名称
+  C_UPTOPERNAME     NVARCHAR2(40),
+  -- 备注
+  C_REMARK          NVARCHAR2(100),
+  -- 审核人姓名
+  C_AUDITORNAME     NVARCHAR2(40),
+  -- 下架人姓名
+  C_SHELFDOWNPEOPLE NVARCHAR2(40),
+  -- 机构
+  INSTITUTION       VARCHAR2(128)  NOT NULL,
+  -- 区域
+  AREA              VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_DRUGOUTSTOREDETAIL
 (
-	-- 序号
-	ID nvarchar2(60) NOT NULL,
-	-- 出库单号
-	C_OUTBILLCD nvarchar2(40) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 药品编号
-	C_DRUGCD nvarchar2(60) NOT NULL,
-	-- 药品商品名称
-	C_TRADENAME nvarchar2(100) NOT NULL,
-	-- 药品通用名称
-	C_COMMONNAME nvarchar2(100) NOT NULL,
-	-- 生产厂家名称
-	C_FACTORYNAME nvarchar2(100) NOT NULL,
-	-- 药品规格
-	C_DRUGSPEC nvarchar2(60) NOT NULL,
-	-- 剂型
-	C_FIGURENAME nvarchar2(40) NOT NULL,
-	-- 批次编号
-	C_BATCHCD nvarchar2(100),
-	-- 批次详细信息
-	C_BATCHDETAIL nvarchar2(600),
-	-- 货位储存号
-	C_POSITIONCD nvarchar2(100),
-	-- 药品包装单位编码
-	C_PACKUNITCD varchar2(40) NOT NULL,
-	-- 药品包装单位名称
-	C_PACKUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品出库明细表
-	N_PACKUNITPRICE number(12,4) NOT NULL,
-	-- 药品使用单位名称
-	C_USEUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品使用单位单价
-	N_USEUNITPRICE number(12,4) NOT NULL,
-	-- 药品出库单位编码
-	C_OUTSTORECD nvarchar2(40) NOT NULL,
-	-- 药品出库单位名称
-	C_OUTSTORENAME nvarchar2(40) NOT NULL,
-	-- 药品出库单位单价
-	N_OUTSTOREPRICE number(12,4) NOT NULL,
-	-- 药品出库数量
-	N_DRUGCOUNT number(5,0) NOT NULL,
-	-- 药品出库金额
-	N_DRUGAMOUNT number(10,4) NOT NULL,
-	-- 更新时间
-	D_UPTDATETIME date,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL,
-	-- 区域
-	AREA varchar2(128) NOT NULL
+  -- 序号
+  ID              NVARCHAR2(60)  NOT NULL,
+  -- 出库单号
+  C_OUTBILLCD     NVARCHAR2(40)  NOT NULL,
+  -- 创建者编号
+  CREATORCD       NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME     NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME      DATE           NOT NULL,
+  -- 药品编号
+  C_DRUGCD        NVARCHAR2(60)  NOT NULL,
+  -- 药品商品名称
+  C_TRADENAME     NVARCHAR2(100) NOT NULL,
+  -- 药品通用名称
+  C_COMMONNAME    NVARCHAR2(100) NOT NULL,
+  -- 生产厂家名称
+  C_FACTORYNAME   NVARCHAR2(100) NOT NULL,
+  -- 药品规格
+  C_DRUGSPEC      NVARCHAR2(60)  NOT NULL,
+  -- 剂型
+  C_FIGURENAME    NVARCHAR2(40)  NOT NULL,
+  -- 批次编号
+  C_BATCHCD       NVARCHAR2(100),
+  -- 批次详细信息
+  C_BATCHDETAIL   NVARCHAR2(600),
+  -- 货位储存号
+  C_POSITIONCD    NVARCHAR2(100),
+  -- 药品包装单位编码
+  C_PACKUNITCD    VARCHAR2(40)   NOT NULL,
+  -- 药品包装单位名称
+  C_PACKUNITNAME  NVARCHAR2(40)  NOT NULL,
+  -- 药品出库明细表
+  N_PACKUNITPRICE NUMBER(12, 4)  NOT NULL,
+  -- 药品使用单位名称
+  C_USEUNITNAME   NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位单价
+  N_USEUNITPRICE  NUMBER(12, 4)  NOT NULL,
+  -- 药品出库单位编码
+  C_OUTSTORECD    NVARCHAR2(40)  NOT NULL,
+  -- 药品出库单位名称
+  C_OUTSTORENAME  NVARCHAR2(40)  NOT NULL,
+  -- 药品出库单位单价
+  N_OUTSTOREPRICE NUMBER(12, 4)  NOT NULL,
+  -- 药品出库数量
+  N_DRUGCOUNT     NUMBER(5, 0)   NOT NULL,
+  -- 药品出库金额
+  N_DRUGAMOUNT    NUMBER(10, 4)  NOT NULL,
+  -- 更新时间
+  D_UPTDATETIME   DATE,
+  -- 机构
+  INSTITUTION     VARCHAR2(128)  NOT NULL,
+  -- 区域
+  AREA            VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_DRUGSTORAGESTOCK
 (
-	-- 序号
-	ID nvarchar2(60) NOT NULL,
-	-- 药品编号
-	C_DRUGCD nvarchar2(60) NOT NULL,
-	-- 入库单位编码
-	C_DRUGUNITCD nvarchar2(40) NOT NULL,
-	-- 批次编号
-	C_BATCHCD nvarchar2(100),
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 部门编码
-	D_NUMBER char(10) NOT NULL,
-	-- 库存量
-	N_DRUGSTOCK number(12,2) NOT NULL,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL,
-	-- 区域
-	AREA varchar2(128) NOT NULL
+  -- 序号
+  ID           NVARCHAR2(60) NOT NULL,
+  -- 药品编号
+  C_DRUGCD     NVARCHAR2(60) NOT NULL,
+  -- 入库单位编码
+  C_DRUGUNITCD NVARCHAR2(40) NOT NULL,
+  -- 批次编号
+  C_BATCHCD    NVARCHAR2(100),
+  -- 创建者编号
+  CREATORCD    NVARCHAR2(40) NOT NULL,
+  -- 创建者名称
+  CREATORNAME  NVARCHAR2(40) NOT NULL,
+  -- 创建时间
+  CREATETIME   DATE          NOT NULL,
+  -- 部门编码
+  D_NUMBER     CHAR(10)      NOT NULL,
+  -- 库存量
+  N_DRUGSTOCK  NUMBER(12, 2) NOT NULL,
+  -- 机构
+  INSTITUTION  VARCHAR2(128) NOT NULL,
+  -- 区域
+  AREA         VARCHAR2(128) NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_INVDRUGSTORE
 (
-	-- 盘点编号
-	C_INVSTORECD nvarchar2(100) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 药房编号
-	C_DRUGSTORECD nvarchar2(40) NOT NULL,
-	-- 药房名称
-	C_DRUGSTORENAME nvarchar2(160),
-	-- 单据处理状态 0:未处理 1:已处理 9:已删除
-	N_DEELSTATUS number(2,0) NOT NULL,
-	-- 单据接口发送状态 0：未发送  1：已发送
-	N_SENDSTATUS number(2,0),
-	-- 盘存时间
-	D_INVSTORETIME date,
-	-- 盘点前总金额
-	N_BEFOREINVAMOUT number(14,4) NOT NULL,
-	-- 盘点后总金额
-	N_AFTERINVAMOUNT number(14,4),
-	-- 更新时间
-	D_UPTDATETIME date,
-	-- 审核人姓名
-	C_AUDITORNAME nvarchar2(40),
-	-- 盘点人
-	C_INVPERSONNAME nvarchar2(40),
-	-- 药品品种数
-	N_DRUGSCOUNT number(5,0),
-	-- 区域
-	AREA varchar2(128) NOT NULL,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL
+  -- 盘点编号
+  C_INVSTORECD     NVARCHAR2(100) NOT NULL,
+  -- 创建者编号
+  CREATORCD        NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME      NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME       DATE           NOT NULL,
+  -- 药房编号
+  C_DRUGSTORECD    NVARCHAR2(40)  NOT NULL,
+  -- 药房名称
+  C_DRUGSTORENAME  NVARCHAR2(160),
+  -- 单据处理状态 0:未处理 1:已处理 9:已删除
+  N_DEELSTATUS     NUMBER(2, 0)   NOT NULL,
+  -- 单据接口发送状态 0：未发送  1：已发送
+  N_SENDSTATUS     NUMBER(2, 0),
+  -- 盘存时间
+  D_INVSTORETIME   DATE,
+  -- 盘点前总金额
+  N_BEFOREINVAMOUT NUMBER(14, 4)  NOT NULL,
+  -- 盘点后总金额
+  N_AFTERINVAMOUNT NUMBER(14, 4),
+  -- 更新时间
+  D_UPTDATETIME    DATE,
+  -- 审核人姓名
+  C_AUDITORNAME    NVARCHAR2(40),
+  -- 盘点人
+  C_INVPERSONNAME  NVARCHAR2(40),
+  -- 药品品种数
+  N_DRUGSCOUNT     NUMBER(5, 0),
+  -- 区域
+  AREA             VARCHAR2(128)  NOT NULL,
+  -- 机构
+  INSTITUTION      VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_INVDRUGSTOREDETAIL
 (
-	-- 序号
-	ID nvarchar2(60) NOT NULL,
-	-- 盘点编号
-	C_INVSTORECD nvarchar2(100) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 药品编号
-	C_DRUGCD nvarchar2(60) NOT NULL,
-	-- 药品商品名称
-	C_TRADENAME nvarchar2(100) NOT NULL,
-	-- 药品通用名称
-	C_COMMONNAME nvarchar2(100) NOT NULL,
-	-- 药品规格
-	C_DRUGSPEC nvarchar2(60) NOT NULL,
-	-- 剂型
-	C_FIGURENAME nvarchar2(40) NOT NULL,
-	-- 生产厂家名称
-	C_FACTORYNAME nvarchar2(100) NOT NULL,
-	-- 货位储存号
-	C_POSITIONCD nvarchar2(100),
-	-- 更新时间
-	D_UPTDATETIME date,
-	-- 药品盘点单位编码
-	C_DRUGINVUNITCD nvarchar2(40) NOT NULL,
-	-- 药品盘点单位名称
-	C_DRUGINVUNITNAME nvarchar2(40),
-	-- 盘点前库存量
-	N_OLDSTOCK number(12,2) NOT NULL,
-	-- 盘点后库存量
-	N_REALSTOCK number(12,2),
-	-- 盘点前总金额
-	N_BEFOREINVAMOUT number(14,4) NOT NULL,
-	-- 盘点后总金额
-	N_AFTERINVAMOUNT number(14,4),
-	-- 药品包装单位编码
-	C_PACKUNITCD varchar2(40) NOT NULL,
-	-- 药品包装单位名称
-	C_PACKUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品使用单位编码
-	C_USEUNITCD nvarchar2(40) NOT NULL,
-	-- 药品使用单位名称
-	C_USEUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品出库明细表
-	N_PACKUNITPRICE number(12,4) NOT NULL,
-	-- 药品使用单位单价
-	N_USEUNITPRICE number(18,4) NOT NULL,
-	-- 药品盘点单位单价
-	N_INVUNITPRICE number(12,4) NOT NULL,
-	-- 到包装单位转换系数
-	N_DRUGPACKMODULUS number(16,6),
-	-- 区域
-	AREA varchar2(128) NOT NULL,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL
+  -- 序号
+  ID                NVARCHAR2(60)  NOT NULL,
+  -- 盘点编号
+  C_INVSTORECD      NVARCHAR2(100) NOT NULL,
+  -- 创建者编号
+  CREATORCD         NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME       NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME        DATE           NOT NULL,
+  -- 药品编号
+  C_DRUGCD          NVARCHAR2(60)  NOT NULL,
+  -- 药品商品名称
+  C_TRADENAME       NVARCHAR2(100) NOT NULL,
+  -- 药品通用名称
+  C_COMMONNAME      NVARCHAR2(100) NOT NULL,
+  -- 药品规格
+  C_DRUGSPEC        NVARCHAR2(60)  NOT NULL,
+  -- 剂型
+  C_FIGURENAME      NVARCHAR2(40)  NOT NULL,
+  -- 生产厂家名称
+  C_FACTORYNAME     NVARCHAR2(100) NOT NULL,
+  -- 货位储存号
+  C_POSITIONCD      NVARCHAR2(100),
+  -- 更新时间
+  D_UPTDATETIME     DATE,
+  -- 药品盘点单位编码
+  C_DRUGINVUNITCD   NVARCHAR2(40)  NOT NULL,
+  -- 药品盘点单位名称
+  C_DRUGINVUNITNAME NVARCHAR2(40),
+  -- 盘点前库存量
+  N_OLDSTOCK        NUMBER(12, 2)  NOT NULL,
+  -- 盘点后库存量
+  N_REALSTOCK       NUMBER(12, 2),
+  -- 盘点前总金额
+  N_BEFOREINVAMOUT  NUMBER(14, 4)  NOT NULL,
+  -- 盘点后总金额
+  N_AFTERINVAMOUNT  NUMBER(14, 4),
+  -- 药品包装单位编码
+  C_PACKUNITCD      VARCHAR2(40)   NOT NULL,
+  -- 药品包装单位名称
+  C_PACKUNITNAME    NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位编码
+  C_USEUNITCD       NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位名称
+  C_USEUNITNAME     NVARCHAR2(40)  NOT NULL,
+  -- 药品出库明细表
+  N_PACKUNITPRICE   NUMBER(12, 4)  NOT NULL,
+  -- 药品使用单位单价
+  N_USEUNITPRICE    NUMBER(18, 4)  NOT NULL,
+  -- 药品盘点单位单价
+  N_INVUNITPRICE    NUMBER(12, 4)  NOT NULL,
+  -- 到包装单位转换系数
+  N_DRUGPACKMODULUS NUMBER(16, 6),
+  -- 区域
+  AREA              VARCHAR2(128)  NOT NULL,
+  -- 机构
+  INSTITUTION       VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_SENDCOLLECTDETAIL
 (
-	-- 序号
-	ID nvarchar2(60) NOT NULL,
-	-- 汇总单序号
-	N_COLLECTID varchar2(60) NOT NULL,
-	-- 发药单流水号
-	C_SENDLISTCD nvarchar2(60) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 病人ID号
-	C_PATIENTID nvarchar2(100) NOT NULL,
-	-- 病人姓名
-	C_PATIENTNAME nvarchar2(36) NOT NULL,
-	-- 病人姓名拼音码
-	C_PATIENTNAMEPYCODE nvarchar2(36),
-	-- 药品编号
-	C_DRUGCD nvarchar2(60) NOT NULL,
-	-- 药品通用名称
-	C_COMMONNAME nvarchar2(100) NOT NULL,
-	-- 药品商品名称
-	C_TRADENAME nvarchar2(100) NOT NULL,
-	-- 药品规格
-	C_DRUGSPEC nvarchar2(60) NOT NULL,
-	-- 剂型
-	C_FIGURENAME nvarchar2(40) NOT NULL,
-	-- 生产厂家名称
-	C_FACTORYNAME nvarchar2(100) NOT NULL,
-	-- 批次编号
-	C_BATCHCD nvarchar2(100),
-	-- 批次详细信息
-	C_BATCHDETAIL nvarchar2(600),
-	-- 药品包装单位编码
-	C_PACKUNITCD varchar2(40) NOT NULL,
-	-- 药品包装单位名称
-	C_PACKUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品出库明细表
-	N_PACKUNITPRICE number(12,4) NOT NULL,
-	-- 药品使用单位编码
-	C_USEUNITCD nvarchar2(40) NOT NULL,
-	-- 药品使用单位名称
-	C_USEUNITNAME nvarchar2(40),
-	-- 药品使用单位单价
-	N_USEUNITPRICE number(18,4),
-	-- 药品领药单位编码
-	C_SENDUNITCD nvarchar2(40) NOT NULL,
-	-- 药品领药单位名称
-	C_SENDUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品领药单位单价
-	N_SENDUNITPRICE number(18,4) NOT NULL,
-	-- 药品数量(按领药单位）
-	N_DRUGNUMBER number(10,2) NOT NULL,
-	-- 药品金额
-	N_DRUGAMOUNT number(20,4) NOT NULL,
-	-- 药品用法编码
-	C_DRUGUSAGECD nvarchar2(40) NOT NULL,
-	-- 药品用法名称
-	C_DRUGUSAGENAME nvarchar2(80) NOT NULL,
-	-- 药品用次名称
-	C_DRUGUSETIMESDAYNAME nvarchar2(100) NOT NULL,
-	-- 药品用次编码
-	C_DRUGUSETIMESDAYCD nvarchar2(40) NOT NULL,
-	-- 医生编码
-	C_DOCTORCD nvarchar2(36) NOT NULL,
-	-- 医生姓名
-	C_DOCTORNAME nvarchar2(36) NOT NULL,
-	-- 医嘱嘱托
-	C_DOCTORADVICE nvarchar2(100),
-	-- 床位号
-	C_BEDCD nvarchar2(40),
-	-- 日次
-	C_DAYTIME nvarchar2(40),
-	-- 剂量
-	C_DOSAGE nvarchar2(40),
-	-- 区域
-	AREA varchar2(128) NOT NULL,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL
+  -- 序号
+  ID                    NVARCHAR2(60)  NOT NULL,
+  -- 汇总单序号
+  N_COLLECTID           VARCHAR2(60)   NOT NULL,
+  -- 发药单流水号
+  C_SENDLISTCD          NVARCHAR2(60)  NOT NULL,
+  -- 创建者编号
+  CREATORCD             NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME           NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME            DATE           NOT NULL,
+  -- 病人ID号
+  C_PATIENTID           NVARCHAR2(100) NOT NULL,
+  -- 病人姓名
+  C_PATIENTNAME         NVARCHAR2(36)  NOT NULL,
+  -- 病人姓名拼音码
+  C_PATIENTNAMEPYCODE   NVARCHAR2(36),
+  -- 药品编号
+  C_DRUGCD              NVARCHAR2(60)  NOT NULL,
+  -- 药品通用名称
+  C_COMMONNAME          NVARCHAR2(100) NOT NULL,
+  -- 药品商品名称
+  C_TRADENAME           NVARCHAR2(100) NOT NULL,
+  -- 药品规格
+  C_DRUGSPEC            NVARCHAR2(60)  NOT NULL,
+  -- 剂型
+  C_FIGURENAME          NVARCHAR2(40)  NOT NULL,
+  -- 生产厂家名称
+  C_FACTORYNAME         NVARCHAR2(100) NOT NULL,
+  -- 批次编号
+  C_BATCHCD             NVARCHAR2(100),
+  -- 批次详细信息
+  C_BATCHDETAIL         NVARCHAR2(600),
+  -- 药品包装单位编码
+  C_PACKUNITCD          VARCHAR2(40)   NOT NULL,
+  -- 药品包装单位名称
+  C_PACKUNITNAME        NVARCHAR2(40)  NOT NULL,
+  -- 药品出库明细表
+  N_PACKUNITPRICE       NUMBER(12, 4)  NOT NULL,
+  -- 药品使用单位编码
+  C_USEUNITCD           NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位名称
+  C_USEUNITNAME         NVARCHAR2(40),
+  -- 药品使用单位单价
+  N_USEUNITPRICE        NUMBER(18, 4),
+  -- 药品领药单位编码
+  C_SENDUNITCD          NVARCHAR2(40)  NOT NULL,
+  -- 药品领药单位名称
+  C_SENDUNITNAME        NVARCHAR2(40)  NOT NULL,
+  -- 药品领药单位单价
+  N_SENDUNITPRICE       NUMBER(18, 4)  NOT NULL,
+  -- 药品数量(按领药单位）
+  N_DRUGNUMBER          NUMBER(10, 2)  NOT NULL,
+  -- 药品金额
+  N_DRUGAMOUNT          NUMBER(20, 4)  NOT NULL,
+  -- 药品用法编码
+  C_DRUGUSAGECD         NVARCHAR2(40)  NOT NULL,
+  -- 药品用法名称
+  C_DRUGUSAGENAME       NVARCHAR2(80)  NOT NULL,
+  -- 药品用次名称
+  C_DRUGUSETIMESDAYNAME NVARCHAR2(100) NOT NULL,
+  -- 药品用次编码
+  C_DRUGUSETIMESDAYCD   NVARCHAR2(40)  NOT NULL,
+  -- 医生编码
+  C_DOCTORCD            NVARCHAR2(36)  NOT NULL,
+  -- 医生姓名
+  C_DOCTORNAME          NVARCHAR2(36)  NOT NULL,
+  -- 医嘱嘱托
+  C_DOCTORADVICE        NVARCHAR2(100),
+  -- 床位号
+  C_BEDCD               NVARCHAR2(40),
+  -- 日次
+  C_DAYTIME             NVARCHAR2(40),
+  -- 剂量
+  C_DOSAGE              NVARCHAR2(40),
+  -- 区域
+  AREA                  VARCHAR2(128)  NOT NULL,
+  -- 机构
+  INSTITUTION           VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_SENDLIST
 (
-	-- 发药单流水号
-	C_SENDLISTCD nvarchar2(60) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- His发药单流水号
-	C_SENDLISTCDHIS nvarchar2(40) NOT NULL,
-	-- 所属病区部门编码
-	C_WARDCD nvarchar2(20) NOT NULL,
-	-- 所属病区部门名称
-	C_WARDNAME nvarchar2(160) NOT NULL,
-	-- 单据处理状态 0:未处理 1:已处理 9:已删除
-	N_DEELSTATUS number(2,0) NOT NULL,
-	-- 单据接口发送状态
-	N_SENDSTATUS number(2,0) NOT NULL,
-	-- 处理药房编码
-	C_STORECD nvarchar2(20) NOT NULL,
-	-- 处理药房名称
-	C_STORENAME nvarchar2(160) NOT NULL,
-	-- 发药类型
-	N_SENDTYPE number(1,0) NOT NULL,
-	-- 录入人编码
-	C_ENTEROPERCD nvarchar2(40) NOT NULL,
-	-- 录入人姓名
-	C_ENTEROPERNAME nvarchar2(40) NOT NULL,
-	-- 发药人编码
-	C_UPTOPERCD nvarchar2(40),
-	-- 发药人姓名
-	C_UPTOPERNAME nvarchar2(160),
-	-- 总金额
-	N_AMOUNT number(12,4) NOT NULL,
-	-- 录入时间
-	D_ENTERTIME date NOT NULL,
-	-- 存盘时间
-	D_UPTDATETIME date,
-	-- 发药类型名称
-	C_SENDTYPENAME nvarchar2(40) NOT NULL,
-	-- 区域
-	AREA varchar2(128) NOT NULL,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL
+  -- 发药单流水号
+  C_SENDLISTCD    NVARCHAR2(60)  NOT NULL,
+  -- 创建者编号
+  CREATORCD       NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME     NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME      DATE           NOT NULL,
+  -- His发药单流水号
+  C_SENDLISTCDHIS NVARCHAR2(40)  NOT NULL,
+  -- 所属病区部门编码
+  C_WARDCD        NVARCHAR2(20)  NOT NULL,
+  -- 所属病区部门名称
+  C_WARDNAME      NVARCHAR2(160) NOT NULL,
+  -- 单据处理状态 0:未处理 1:已处理 9:已删除
+  N_DEELSTATUS    NUMBER(2, 0)   NOT NULL,
+  -- 单据接口发送状态
+  N_SENDSTATUS    NUMBER(2, 0)   NOT NULL,
+  -- 处理药房编码
+  C_STORECD       NVARCHAR2(20)  NOT NULL,
+  -- 处理药房名称
+  C_STORENAME     NVARCHAR2(160) NOT NULL,
+  -- 发药类型
+  N_SENDTYPE      NUMBER(1, 0)   NOT NULL,
+  -- 录入人编码
+  C_ENTEROPERCD   NVARCHAR2(40)  NOT NULL,
+  -- 录入人姓名
+  C_ENTEROPERNAME NVARCHAR2(40)  NOT NULL,
+  -- 发药人编码
+  C_UPTOPERCD     NVARCHAR2(40),
+  -- 发药人姓名
+  C_UPTOPERNAME   NVARCHAR2(160),
+  -- 总金额
+  N_AMOUNT        NUMBER(12, 4)  NOT NULL,
+  -- 录入时间
+  D_ENTERTIME     DATE           NOT NULL,
+  -- 存盘时间
+  D_UPTDATETIME   DATE,
+  -- 发药类型名称
+  C_SENDTYPENAME  NVARCHAR2(40)  NOT NULL,
+  -- 区域
+  AREA            VARCHAR2(128)  NOT NULL,
+  -- 机构
+  INSTITUTION     VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_SENDLISTCOLLECT
 (
-	-- 汇总单序号
-	N_COLLECTID nvarchar2(60) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 药品编号
-	C_DRUGCD nvarchar2(60) NOT NULL,
-	-- 药品通用名称
-	C_COMMONNAME nvarchar2(100) NOT NULL,
-	-- 药品商品名称
-	C_TRADENAME nvarchar2(100) NOT NULL,
-	-- 药品规格
-	C_DRUGSPEC nvarchar2(60) NOT NULL,
-	-- 剂型
-	C_FIGURENAME nvarchar2(40) NOT NULL,
-	-- 生产厂家名称
-	C_FACTORYNAME nvarchar2(100) NOT NULL,
-	-- 药房名称
-	C_DRUGSTORENAME nvarchar2(160) NOT NULL,
-	-- 药房编号
-	C_DRUGSTORECD nvarchar2(40) NOT NULL,
-	-- 单据处理状态 0:未处理 1:已处理 9:已删除
-	N_DEELSTATUS number(2,0) NOT NULL,
-	-- 药品包装单位编码
-	C_DRUGPACKUNITCD varchar2(36) NOT NULL,
-	-- 药品包装单位名称
-	C_DRUGPACKUNITNAME nvarchar2(200) NOT NULL,
-	-- 药品包装单位单价
-	C_DRUGPACKUNITPRICE number(12,4) NOT NULL,
-	-- 药品使用单位编码
-	C_USEUNITCD nvarchar2(40) NOT NULL,
-	-- 药品使用单位名称
-	C_USEUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品使用单位单价
-	N_USEUNITPRICE number(12,4) NOT NULL,
-	-- 药品领药单位编码
-	C_SENDUNITCD nvarchar2(40) NOT NULL,
-	-- 药品领药单位名称
-	C_SENDUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品领药单位单价
-	N_SENDUNITPRICE number(12,4) NOT NULL,
-	-- 药品数量(按领药单位）
-	N_DRUGNUMBER number(10,2) NOT NULL,
-	-- 药品金额
-	N_DRUGAMOUNT number(12,4) NOT NULL,
-	-- 包装合计
-	C_PACKTOTAL nvarchar2(100),
-	-- 实际库存
-	C_REALSTOCK nvarchar2(100),
-	-- 使用合计
-	C_USETOTAL nvarchar2(100),
-	-- 区域
-	AREA varchar2(128) NOT NULL,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL
+  -- 汇总单序号
+  N_COLLECTID         NVARCHAR2(60)  NOT NULL,
+  -- 创建者编号
+  CREATORCD           NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME         NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME          DATE           NOT NULL,
+  -- 药品编号
+  C_DRUGCD            NVARCHAR2(60)  NOT NULL,
+  -- 药品通用名称
+  C_COMMONNAME        NVARCHAR2(100) NOT NULL,
+  -- 药品商品名称
+  C_TRADENAME         NVARCHAR2(100) NOT NULL,
+  -- 药品规格
+  C_DRUGSPEC          NVARCHAR2(60)  NOT NULL,
+  -- 剂型
+  C_FIGURENAME        NVARCHAR2(40)  NOT NULL,
+  -- 生产厂家名称
+  C_FACTORYNAME       NVARCHAR2(100) NOT NULL,
+  -- 药房名称
+  C_DRUGSTORENAME     NVARCHAR2(160) NOT NULL,
+  -- 药房编号
+  C_DRUGSTORECD       NVARCHAR2(40)  NOT NULL,
+  -- 单据处理状态 0:未处理 1:已处理 9:已删除
+  N_DEELSTATUS        NUMBER(2, 0)   NOT NULL,
+  -- 药品包装单位编码
+  C_DRUGPACKUNITCD    VARCHAR2(36)   NOT NULL,
+  -- 药品包装单位名称
+  C_DRUGPACKUNITNAME  NVARCHAR2(200) NOT NULL,
+  -- 药品包装单位单价
+  C_DRUGPACKUNITPRICE NUMBER(12, 4)  NOT NULL,
+  -- 药品使用单位编码
+  C_USEUNITCD         NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位名称
+  C_USEUNITNAME       NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位单价
+  N_USEUNITPRICE      NUMBER(12, 4)  NOT NULL,
+  -- 药品领药单位编码
+  C_SENDUNITCD        NVARCHAR2(40)  NOT NULL,
+  -- 药品领药单位名称
+  C_SENDUNITNAME      NVARCHAR2(40)  NOT NULL,
+  -- 药品领药单位单价
+  N_SENDUNITPRICE     NUMBER(12, 4)  NOT NULL,
+  -- 药品数量(按领药单位）
+  N_DRUGNUMBER        NUMBER(10, 2)  NOT NULL,
+  -- 药品金额
+  N_DRUGAMOUNT        NUMBER(12, 4)  NOT NULL,
+  -- 包装合计
+  C_PACKTOTAL         NVARCHAR2(100),
+  -- 实际库存
+  C_REALSTOCK         NVARCHAR2(100),
+  -- 使用合计
+  C_USETOTAL          NVARCHAR2(100),
+  -- 区域
+  AREA                VARCHAR2(128)  NOT NULL,
+  -- 机构
+  INSTITUTION         VARCHAR2(128)  NOT NULL
 );
 
 
 CREATE TABLE T_SIIP_SENDLISTDETAIL
 (
-	-- 序号
-	ID nvarchar2(60) NOT NULL,
-	-- 发药单流水号
-	C_SENDLISTCD nvarchar2(60) NOT NULL,
-	-- 创建者编号
-	CREATORCD nvarchar2(40) NOT NULL,
-	-- 创建者名称
-	CREATORNAME nvarchar2(40) NOT NULL,
-	-- 创建时间
-	CREATETIME date NOT NULL,
-	-- 病人ID号
-	C_PATIENTID nvarchar2(100) NOT NULL,
-	-- 病人姓名
-	C_PATIENTNAME nvarchar2(36) NOT NULL,
-	-- 病人姓名拼音码
-	C_PATIENTNAMEPYCODE nvarchar2(36),
-	-- 药品编号
-	C_DRUGCD nvarchar2(60) NOT NULL,
-	-- 药品通用名称
-	C_COMMONNAME nvarchar2(100) NOT NULL,
-	-- 药品商品名称
-	C_TRADENAME nvarchar2(100) NOT NULL,
-	-- 药品规格
-	C_DRUGSPEC nvarchar2(60) NOT NULL,
-	-- 剂型
-	C_FIGURENAME nvarchar2(40) NOT NULL,
-	-- 生产厂家名称
-	C_FACTORYNAME nvarchar2(100) NOT NULL,
-	-- 批次编号
-	C_BATCHCD nvarchar2(100),
-	-- 批次详细信息
-	C_BATCHDETAIL nvarchar2(600),
-	-- 药品包装单位编码
-	C_DRUGPACKUNITCD varchar2(36) NOT NULL,
-	-- 药品包装单位名称
-	C_DRUGPACKUNITNAME nvarchar2(200) NOT NULL,
-	-- 药品包装单位单价
-	C_DRUGPACKUNITPRICE number(12,4) NOT NULL,
-	-- 药品使用单位编码
-	C_USEUNITCD nvarchar2(40) NOT NULL,
-	-- 药品使用单位名称
-	C_USEUNITNAME nvarchar2(40),
-	-- 药品使用单位单价
-	N_USEUNITPRICE number(12,4),
-	-- 药品领药单位编码
-	C_SENDUNITCD nvarchar2(40) NOT NULL,
-	-- 药品领药单位名称
-	C_SENDUNITNAME nvarchar2(40) NOT NULL,
-	-- 药品领药单位单价
-	N_SENDUNITPRICE number(12,4) NOT NULL,
-	-- 药品数量(按领药单位）
-	N_DRUGNUMBER  number(12,2) NOT NULL,
-	-- 药品金额
-	N_DRUGAMOUNT number(12,4) NOT NULL,
-	-- 药品用法编码
-	C_DRUGUSAGECD nvarchar2(40) NOT NULL,
-	-- 药品用法名称
-	C_DRUGUSAGENAME nvarchar2(80) NOT NULL,
-	-- 药品用次编码
-	C_DRUGUSETIMESDAYCD nvarchar2(40) NOT NULL,
-	-- 药品用次名称
-	C_DRUGUSETIMESDAYNAME nvarchar2(100) NOT NULL,
-	-- 医生编码
-	C_DOCTORCD nvarchar2(36) NOT NULL,
-	-- 医生姓名
-	C_DOCTORNAME nvarchar2(36) NOT NULL,
-	-- 医嘱嘱托
-	C_DOCTORADVICE nvarchar2(100),
-	-- 床位号
-	C_BEDCD nvarchar2(40),
-	-- 日次
-	C_DAYTIME nvarchar2(40),
-	-- 剂量
-	C_DOSAGE nvarchar2(40),
-	-- 区域
-	AREA varchar2(128) NOT NULL,
-	-- 机构
-	INSTITUTION varchar2(128) NOT NULL
+  -- 序号
+  ID                    NVARCHAR2(60)  NOT NULL,
+  -- 发药单流水号
+  C_SENDLISTCD          NVARCHAR2(60)  NOT NULL,
+  -- 创建者编号
+  CREATORCD             NVARCHAR2(40)  NOT NULL,
+  -- 创建者名称
+  CREATORNAME           NVARCHAR2(40)  NOT NULL,
+  -- 创建时间
+  CREATETIME            DATE           NOT NULL,
+  -- 病人ID号
+  C_PATIENTID           NVARCHAR2(100) NOT NULL,
+  -- 病人姓名
+  C_PATIENTNAME         NVARCHAR2(36)  NOT NULL,
+  -- 病人姓名拼音码
+  C_PATIENTNAMEPYCODE   NVARCHAR2(36),
+  -- 药品编号
+  C_DRUGCD              NVARCHAR2(60)  NOT NULL,
+  -- 药品通用名称
+  C_COMMONNAME          NVARCHAR2(100) NOT NULL,
+  -- 药品商品名称
+  C_TRADENAME           NVARCHAR2(100) NOT NULL,
+  -- 药品规格
+  C_DRUGSPEC            NVARCHAR2(60)  NOT NULL,
+  -- 剂型
+  C_FIGURENAME          NVARCHAR2(40)  NOT NULL,
+  -- 生产厂家名称
+  C_FACTORYNAME         NVARCHAR2(100) NOT NULL,
+  -- 批次编号
+  C_BATCHCD             NVARCHAR2(100),
+  -- 批次详细信息
+  C_BATCHDETAIL         NVARCHAR2(600),
+  -- 药品包装单位编码
+  C_DRUGPACKUNITCD      VARCHAR2(36)   NOT NULL,
+  -- 药品包装单位名称
+  C_DRUGPACKUNITNAME    NVARCHAR2(200) NOT NULL,
+  -- 药品包装单位单价
+  C_DRUGPACKUNITPRICE   NUMBER(12, 4)  NOT NULL,
+  -- 药品使用单位编码
+  C_USEUNITCD           NVARCHAR2(40)  NOT NULL,
+  -- 药品使用单位名称
+  C_USEUNITNAME         NVARCHAR2(40),
+  -- 药品使用单位单价
+  N_USEUNITPRICE        NUMBER(12, 4),
+  -- 药品领药单位编码
+  C_SENDUNITCD          NVARCHAR2(40)  NOT NULL,
+  -- 药品领药单位名称
+  C_SENDUNITNAME        NVARCHAR2(40)  NOT NULL,
+  -- 药品领药单位单价
+  N_SENDUNITPRICE       NUMBER(12, 4)  NOT NULL,
+  -- 药品数量(按领药单位）
+  N_DRUGNUMBER          NUMBER(12, 2)  NOT NULL,
+  -- 药品金额
+  N_DRUGAMOUNT          NUMBER(12, 4)  NOT NULL,
+  -- 药品用法编码
+  C_DRUGUSAGECD         NVARCHAR2(40)  NOT NULL,
+  -- 药品用法名称
+  C_DRUGUSAGENAME       NVARCHAR2(80)  NOT NULL,
+  -- 药品用次编码
+  C_DRUGUSETIMESDAYCD   NVARCHAR2(40)  NOT NULL,
+  -- 药品用次名称
+  C_DRUGUSETIMESDAYNAME NVARCHAR2(100) NOT NULL,
+  -- 医生编码
+  C_DOCTORCD            NVARCHAR2(36)  NOT NULL,
+  -- 医生姓名
+  C_DOCTORNAME          NVARCHAR2(36)  NOT NULL,
+  -- 医嘱嘱托
+  C_DOCTORADVICE        NVARCHAR2(100),
+  -- 床位号
+  C_BEDCD               NVARCHAR2(40),
+  -- 日次
+  C_DAYTIME             NVARCHAR2(40),
+  -- 剂量
+  C_DOSAGE              NVARCHAR2(40),
+  -- 区域
+  AREA                  VARCHAR2(128)  NOT NULL,
+  -- 机构
+  INSTITUTION           VARCHAR2(128)  NOT NULL
 );
+
+/*处方药表*/
+CREATE TABLE T_SIIP_RECIPE
+(
+  AREA                  VARCHAR2(128),
+  INSTITUTION           VARCHAR2(128),
+  C_RECIPECD            VARCHAR2(30) NOT NULL,
+  C_RECIPECDOLD         VARCHAR2(30),
+  D_RECIPEEXPIREDATE    DATE,
+  C_RECIPETYPE          VARCHAR2(2),
+  N_RECIPESORT          NUMBER(1, 0),
+  N_SPECIALFLG          NUMBER(1, 0),
+  N_RECIPECOUNT         NUMBER(10, 0),
+  N_RECIPEAMOUNT        NUMBER(12, 4),
+  C_RECIPEENTEROPER     NVARCHAR2(20),
+  D_DOCTORDATETIME      DATE,
+  C_DOCTORCD            NVARCHAR2(160),
+  C_DOCTORNAME          NVARCHAR2(400),
+  C_DOCTORDEPTCD        VARCHAR2(10),
+  C_DOCTORDEPTNAME      NVARCHAR2(40),
+  C_FEEOPER             VARCHAR2(20),
+  D_FEEDATETIME         DATE,
+  N_FEEAMOUNT           NUMBER(12, 4),
+  C_PATIENTICD10CD      NVARCHAR2(20),
+  C_PATIENTICD10NAME    NVARCHAR2(100),
+  C_PATIENTICD10NOTES   NVARCHAR2(510),
+  C_PATIENTID           VARCHAR2(50),
+  C_PATIENTCARDCD       VARCHAR2(50),
+  C_CITYCARDCD          VARCHAR2(50),
+  C_PATIENTTIMES        NUMBER(10, 0),
+  C_RECIPECDHIS         VARCHAR2(30),
+  N_LEDGERNO            NUMBER(10, 0),
+  C_PATIENTNAME         NVARCHAR2(40),
+  C_PATIENTSEX          NVARCHAR2(4),
+  C_PATIENTAGE          NVARCHAR2(40),
+  C_PATIENTPHONE        NVARCHAR2(60),
+  C_PATIENTWORKUNIT     NVARCHAR2(100),
+  D_PATIENTBIRTHDAY     DATE,
+  C_PATIENTSORTCD       NVARCHAR2(40),
+  C_PATIENTSORTNAME     NVARCHAR2(40),
+  N_PATIENTHEIGHT       NUMBER(3, 0),
+  N_PATIENTWEIGHT       NUMBER(3, 0),
+  N_RECIPESTATUS        NUMBER(1, 0),
+  N_INTERFACESTATUS     NUMBER(1, 0),
+  N_VIPFLG              NUMBER(1, 0),
+  C_DOCTORADVICE        NVARCHAR2(510),
+  D_ADDDATETIME         DATE,
+  B_TWOCODE             BLOB,
+  C_NOTESEX1            NVARCHAR2(100),
+  C_NOTESEX2            NVARCHAR2(100),
+  C_NOTESEX3            NVARCHAR2(100),
+  C_NOTESEX4            NVARCHAR2(100),
+  C_NOTESEX5            NVARCHAR2(100),
+  C_STORECD             NVARCHAR2(10),
+  C_UPTOPERCD           NVARCHAR2(20),
+  C_UPTOPERNAME         NVARCHAR2(20),
+  D_UPTDATETIME         DATE,
+  C_ADJUSTCD            NVARCHAR2(40),
+  C_ADJUSTNAME          NVARCHAR2(40),
+  C_INVOICESERIALNUM    NVARCHAR2(40),
+  N_INFUSIONRECIPEFLG   NUMBER(1, 0),
+  N_EMERGENCYPATIENTFLG NUMBER(1, 0),
+  N_INFUSIONBRINGBACK   NUMBER(1, 0),
+  C_PATIENTNAMEPYCODE   VARCHAR2(20),
+  N_WINDOWNO            NUMBER(2, 0),
+  PRIMARY KEY (C_RECIPECD)
+);
+
+COMMENT ON COLUMN T_SIIP_RECIPE.AREA IS '区域';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_RECIPECD IS '处方流水号';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_RECIPECDOLD  IS '原处方号';
+COMMENT ON COLUMN T_SIIP_RECIPE.D_RECIPEEXPIREDATE IS '处方有效期';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_RECIPETYPE IS '处方类型';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_RECIPESORT IS '处方种类';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_SPECIALFLG IS '特殊处方标识';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_RECIPECOUNT IS '处方剂数';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_RECIPEAMOUNT IS '单剂处方金额';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_RECIPEENTEROPER IS '处方录入人编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.D_DOCTORDATETIME IS '处方录入时间';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_DOCTORCD IS '医生编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_DOCTORNAME IS '医生姓名';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_DOCTORDEPTCD IS '医生部门编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_DOCTORDEPTNAME IS '医生部门名称';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_FEEOPER IS '收费人编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.D_FEEDATETIME IS '收费时间';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_FEEAMOUNT IS '全部处方收费金额';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTICD10CD IS '主诊断编号';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTICD10NAME IS '主诊断名称';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTICD10NOTES IS '主诊断说明';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTID IS '病人ID号/身份证号';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTCARDCD IS '就诊卡号';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_CITYCARDCD IS '市民卡号';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTTIMES IS '就诊次数';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_RECIPECDHIS IS 'HIS处方号';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_LEDGERNO IS '结算序号';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTNAME IS '姓名';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTSEX IS '性别';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTAGE IS '年龄';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTPHONE IS '联系方式';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTWORKUNIT IS '工作单位';
+COMMENT ON COLUMN T_SIIP_RECIPE.D_PATIENTBIRTHDAY IS '出生日期';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTSORTCD IS '身份类别编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTSORTNAME IS '身份类别名称';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_PATIENTHEIGHT IS '病人身高';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_PATIENTWEIGHT IS '病人体重';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_RECIPESTATUS IS '处方状态';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_INTERFACESTATUS IS '接口数据状态';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_VIPFLG IS 'VIP标记';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_DOCTORADVICE IS '医嘱';
+COMMENT ON COLUMN T_SIIP_RECIPE.D_ADDDATETIME IS '新增时间';
+COMMENT ON COLUMN T_SIIP_RECIPE.B_TWOCODE IS '二维码';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_NOTESEX1 IS '扩展字段1';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_NOTESEX2 IS '扩展字段2';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_NOTESEX3 IS '扩展字段3';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_NOTESEX4 IS '扩展字段4';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_NOTESEX5 IS '扩展字段5';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_STORECD IS '门诊药房编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_UPTOPERCD IS '发药人编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_UPTOPERNAME IS '发药人姓名';
+COMMENT ON COLUMN T_SIIP_RECIPE.D_UPTDATETIME IS '存盘时间';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_ADJUSTCD IS '调剂人编码';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_ADJUSTNAME IS '调剂人姓名';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_INVOICESERIALNUM IS '发票流水号';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_INFUSIONRECIPEFLG IS '存在输液明细';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_EMERGENCYPATIENTFLG IS '是否是急诊病人';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_INFUSIONBRINGBACK IS '是否在院输液';
+COMMENT ON COLUMN T_SIIP_RECIPE.C_PATIENTNAMEPYCODE IS '患者姓名拼音码';
+COMMENT ON COLUMN T_SIIP_RECIPE.N_WINDOWNO IS '窗口号';
+
 
 
 
@@ -944,7 +1070,7 @@ COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.N_USEUNITPRICE IS '药品使用单位单
 COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.C_SENDUNITCD IS '药品领药单位编码';
 COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.C_SENDUNITNAME IS '药品领药单位名称';
 COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.N_SENDUNITPRICE IS '药品领药单位单价';
-COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.N_DRUGNUMBER  IS '药品数量(按领药单位）';
+COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.N_DRUGNUMBER IS '药品数量(按领药单位）';
 COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.N_DRUGAMOUNT IS '药品金额';
 COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.C_DRUGUSAGECD IS '药品用法编码';
 COMMENT ON COLUMN T_SIIP_SENDLISTDETAIL.C_DRUGUSAGENAME IS '药品用法名称';

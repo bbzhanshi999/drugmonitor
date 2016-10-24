@@ -122,9 +122,21 @@ $(document).ready(function () {
             } else {
                 $('#mainTabs').tabs('select', node.text);
             }
-        }
+        },
+        loadFilter:menuTreeLoadFilter
     })
-
-
 });
 
+function menuTreeLoadFilter(data){
+    if(data&&data.length>0){
+        for (var x in data) {
+            if($.trim(data[x].children)){
+                data[x].state = 'closed';
+                if(data[x].children&&data[x].children.length>0){
+                    menuTreeLoadFilter(data[x].children);
+                }
+            }
+        }
+    }
+    return data;
+}

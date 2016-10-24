@@ -58,7 +58,8 @@
     </script>
 </head>
 <body>
-<img src="${ctxStatic}/images/background.jpg" style="width:100%;height:100%;position: absolute;left: 0;top: 0;"/>
+<h1 style="color:white;font-family: 'Microsoft YaHei UI';position: absolute;z-index: 9999;left:50px;top:50px;"><i class="e-icon fa fa-2x fa-medkit"></i>&nbsp;&nbsp;&nbsp;药品监督系统</h1>
+<img src="${ctxStatic}/images/background2.png" style="width:100%;height:100%;position: absolute;left: 0;top: 0;"/>
 <div id="dd" class="easyui-dialog" title="登录界面" style="width:400px;height:200px;"
      data-options="iconCls:'icon-save',resizable:true,modal:true,closable:false,modal:false">
     <form id="form" method="post" style="padding-top: 10px">
