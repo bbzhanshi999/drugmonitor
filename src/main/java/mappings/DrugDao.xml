@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simlink.task.dao.DrugDao">
+
+
+    <sql id="drugInStoreColumns">
+        C_ACCEPTBILLCD,CREATORCD,CREATORNAME,CREATETIME,C_OUTSTOREBILLUPCD,D_ACCEPTDATETIME,
+		C_ACCEPTTYPE,N_DEELSTATUS,N_SENDSTATUS,C_SENDDEPTCD,C_OUTSTORENAME,C_ACCEPTDEPTCD,
+		C_INSTORENAME,N_ACCEPTCOUNT,N_DRUGAMOUNT,C_ACCEPTOPERCD,C_UPTOPERCD,D_UPTDATETIME,
+		C_ACCEPTOPERNAME,C_UPTOPERNAME,C_REMARK,C_AUDITORNAME,C_SHELFUPPEOPLE,INSTITUTION,AREA
+    </sql>
+	
+	<sql id="drugInStoreDetailColumns">
+        ID ,CREATORCD ,CREATORNAME ,CREATETIME ,C_ACCEPTBILLCD ,C_DRUGCD ,C_TRADENAME
+		,C_COMMONNAME ,C_FACTORYNAME ,C_DRUGSPEC ,C_FIGURENAME ,C_BATCHCD ,C_BATCHDETAIL
+		,C_POSITIONCD ,C_PACKUNITCD ,C_PACKUNITNAME ,N_PACKUNITPRICE ,N_USEUNITPRICE
+		,C_USEUNITCD ,C_USEUNITNAME ,C_INSTOREUNITCD ,C_INSTOREUNITNAME
+		,N_INSTOREUNITPRICE ,N_DRUGCOUNT ,N_DRUGAMOUNT ,D_UPTDATETIME,INSTITUTION,AREA
+    </sql>
+    
+    <sql id="drugOutStoreColumns">
+        C_OUTBILLCD ,CREATORCD ,CREATORNAME ,CREATETIME ,C_INSTOREBILLUPCD
+		,D_OUTDATETIME ,C_OUTTYPE ,N_DEELSTATUS ,N_SENDSTATUS ,C_ACCEPTDEPTCD
+		,C_ACCEPTDEPTNAME ,C_OUTDEPTCD ,C_OUTDEPTNAME ,N_OUTCOUNT ,N_DRUGAMOUNT
+		,C_OUTOPERCD ,C_ACCEPTOPERCD ,C_UPTOPERCD ,D_UPTDATETIME ,C_OUTOPERNAME
+		,C_ACCEPTOPERNAME ,C_UPTOPERNAME ,C_REMARK ,C_AUDITORNAME ,C_SHELFDOWNPEOPLE,INSTITUTION,AREA
+    </sql>
+
+	<sql id="drugOutStoreDetailColumns">
+        ID ,C_OUTBILLCD ,CREATORCD ,CREATORNAME ,CREATETIME ,C_DRUGCD ,C_TRADENAME
+		,C_COMMONNAME ,C_FACTORYNAME ,C_DRUGSPEC ,C_FIGURENAME ,C_BATCHCD ,C_BATCHDETAIL
+		,C_POSITIONCD ,C_PACKUNITCD ,C_PACKUNITNAME ,N_PACKUNITPRICE ,C_USEUNITCD
+		,C_USEUNITNAME ,N_USEUNITPRICE ,C_OUTSTORECD ,C_OUTSTORENAME ,N_OUTSTOREPRICE
+		,N_DRUGCOUNT ,N_DRUGAMOUNT ,D_UPTDATETIME,INSTITUTION,AREA
+    </sql>
+    
+    <sql id="drugStorageStockColumns">
+        ID ,C_DRUGCD ,C_DRUGUNITCD ,C_BATCHCD ,CREATORCD ,CREATORNAME ,CREATETIME
+		,N_DRUGSTOCK ,D_NUMBER ,INSTITUTION ,AREA
+    </sql>
+    
+    <sql id="invDrugStoreColumns">
+       C_INVSTORECD ,CREATORCD ,CREATORNAME ,CREATETIME ,C_DRUGSTORECD ,C_DRUGSTORENAME
+		,N_DEELSTATUS ,N_SENDSTATUS ,D_INVSTORETIME ,N_BEFOREINVAMOUT ,N_AFTERINVAMOUNT
+		,D_UPTDATETIME ,C_AUDITORNAME ,C_INVPERSONNAME ,N_DRUGSCOUNT,INSTITUTION,AREA
+    </sql>
+    
+    <sql id="invDrugStoreDetailColumns">
+       ID ,C_INVSTORECD ,CREATORCD ,CREATORNAME ,CREATETIME ,C_DRUGCD ,C_TRADENAME
+		,C_COMMONNAME ,C_DRUGSPEC ,C_FIGURENAME ,C_FACTORYNAME ,C_POSITIONCD
+		,D_UPTDATETIME ,C_DRUGINVUNITCD ,C_DRUGINVUNITNAME ,N_OLDSTOCK ,N_OLDAMOUNT
+		,N_REALSTOCK ,N_REALAMOUNT ,C_PACKUNITCD ,C_USEUNITCD ,C_PACKUNITNAME
+		,C_USEUNITNAME ,N_PACKUNITPRICE ,N_USEUNITPRICE ,N_INVUNITPRICE
+		,N_DRUGPACKMODULUS,INSTITUTION,AREA
+    </sql>
+    
+    <sql id="sendCollectDetailColumns">
+       ID ,N_COLLECTID ,C_SENDLISTCD ,CREATORCD ,CREATORNAME ,CREATETIME ,C_PATIENTID
+		,C_PATIENTNAME ,C_PATIENTNAMEPYCODE ,C_DRUGCD ,C_COMMONNAME ,C_TRADENAME
+		,C_DRUGSPEC ,C_FIGURENAME ,C_FACTORYNAME ,C_BATCHCD ,C_BATCHDETAIL
+		,C_DRUGPACKUNITCD ,C_DRUGPACKUNITNAME ,C_DRUGPACKUNITPRICE ,C_USEUNITCD
+		,C_USEUNITNAME ,N_USEUNITPRICE ,C_SENDUNITCD ,C_SENDUNITNAME ,N_SENDUNITPRICE
+		,N_DRUGNUMBER ,N_DRUGAMOUNT ,C_DRUGUSAGECD ,C_DRUGUSAGENAME ,C_DRUGUSETIMESDAYCD
+		,C_DRUGUSETIMESDAYNAME ,C_DOCTORCD ,C_DOCTORNAME ,C_DOCTORADVICE ,C_BEDCD
+		,C_DAYTIME ,C_DOSAGE,INSTITUTION,AREA
+    </sql>
+    
+    <sql id="sendListColumns">
+      C_SENDLISTCD ,CREATORCD ,CREATORNAME ,CREATETIME ,C_SENDLISTCDHIS ,C_WARDCD
+		,C_WARDNAME ,N_DEELSTATUS ,N_SENDSTATUS ,C_STORECD ,C_STORENAME ,N_SENDTYPE
+		,C_ENTEROPERCD ,C_ENTEROPERNAME ,C_UPTOPERCD ,C_UPTOPERNAME ,N_AMOUNT
+		,D_ENTERTIME ,D_UPTDATETIME ,C_SENDTYPENAME,INSTITUTION,AREA
+    </sql>
+    
+    <sql id="sendListCollectColumns">
+      N_COLLECTID ,CREATORCD ,CREATORNAME ,CREATETIME ,C_DRUGCD ,C_COMMONNAME
+		,C_TRADENAME ,C_DRUGSPEC ,C_FIGURENAME ,C_FACTORYNAME ,C_DRUGSTORENAME
+		,C_DRUGSTORECD ,N_DEELSTATUS ,C_DRUGPACKUNITCD ,C_DRUGPACKUNITNAME
+		,C_DRUGPACKUNITPRICE ,C_USEUNITCD ,C_USEUNITNAME ,N_USEUNITPRICE ,C_SENDUNITCD
+		,C_SENDUNITNAME ,N_SENDUNITPRICE ,N_DRUGNUMBER ,N_DRUGAMOUNT ,C_PACKTOTAL
+		,C_REALSTOCK ,C_USETOTAL,INSTITUTION,AREA
+    </sql>
+    
+    <sql id="sendListDetailColumns">
+      ID ,C_SENDLISTCD ,CREATORCD ,CREATORNAME ,CREATETIME ,C_PATIENTID ,C_PATIENTNAME
+		,C_PATIENTNAMEPYCODE ,C_DRUGCD ,C_COMMONNAME ,C_TRADENAME ,C_DRUGSPEC
+		,C_FIGURENAME ,C_FACTORYNAME ,C_BATCHCD ,C_BATCHDETAIL ,C_DRUGPACKUNITCD
+		,C_DRUGPACKUNITNAME ,C_DRUGPACKUNITPRICE ,C_USEUNITCD ,C_USEUNITNAME
+		,N_USEUNITPRICE ,C_SENDUNITCD ,C_SENDUNITNAME ,N_SENDUNITPRICE ,N_DRUGNUMBER
+		,N_DRUGAMOUNT ,C_DRUGUSAGECD ,C_DRUGUSAGENAME ,C_DRUGUSETIMESDAYCD
+		,C_DRUGUSETIMESDAYNAME ,C_DOCTORCD ,C_DOCTORNAME ,C_DOCTORADVICE ,C_BEDCD
+		,C_DAYTIME ,C_DOSAGE,INSTITUTION,AREA
+    </sql>
+    
+    <insert id="saveAllTSiipDruginstore" parameterType="java.util.List">
+        INSERT INTO T_SIIP_DRUGINSTORE(
+          <include refid="drugInStoreColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.CAcceptbillcd},#{item.creatorcd},#{item.creatorname},#{item.createtime},#{item.COutstorebillupcd},#{item.DAcceptdatetime},
+			#{item.CAccepttype},#{item.NDeelstatus},#{item.NSendstatus},#{item.CSenddeptcd},#{item.COutstorename},
+			#{item.CAcceptdeptcd},#{item.CInstorename},#{item.NAcceptcount},#{item.NDrugamount},#{item.CAcceptopercd},
+			#{item.CUptopercd},#{item.DUptdatetime},#{item.CAcceptopername},#{item.CUptopername},#{item.CRemark},
+			#{item.CAuditorname},#{item.CShelfuppeople},#{item.institution},#{item.area} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+    <insert id="saveTSiipDruginstoredetail" parameterType="java.util.List">
+        INSERT INTO T_SIIP_DRUGINSTOREDETAIL(
+          <include refid="drugInStoreDetailColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.id}, #{item.creatorcd},#{item.creatorname}, #{item.createtime},#{item.CAcceptbillcd}, #{item.CDrugcd},
+			#{item.CTradename}, #{item.CCommonname},#{item.CFactoryname}, #{item.CDrugspec},
+			#{item.CFigurename}, #{item.CBatchcd},#{item.CBatchdetail}, #{item.CPositioncd},#{item.CPackunitcd}, #{item.CPackunitname},
+			#{item.NPackunitprice}, #{item.NUseunitprice},#{item.CUseunitcd}, #{item.CUseunitname},
+			#{item.CInstoreunitcd}, #{item.CInstoreunitname},#{item.NInstoreunitprice}, #{item.NDrugcount},
+			#{item.NDrugamount}, #{item.DUptdatetime}, #{item.institution},#{item.area} from dual
+		</foreach>    
+		)A
+    </insert>
+
+    <insert id="saveTSiipDrugoutstore" parameterType="java.util.List">
+        INSERT INTO T_SIIP_DRUGOUTSTORE(
+          <include refid="drugOutStoreColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.COutbillcd},#{item.creatorcd}, #{item.creatorname},#{item.createtime},#{item.CInstorebillupcd},#{item.DOutdatetime},
+				#{item.COuttype},#{item.NDeelstatus},#{item.NSendstatus},#{item.CAcceptdeptcd},#{item.CAcceptdeptname},
+				#{item.COutdeptcd},#{item.COutdeptname},#{item.NOutcount},#{item.NDrugamount},#{item.COutopercd},
+				#{item.CAcceptopercd},#{item.CUptopercd},#{item.DUptdatetime},#{item.COutopername},
+				#{item.CAcceptopername},#{item.CUptopername},#{item.CRemark},#{item.CAuditorname},
+				#{item.CShelfdownpeople},#{item.institution},#{item.area} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+    <insert id="saveTSiipDrugoutstoredetail" parameterType="java.util.List">
+        INSERT INTO T_SIIP_DRUGOUTSTOREDETAIL(
+          <include refid="drugOutStoreDetailColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.id}, #{item.COutbillcd},#{item.creatorcd}, #{item.creatorname}, #{item.createtime},
+			#{item.CDrugcd}, #{item.CTradename},#{item.CCommonname}, #{item.CFactoryname},
+			#{item.CDrugspec}, #{item.CFigurename},#{item.CBatchcd}, #{item.CBatchdetail},
+			#{item.CPositioncd}, #{item.CPackunitcd},#{item.CPackunitname}, #{item.NPackunitprice},
+			#{item.CUseunitname}, #{item.NUseunitprice},#{item.COutstorecd}, #{item.COutstorename},
+			#{item.NOutstoreprice}, #{item.NDrugcount}, #{item.NDrugamount},#{item.DUptdatetime},
+			 #{item.institution}, #{item.area}, #{item.CUserunitcd},#{item.institution},#{item.area} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+    <insert id="saveTSiipDrugstoragestock" parameterType="java.util.List">
+        INSERT INTO T_SIIP_DRUGSTORAGESTOCK(
+          <include refid="drugStorageStockColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.id}, #{item.CDrugcd},#{item.CDrugunitcd}, #{item.CBatchcd},
+			#{item.creatorcd}, #{item.creatorname}, #{item.createtime},#{item.DNumber}, #{item.NDrugstock}, #{item.institution},
+			#{item.area} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+    <insert id="saveTSiipInvdrugstore" parameterType="java.util.List">
+        INSERT INTO T_SIIP_INVDRUGSTORE(
+          <include refid="invDrugStoreColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.CInvstorecd},#{item.creatorcd}, #{item.creatorname}, #{item.createtime},
+			#{item.CDrugstorecd}, #{item.CDrugstorename},#{item.NDeelstatus}, #{item.NSendstatus}, #{item.DInvstoretime},
+			#{item.NBeforeinvamout}, #{item.NAfterinvamount},#{item.DUptdatetime}, #{item.CAuditorname},
+			#{item.CInvpersonname}, #{item.NDrugscount}, #{item.area},#{item.institution} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+    <insert id="saveTSiipInvdrugstoredetail" parameterType="java.util.List">
+        INSERT INTO T_SIIP_INVDRUGSTOREDETAIL(
+          <include refid="invDrugStoreDetailColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.id}, #{item.CInvstorecd},#{item.creatorcd}, #{item.creatorname}, #{item.createtime},
+			#{item.CDrugcd}, #{item.CTradename},#{item.CCommonname}, #{item.CDrugspec},
+			#{item.CFigurename}, #{item.CFactoryname},#{item.CPositioncd}, #{item.DUptdatetime},
+			#{item.CDruginvunitcd}, #{item.CDruginvunitname},#{item.NOldstock}, #{item.NRealstock},
+			#{item.NBeforeinvamout}, #{item.NAfterinvamount},#{item.CPackunitcd}, #{item.CPackunitname},
+			#{item.CUseunitcd}, #{item.CUseunitname},#{item.NPackunitprice}, #{item.NUseunitprice},
+			#{item.NInvunitprice}, #{item.NDrugpackmodulus}, #{item.area},#{item.institution} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+
+    <insert id="saveTSiipSendcollectdetail" parameterType="java.util.List">
+        INSERT INTO T_SIIP_SENDCOLLECTDETAIL(
+          <include refid="sendCollectDetailColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.id}, #{item.NCollectid},#{item.CSendlistcd}, #{item.creatorcd},#{item.creatorname}, #{item.createtime}, #{item.CPatientid},
+			#{item.CPatientname}, #{item.CPatientnamepycode},#{item.CDrugcd}, #{item.CCommonname},
+			#{item.CTradename}, #{item.CDrugspec},#{item.CFigurename}, #{item.CFactoryname},#{item.CBatchcd}, #{item.CBatchdetail},
+			#{item.CDrugpackunitcd}, #{item.CDrugpackunitname},#{item.CDrugpackunitprice}, #{item.CUseunitcd},
+			#{item.CUseunitname}, #{item.NUseunitprice},#{item.CSendunitcd}, #{item.CSendunitname},
+			#{item.NSendunitprice}, #{item.NDrugnumber},#{item.NDrugamount}, #{item.CDrugusagecd},
+			#{item.CDrugusagename}, #{item.CDrugusetimesdayname},#{item.CDrugusetimesdaycd}, #{item.CDoctorcd},
+			#{item.CDoctorname}, #{item.CDoctoradvice},#{item.CBedcd}, #{item.CDaytime}, #{item.CDosage},#{item.area}, #{item.institution} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+
+    <insert id="saveTSiipSendlist" parameterType="java.util.List">
+        INSERT INTO T_SIIP_SENDLIST(
+          <include refid="sendListColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select   #{item.CSendlistcd}, #{item.creatorcd},#{item.creatorname}, #{item.createtime},
+			#{item.CSendlistcdhis}, #{item.CWardcd},#{item.CWardname}, #{item.NDeelstatus}, #{item.NSendstatus},
+			#{item.CStorecd}, #{item.CStorename}, boolean NSendtype},#{item.CEnteropercd}, #{item.CEnteropername},
+			#{item.CUptopercd}, #{item.CUptopername},#{item.NAmount}, #{item.DEntertime}, #{item.DUptdatetime},
+			#{item.CSendtypename}, #{item.area}, #{item.institution} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+
+    <insert id="saveTSiipSendlistcollect" parameterType="java.util.List">
+        INSERT INTO T_SIIP_SENDLISTCOLLECT(
+          <include refid="sendListCollectColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.NCollectid},#{item.creatorcd}, #{item.creatorname}, #{item.createtime},
+			#{item.CDrugcd}, #{item.CCommonname},#{item.CTradename}, #{item.CDrugspec},#{item.CFigurename}, #{item.CFactoryname},
+			#{item.CDrugstorename}, #{item.CDrugstorecd},#{item.NDeelstatus}, #{item.CDrugpackunitcd},
+			#{item.CDrugpackunitname}, #{item.CDrugpackunitprice},#{item.CUseunitcd}, #{item.CUseunitname},
+			#{item.NUseunitprice}, #{item.CSendunitcd},#{item.CSendunitname}, #{item.NSendunitprice},
+			#{item.NDrugnumber}, #{item.NDrugamount},#{item.CPacktotal}, #{item.CRealstock},
+			#{item.CUsetotal}, #{item.area}, #{item.institution} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+
+    <insert id="saveTSiipSendlistdetail" parameterType="java.util.List">
+        INSERT INTO T_SIIP_SENDLISTDETAIL(
+          <include refid="sendListDetailColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.id}, #{item.CSendlistcd},#{item.creatorcd}, #{item.creatorname}, #{item.createtime},
+			#{item.CPatientid}, #{item.CPatientname},#{item.CPatientnamepycode}, #{item.CDrugcd},
+			#{item.CCommonname}, #{item.CTradename},#{item.CDrugspec}, #{item.CFigurename},#{item.CFactoryname}, #{item.CBatchcd},
+			#{item.CBatchdetail}, #{item.CDrugpackunitcd},#{item.CDrugpackunitname}, #{item.CDrugpackunitprice},
+			#{item.CUseunitcd}, #{item.CUseunitname},#{item.NUseunitprice}, #{item.CSendunitcd},
+			#{item.CSendunitname}, #{item.NSendunitprice},#{item.NDrugnumber}, #{item.NDrugamount},
+			#{item.CDrugusagecd}, #{item.CDrugusagename},#{item.CDrugusetimesdaycd}, #{item.CDrugusetimesdayname},
+			#{item.CDoctorcd}, #{item.CDoctorname},#{item.CDoctoradvice}, #{item.CBedcd},
+			#{item.CDaytime}, #{item.CDosage}, #{item.area},#{item.institution} from dual
+		</foreach>    
+		)A
+    </insert>
+
+</mapper>
