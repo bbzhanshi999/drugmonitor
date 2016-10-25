@@ -3,6 +3,19 @@
     margin-left: 10px;
 }
 
+.background-div{
+    FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#032760,endColorStr=#1A90CB); /*IE 6 7 8*/
+
+    background: -ms-linear-gradient(top, #032760,  #1A90CB);        /* IE 10 */
+
+    background: -moz-radial-gradient(circle, #1E90FF, #032760);
+    /* Safari 4-5, Chrome 1-9 */
+    /* Can't specify a percentage size? Laaaaaame. */
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#1E90FF), to(#032760));
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-radial-gradient(circle, #1E90FF, #032760);
+
+}
 .form-line.wide {
     line-height: 50px;
     margin-left: 10px;
@@ -110,11 +123,6 @@ header.panel-header {
     min-height: 292px;
 }
 
-.content-bg1 {
-    background-image: url('images/bg1.png');
-    background-repeat: no-repeat;
-    background-position: center bottom;
-}
 
 .content-splash h1 {
     color: #fff;
@@ -208,30 +216,3 @@ textarea.html, textarea.js {
     line-height: 100%;
 }
 
-.icon-base {
-    background: url('images/basic.png') no-repeat;
-}
-
-.icon-layout {
-    background: url('images/layout.png') no-repeat;
-}
-
-.icon-menu {
-    background: url('images/menu.png') no-repeat;
-}
-
-.icon-form {
-    background: url('images/form.png') no-repeat;
-}
-
-.icon-window {
-    background: url('images/window.png') no-repeat;
-}
-
-.icon-datagrid {
-    background: url('images/grid.png') no-repeat;
-}
-
-.icon-gears {
-    background: url('images/gears.png') no-repeat;
-}

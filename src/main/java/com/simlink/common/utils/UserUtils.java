@@ -25,7 +25,6 @@ import java.util.Map;
  * Created by Administrator on 2016/5/3 0003.
  */
 @Service
-@Lazy(false)
 public class UserUtils {
 
     public static final String KEY_ACTIVE_USERS = "activeUsers";
@@ -51,7 +50,6 @@ public class UserUtils {
     /**
      * 载入所有user信息
      */
-    @PostConstruct
     public static void loadAllUsers(){
         List<User> allUsers = systemDao.getAllUsers();
         JedisUtils.del(USERS);
