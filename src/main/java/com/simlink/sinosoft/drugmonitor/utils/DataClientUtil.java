@@ -8,10 +8,8 @@ import com.simlink.sinosoft.drugmonitor.dao.DataClientDao;
 import com.simlink.sinosoft.drugmonitor.entity.DataClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -19,14 +17,12 @@ import java.util.List;
  * Created by Administrator on 2016/9/27 0027.
  */
 @Service
-@Lazy(false)
 public class DataClientUtil {
 
     protected static Logger logger = LoggerFactory.getLogger(DataClientUtil.class);
     private static final String CLIENTS = "dataClients";
     private static DataClientDao dataClientDao = SpringContextHolder.getBean(DataClientDao.class);
 
-    @PostConstruct
     public static void loadAllClients(){
         List<DataClient> clients = dataClientDao.getAllClients();
         JedisUtils.del(CLIENTS);
