@@ -13,6 +13,7 @@ import com.simlink.task.entity.TSiipDrugoutstoredetail;
 import com.simlink.task.entity.TSiipDrugstoragestock;
 import com.simlink.task.entity.TSiipInvdrugstore;
 import com.simlink.task.entity.TSiipInvdrugstoredetail;
+import com.simlink.task.entity.TSiipRecipe;
 import com.simlink.task.entity.TSiipSendcollectdetail;
 import com.simlink.task.entity.TSiipSendlist;
 import com.simlink.task.entity.TSiipSendlistcollect;
@@ -100,5 +101,9 @@ public class FormServiceImpl implements FormService {
 	 */
 	public int  saveTSiipSendlistdetail(List<TSiipSendlistdetail> entityList){
 		return drugInStoreDao.saveTSiipSendlistdetail(entityList);
+	}
+	
+	public int  saveTSiipRecipe(List<TSiipRecipe> entityList){
+		return drugInStoreDao.saveTSiipRecipe(entityList);
 	}
 }

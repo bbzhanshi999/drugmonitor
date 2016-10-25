@@ -92,6 +92,16 @@
 		,C_DAYTIME ,C_DOSAGE,INSTITUTION,AREA
     </sql>
     
+    <sql id="recipeColumns">
+     	C_RECIPECD, C_RECIPECDOLD, D_RECIPEEXPIREDATE, C_RECIPETYPE,N_RECIPESORT, N_SPECIALFLG, N_RECIPECOUNT, N_RECIPEAMOUNT, C_RECIPEENTEROPER,
+		D_DOCTORDATETIME, C_DOCTORCD, C_DOCTORNAME, C_DOCTORDEPTCD, C_DOCTORDEPTNAME,C_FEEOPER, D_FEEDATETIME, N_FEEAMOUNT, C_PATIENTICD10CD, C_PATIENTICD10NAME,
+		C_PATIENTICD10NOTES, C_PATIENTID, C_PATIENTCARDCD, C_CITYCARDCD, C_PATIENTTIMES,C_RECIPECDHIS, N_LEDGERNO, C_PATIENTNAME, C_PATIENTSEX, C_PATIENTAGE,
+		C_PATIENTPHONE, C_PATIENTWORKUNIT, D_PATIENTBIRTHDAY, C_PATIENTSORTCD,C_PATIENTSORTNAME, N_PATIENTHEIGHT, N_PATIENTWEIGHT, N_RECIPESTATUS,
+		N_INTERFACESTATUS, N_VIPFLG, C_DOCTORADVICE, D_ADDDATETIME, B_TWOCODE,C_NOTESEX1, C_NOTESEX2, C_NOTESEX3, C_NOTESEX4, C_NOTESEX5, C_STORECD,
+		C_UPTOPERCD, C_UPTOPERNAME, D_UPTDATETIME, C_ADJUSTCD, C_ADJUSTNAME,C_INVOICESERIALNUM, N_INFUSIONRECIPEFLG, N_EMERGENCYPATIENTFLG,
+		N_INFUSIONBRINGBACK, C_PATIENTNAMEPYCODE, N_WINDOWNO,INSTITUTION,AREA
+    </sql>
+    
     <insert id="saveAllTSiipDruginstore" parameterType="java.util.List">
         INSERT INTO T_SIIP_DRUGINSTORE(
           <include refid="drugInStoreColumns"/>
@@ -277,6 +287,26 @@
 			#{item.CDrugusagecd}, #{item.CDrugusagename},#{item.CDrugusetimesdaycd}, #{item.CDrugusetimesdayname},
 			#{item.CDoctorcd}, #{item.CDoctorname},#{item.CDoctoradvice}, #{item.CBedcd},
 			#{item.CDaytime}, #{item.CDosage}, #{item.area},#{item.institution} from dual
+		</foreach>    
+		)A
+    </insert>
+    
+    <insert id="saveTSiipRecipe" parameterType="java.util.List">
+        INSERT INTO T_SIIP_RECIPE(
+          <include refid="recipeColumns"/>
+        )
+        SELECT A.* from(
+	       <foreach collection="list" item="item" index="index" separator="union all" >
+			select #{item.CRecipecd},#{item.CRecipecdold},#{item.DRecipeexpiredate},#{item.CRecipetype},#{item.NRecipesort},#{item.NSpecialflg},
+			#{item.NRecipecount},#{item.NRecipeamount},#{item.CRecipeenteroper},#{item.DDoctordatetime},#{item.CDoctorcd},#{item.CDoctorname},
+			#{item.CDoctordeptcd},#{item.CDoctordeptname},#{item.CFeeoper},#{item.DFeedatetime},#{item.NFeeamount},#{item.CPatienticd10cd},
+			#{item.CPatienticd10name},#{item.CPatienticd10notes},#{item.CPatientid},#{item.CPatientcardcd},#{item.CCitycardcd},#{item.CPatienttimes},
+			#{item.CRecipecdhis},#{item.NLedgerno},#{item.CPatientname},#{item.CPatientsex},#{item.CPatientage},
+			#{item.CPatientphone},#{item.CPatientworkunit},#{item.DPatientbirthday},#{item.CPatientsortcd},#{item.CPatientsortname},
+			#{item.NPatientheight},#{item.NPatientweight},#{item.NRecipestatus},#{item.NInterfacestatus},#{item.NVipflg},#{item.CDoctoradvice},
+			#{item.DAdddatetime},#{item.BTwocode},#{item.CNotesex1},#{item.CNotesex2},#{item.CNotesex3},#{item.CNotesex4},#{item.CNotesex5},
+			#{item.CStorecd},#{item.CUptopercd},#{item.CUptopername},#{item.DUptdatetime},#{item.CAdjustcd},#{item.CAdjustname},#{item.CInvoiceserialnum},
+			#{item.NInfusionrecipeflg},#{item.NEmergencypatientflg},#{item.NInfusionbringback},#{item.CPatientnamepycode},#{item.NWindowno}, #{item.area},#{item.institution} from dual
 		</foreach>    
 		)A
     </insert>

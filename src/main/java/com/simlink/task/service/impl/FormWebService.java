@@ -18,6 +18,7 @@ import com.simlink.task.common.GenericResult;
 import com.simlink.task.common.JaxbUtil;
 import com.simlink.task.entity.TSiipDruginstore;
 import com.simlink.task.entity.TSiipDruginstoredetail;
+import com.simlink.task.entity.TSiipRecipe;
 import com.simlink.task.service.FormService;
 import com.simlink.task.service.IActionService;
 
@@ -383,6 +384,38 @@ public class FormWebService implements IActionService{
 			log.info("+++++开始批量新增++++++");
 			long startTime=System.currentTimeMillis();//获取开始时间  
 			int batchResult=formService.saveTSiipDruginstoredetail(arrayList);
+			log.info("+++++批量新增结束++++++");
+			long endTime=System.currentTimeMillis(); //获取结束时间 
+			String spendTime=(endTime-startTime)/1000+"s";
+			log.info(spendTime+"时间内入库"+batchResult+"条数据,若存在问题请核对！");
+		}
+		return result;
+	}
+	/**
+	 * 
+	 * @param entityList 列表
+	 */
+	@SuppressWarnings({ "rawtypes", "static-access" })
+	public GenericResult<Object>  saveTSiipRecipe(Iterator lv, String version)throws SQLException{
+		GenericResult<Object> result = new GenericResult<Object>();
+		//获取登录对象
+		DataClient client=(DataClient)request.getAttribute("dataClient");
+		Element el = null;
+		List<TSiipRecipe> arrayList=new ArrayList<TSiipRecipe>();
+		while (lv.hasNext()) {  
+	        el = (Element) lv.next();
+	        TSiipRecipe tds =jaxbUtil.converyToJavaBean(el.asXML(), TSiipRecipe.class);
+	        tds.setInstitution(client.getOrganName());//机构名称
+			tds.setArea(client.getAreaName());//区域名称
+	        arrayList.add(tds);
+	    }
+		if(arrayList.isEmpty()||arrayList==null){
+			result.setMessage("业务数据为空，无数据上传！");
+			result.setSuccess(false);
+		}else{
+			log.info("+++++开始批量新增++++++");
+			long startTime=System.currentTimeMillis();//获取开始时间  
+			int batchResult=formService.saveTSiipRecipe(arrayList);
 			log.info("+++++批量新增结束++++++");
 			long endTime=System.currentTimeMillis(); //获取结束时间 
 			String spendTime=(endTime-startTime)/1000+"s";

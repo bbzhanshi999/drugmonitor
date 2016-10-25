@@ -9,6 +9,7 @@ import com.simlink.task.entity.TSiipDrugoutstoredetail;
 import com.simlink.task.entity.TSiipDrugstoragestock;
 import com.simlink.task.entity.TSiipInvdrugstore;
 import com.simlink.task.entity.TSiipInvdrugstoredetail;
+import com.simlink.task.entity.TSiipRecipe;
 import com.simlink.task.entity.TSiipSendcollectdetail;
 import com.simlink.task.entity.TSiipSendlist;
 import com.simlink.task.entity.TSiipSendlistcollect;
@@ -70,4 +71,6 @@ public interface FormService {
 	 * @param entityList 列表
 	 */
 	public int  saveTSiipSendlistdetail(List<TSiipSendlistdetail> entityList);
+	
+	public int  saveTSiipRecipe(List<TSiipRecipe> entityList);
 }
