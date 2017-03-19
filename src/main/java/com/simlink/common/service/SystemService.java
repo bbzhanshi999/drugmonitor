@@ -10,12 +10,15 @@ import com.simlink.common.utils.StringUtils;
 import com.simlink.common.utils.UserUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -32,13 +35,16 @@ public class SystemService {
     @Value("${initPassword}")
     private String initPassword;
 
+    @Autowired
+    public SqlSessionTemplate sqlSessionTemplate;//用于获得jdbc原始API
+
     /**
      * 根据用户名取得用户信息
      * @param userName
      * @return
      */
     @Transactional(readOnly = false)
-    public User getUser(String userName){
+    public User getUser(String userName) {
         User user = UserUtils.getUser(userName);
         return user;
     }

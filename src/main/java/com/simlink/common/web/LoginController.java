@@ -137,7 +137,7 @@ public class LoginController {
         List<Menu> origin = UserUtils.getCurrentUser().getMenus();
         List<Menu> menus = Menu.buildList(origin);
         model.addAttribute("menu",menus);
-        return "index";
+        return "index-back";
     }
 
 

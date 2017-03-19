@@ -13,6 +13,7 @@
         <constructor-arg>
             <value>
                 /= anon
+                /layui-test.jsp= anon
                 /static/** = anon
                 /updateInitPassword = anon
                 /getvcode = anon
