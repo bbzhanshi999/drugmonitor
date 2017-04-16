@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统服务类
@@ -212,5 +213,19 @@ public class SystemService {
     public void resetPassword(String id) {
         systemDao.resetPassword(id);
         UserUtils.loadAllUsers();
+    }
+
+    /**
+     * 根据类型获取字典值
+     * @param type
+     * @return
+     */
+    public List<Map<String,Object>> getDicts(String type) {
+
+        return systemDao.getDicts(type);
+    }
+
+    public List<Map<String, Object>> getAllSupporter() {
+        return systemDao.getAllSupporter();
     }
 }

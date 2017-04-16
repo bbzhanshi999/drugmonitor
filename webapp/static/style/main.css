@@ -18,7 +18,8 @@
 }
 .form-line.wide {
     line-height: 50px;
-    margin-left: 10px;
+    margin-left: 20%;
+    text-align: left;
 }
 
 .form-line label {

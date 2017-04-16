@@ -49,4 +49,9 @@ public interface SystemDao {
     public void removeAssginRole(String id);
 
     public void resetPassword(String id);
+
+    public List<Map<String,Object>> getDicts(String type);
+
+    List<Map<String,Object>> getAllSupporter();
+
 }

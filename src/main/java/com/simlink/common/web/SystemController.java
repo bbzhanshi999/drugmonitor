@@ -14,6 +14,7 @@ import com.simlink.common.utils.SystemUtils;
 import com.simlink.common.utils.UserUtils;
 import com.simlink.sinosoft.drugmonitor.entity.DataClient;
 import com.simlink.sinosoft.drugmonitor.entity.Organization;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -209,5 +210,21 @@ public class SystemController extends BaseController{
     public List<Menu> getAllMenus(){
         List<Menu> menus = SystemUtils.getAllMenus();
         return menus;
+    }
+
+    @RequestMapping("getDicts")
+    @ResponseBody
+    public List<Map<String,Object>> getDict(String type){
+        return systemService.getDicts(type);
+    }
+
+    /**
+     * 获得所有供应商信息
+     * @return
+     */
+    @RequestMapping("getAllSupporter")
+    @ResponseBody
+    public List<Map<String,Object>> getAllSupporter(){
+        return systemService.getAllSupporter();
     }
 }

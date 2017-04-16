@@ -220,7 +220,6 @@ public class DataPermissionController extends BaseController {
     }
 
     @RequestMapping("getAllOrganizations")
-    @RequiresPermissions("data:permission:organization")
     @ResponseBody
     public List<Organization> getAllOrganizations(){
         List<Organization> organizations= dataPermissionService.getAllOrganizations();

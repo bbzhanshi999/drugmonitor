@@ -69,4 +69,18 @@
         WHERE O.DEL_FLAG = '0'
         ORDER BY O.UPDATE_TIME ASC
     </select>
+
+    <select id="getAllOrganId" resultType="String">
+        SELECT O.ID AS "id"
+        FROM DRUG_ORGANIZATION O
+        WHERE O.DEL_FLAG = '0'
+        ORDER BY O.UPDATE_TIME ASC
+    </select>
+
+    <select id="getOrganById" resultType="com.simlink.sinosoft.drugmonitor.entity.Organization">
+        SELECT <include refid="organizationColumns"/>
+        FROM DRUG_ORGANIZATION O
+        WHERE O.DEL_FLAG = '0'
+        AND O.ID = #{id}
+    </select>
 </mapper>

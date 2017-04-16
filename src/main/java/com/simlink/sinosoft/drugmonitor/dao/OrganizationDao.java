@@ -21,4 +21,8 @@ public interface OrganizationDao {
     public void deleteOrganization(String id);
 
     public List<Organization> findAllOrganizations();
+
+    public String[] getAllOrganId();
+
+    public Organization getOrganById(String id);
 }

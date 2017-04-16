@@ -5,7 +5,9 @@ package com.simlink.common.utils;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -491,6 +493,59 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	}
 
 	/**
+	 * 根据年月日季度获得对应的日期范围
+	 * @param period
+	 * @param pattern
+     */
+	public static DateRange getDateRange(String period, String pattern) throws ParseException {
+		String season,year,month,day;Date date,first,last;DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		if("yyyy/Q".equals(pattern)){
+			season = period.split("/")[1];
+			year = period.split("/")[0];
+			date  = getdateBySeason(season,year);
+			first = getFirstDateOfSeason(date);
+			last = getLastDateOfSeason(date);
+		}else if ("yyyy/mm".equals(pattern)){
+			year = period.split("/")[0];
+			month = period.split("/")[1];
+			date=dateFormat.parse(year+"-"+month+"-01");
+			first = getFirstDateOfMonth(date);
+			last = getLastDateOfMonth(date);
+		}else if("yyyy".equals(pattern)){
+			first = dateFormat.parse(period+"-01-01");
+			last = dateFormat.parse(period+"-12-31");
+		}else{
+			first = parseDate(period,"yyyy/MM/dd");
+			last = first;
+		}
+		return new DateRange(first,last);
+	}
+
+	/**
+	 * 根据季度获得季度中的一天
+	 * @param season
+	 * @return
+     */
+	private static Date getdateBySeason(String season,String year) {
+		int s = Integer.parseInt(season);Date result = null;
+		switch(s){
+			case 1:
+				result = parseDate(year+"-"+"01-01");
+				break;
+			case 2:
+				result = parseDate(year+"-"+"04-01");
+				break;
+			case 3:
+				result = parseDate(year+"-"+"07-01");
+				break;
+			case 4:
+				result = parseDate(year+"-"+"10-01");
+				break;
+		}
+		return result;
+	}
+
+	/**
 	 * 时间范围
 	 */
 	public static class DateRange{
@@ -505,6 +560,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 			this.endDate = endDate;
 			this.startDateStr = formatDate(startDate);
 			this.endDateStr = formatDate(endDate);
+		}
+
+		public DateRange(String startDateStr,String endDateStr){
+			this.startDateStr = startDateStr;
+			this.endDateStr = endDateStr;
+			this.startDate = parseDate(startDateStr);
+			this.endDate = parseDate(endDateStr);
 		}
 
 		public Date getStartDate() {

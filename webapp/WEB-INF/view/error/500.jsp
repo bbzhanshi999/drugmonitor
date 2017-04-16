@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/view/include/taglib.jsp"%>
-<%@ include file="/WEB-INF/view/include/head.jsp"%>
+<%@ include file="/WEB-INF/view/include/head-back.jsp"%>
 <html>
 <head>
 	<title>错误页</title>

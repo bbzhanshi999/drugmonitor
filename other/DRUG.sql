@@ -14,6 +14,35 @@ File Encoding         : 65001
 Date: 2016-09-29 14:49:06
 */
 
+DROP TABLE "DRUG"."DRUG_DICT";
+CREATE TABLE "DRUG"."DRUG_DICT" (
+"ID" VARCHAR2(32 BYTE) NOT NULL ,
+"KEY" VARCHAR2(100 BYTE) NULL ,
+"VALUE" VARCHAR2(255 BYTE) NULL ,
+"TYPE" VARCHAR2(100 BYTE) NULL
+)
+LOGGING
+NOCOMPRESS
+NOCACHE
+
+;
+COMMENT ON COLUMN "DRUG"."DRUG_DICT"."ID" IS 'ID';
+COMMENT ON COLUMN "DRUG"."DRUG_DICT"."KEY" IS '键';
+COMMENT ON COLUMN "DRUG"."DRUG_DICT"."VALUE" IS '值';
+
+-- ----------------------------
+-- Indexes structure for table DRUG_DICT
+-- ----------------------------
+
+-- ----------------------------
+-- Checks structure for table DRUG_DICT
+-- ----------------------------
+ALTER TABLE "DRUG"."DRUG_DICT" ADD CHECK ("ID" IS NOT NULL);
+
+-- ----------------------------
+-- Primary Key structure for table DRUG_DICT
+-- ----------------------------
+ALTER TABLE "DRUG"."DRUG_DICT" ADD PRIMARY KEY ("ID");
 
 -- ----------------------------
 -- Table structure for DRUG_AREA

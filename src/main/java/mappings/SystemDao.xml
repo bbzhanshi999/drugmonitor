@@ -442,7 +442,8 @@
 
 
     <select id="getMenusByRoleId" resultType="com.simlink.common.entity.Menu">
-        SELECT <include refid="menuColumns"/>
+        SELECT
+        <include refid="menuColumns"/>
         FROM DRUG_MENU M
         <include refid="roleMenuJoins"/>
         where M.DEL_FLAG = '0' AND R.ID = #{roleId}
@@ -469,9 +470,21 @@
     </select>
 
     <select id="findRolesByUserId" resultType="com.simlink.common.entity.Role">
-        SELECT <include refid="roleColumns"/>
+        SELECT
+        <include refid="roleColumns"/>
         FROM DRUG_ROLE R
         RIGHT JOIN DRUG_USER_ROLE UR ON UR.ROLE_ID = R.ID
         WHERE R.DEL_FLAG = '0' AND UR.USER_ID = #{id}
+    </select>
+
+    <select id="getDicts" resultType="java.util.Map">
+        SELECT VALUE as "value",KEY as "key"
+        FROM DRUG_DICT where TYPE = #{type} and DEL_FLAG='0'
+    </select>
+
+    <select id="getAllSupporter" resultType="java.util.Map">
+        SELECT ID as "id",
+          SUPPORTER_NAME AS "supporterName"
+         FROM DRUG_SUPPORTER WHERE DEL_FLAG='0'
     </select>
 </mapper>
