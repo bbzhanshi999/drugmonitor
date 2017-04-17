@@ -4,7 +4,7 @@
 
     <select id="drugData" resultType="java.util.HashMap">
         SELECT
-        C.AREA_NAME       AS "area",
+        C.AREA_NAME AS "area",
         SUM(N_DRUGAMOUNT) AS "amount",
         SUM(N_DRUGNUMBER) AS "count"
         FROM (SELECT
@@ -27,4 +27,84 @@
     <select id="getDrugNames" resultType="java.util.HashMap">
         SELECT DISTINCT C_COMMONNAME AS "drugName" FROM T_SIIP_SENDLISTCOLLECT ORDER BY C_COMMONNAME
     </select>
+
+    <select id="scanData" resultType="java.util.Map">
+        select count(1) as "amount",
+        <choose>
+            <when test='period=="yyyy/mm"'>
+                to_char(D_ADDDATETIME, 'yyyy/mm') AS "period"
+            </when>
+            <when test='period=="yyyy"'>
+                to_char(D_ADDDATETIME, 'yyyy') AS "period"
+            </when>
+            <when test='period=="yyyy/Q"'>
+                to_char(D_ADDDATETIME, 'yyyy/Q') AS "period"
+            </when>
+            <otherwise>
+                to_char(D_ADDDATETIME, 'yyyy/mm/dd') AS "period"
+            </otherwise>
+        </choose>
+        from T_SIOP_ELECCODECIRCULATE
+        where D_ADDDATETIME &lt;=#{endDate} AND D_ADDDATETIME &gt;=#{startDate}
+        <if test="institution!=null and institution!=''">
+            AND INSTITUTION = #{institution}
+        </if>
+        <choose>
+            <when test='period=="yyyy/mm"'>
+                GROUP BY to_char(D_ADDDATETIME, 'yyyy/mm')
+                ORDER BY to_char(D_ADDDATETIME, 'yyyy/mm')
+            </when>
+            <when test='period=="yyyy"'>
+                GROUP BY to_char(D_ADDDATETIME, 'yyyy')
+                ORDER BY to_char(D_ADDDATETIME, 'yyyy')
+            </when>
+            <when test='period=="yyyy/Q"'>
+                GROUP BY to_char(D_ADDDATETIME, 'yyyy/Q')
+                ORDER BY to_char(D_ADDDATETIME, 'yyyy/Q')
+            </when>
+            <otherwise>
+                GROUP BY to_char(D_ADDDATETIME, 'yyyy/mm/dd')
+                ORDER BY to_char(D_ADDDATETIME, 'yyyy/mm/dd')
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="scanDataDetail" resultType="java.util.Map">
+        SELECT
+        A.C_ELECTRONICCODE AS "code",
+        A.N_DRUGNAME AS "drugName",
+        C.ORGAN_NAME AS "organName",
+        B."VALUE" AS "status",
+        E."VALUE" AS "drugType",
+        A.MANUFACTURE as "manufacture",
+        A.D_ADDDATETIME,
+        to_char(A.D_ADDDATETIME,'yyyy-mm-dd') AS "addDate"
+        FROM T_SIOP_ELECCODECIRCULATE A
+        LEFT JOIN DRUG_ORGANIZATION C ON C.ID = A.INSTITUTION
+        LEFT JOIN DRUG_DICT E ON E.KEY = A.N_DRUGTYPE AND E.TYPE = 'drugType'
+        LEFT JOIN DRUG_DICT B ON B.KEY = A.N_STATUS AND B.TYPE = 'scanStatus'
+        WHERE A.D_ADDDATETIME &gt;= #{startDate}
+        AND A.D_ADDDATETIME &lt;= #{endDate}
+        <if test="institution!=null and institution!=''">
+            AND A.INSTITUTION = #{institution}
+        </if>
+    </select>
+
+    <select id="getScanCycle" resultType="java.util.Map">
+        SELECT
+        A.C_ELECTRONICCODE AS "code",
+        A.N_DRUGNAME AS "drugName",
+        C.ORGAN_NAME AS "organName",
+        B."VALUE" AS "status",
+        E."VALUE" AS "drugType",
+        A.MANUFACTURE as "manufacture",
+        to_char(A.D_ADDDATETIME,'yyyy-mm-dd') AS "addDate"
+        FROM T_SIOP_ELECCODECIRCULATE A
+        LEFT JOIN DRUG_ORGANIZATION C ON C.ID = A.INSTITUTION
+        LEFT JOIN DRUG_DICT E ON E.KEY = A.N_DRUGTYPE AND E.TYPE = 'drugType'
+        LEFT JOIN DRUG_DICT B ON B.KEY = A.N_STATUS AND B.TYPE = 'scanStatus'
+        WHERE A.C_ELECTRONICCODE = #{code}
+    </select>
+
 </mapper>

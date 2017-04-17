@@ -89,5 +89,5 @@
     </div>
 </div>
 <div id="gridDialog" style="width:500px;height:400px"><table id="grid"></table></div>
-
+<div id="cycleSearch-dialog" style="width:220px;height:120px"></div>
 </body>

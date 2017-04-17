@@ -56,6 +56,9 @@
         <if test="vaccine!=null and vaccine!=''">
             AND A.B_ISVACCINE = #{vaccine}
         </if>
+        <if test="drugType!=null and drugType!=''">
+            AND A.N_DRUGTYPE = #{drugType}
+        </if>
         ) C
         <choose>
             <when test='period=="yyyy/mm"'>
@@ -282,6 +285,76 @@
                 ORDER BY to_char(C.D_DOCTORDATETIME, 'yyyy/mm/dd')
             </otherwise>
         </choose>
+    </select>
+
+    <select id="surplusData" resultType="java.util.Map">
+        SELECT
+        SUM(C.N_DRUGAMOUNT) AS "amount",
+        <choose>
+            <when test='period=="yyyy/mm"'>
+                to_char(C.SURPLUS_DATE,'yyyy/mm') AS "period"
+            </when>
+            <when test='period=="yyyy"'>
+                to_char(C.SURPLUS_DATE,'yyyy') AS "period"
+            </when>
+            <when test='period=="yyyy/Q"'>
+                to_char(C.SURPLUS_DATE,'yyyy/Q') AS "period"
+            </when>
+            <otherwise>
+                to_char(C.SURPLUS_DATE,'yyyy/mm/dd') AS "period"
+            </otherwise>
+        </choose>
+        FROM (SELECT
+        A.N_DRUGAMOUNT,
+        A.SURPLUS_DATE
+        FROM T_SIIP_SURPLUS A
+        WHERE A.SURPLUS_DATE &gt;= #{startDate}
+        AND A.SURPLUS_DATE &lt;= #{endDate}
+        <if test="institution!=null and institution!=''">
+            AND A.INSTITUTION = #{institution}
+        </if>
+        <if test="drugName!=null and drugName!=''">
+            AND A.C_DRUGNAME = #{drugName}
+        </if>
+        ) C
+        <choose>
+            <when test='period=="yyyy/mm"'>
+                GROUP BY to_char(C.SURPLUS_DATE, 'yyyy/mm')
+                ORDER BY to_char(C.SURPLUS_DATE, 'yyyy/mm')
+            </when>
+            <when test='period=="yyyy"'>
+                GROUP BY to_char(C.SURPLUS_DATE, 'yyyy')
+                ORDER BY to_char(C.SURPLUS_DATE, 'yyyy')
+            </when>
+            <when test='period=="yyyy/Q"'>
+                GROUP BY to_char(C.SURPLUS_DATE, 'yyyy/Q')
+                ORDER BY to_char(C.SURPLUS_DATE, 'yyyy/Q')
+            </when>
+            <otherwise>
+                GROUP BY to_char(C.SURPLUS_DATE, 'yyyy/mm/dd')
+                ORDER BY to_char(C.SURPLUS_DATE, 'yyyy/mm/dd')
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="surplusDataDetail" resultType="java.util.Map">
+        SELECT
+        A.N_DRUGAMOUNT AS "amount",
+        A.N_DRUGCOUNT AS "count",
+        A.SURPLUS_DATE,
+        to_char(A.SURPLUS_DATE,'yyyy-mm-dd') AS "surplusDate",
+        A.DRUGNAME AS "drugName",
+        C.ORGAN_NAME AS "organName"
+        FROM T_SIIP_SURPLUS A
+        LEFT JOIN DRUG_ORGANIZATION C ON C.ID = A.INSTITUTION
+        WHERE A.SURPLUS_DATE &gt;= #{startDate}
+        AND A.SURPLUS_DATE &lt;= #{endDate}
+        <if test="institution!=null and institution!=''">
+            AND A.INSTITUTION = #{institution}
+        </if>
+        <if test="drugName!=null and drugName!=''">
+            AND A.DRUGNAME = #{drugName}
+        </if>
     </select>
 
 

@@ -4,15 +4,9 @@ import com.github.miemiedev.mybatis.paginator.domain.Order;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.google.common.collect.Maps;
-import com.simlink.common.entity.Role;
 import com.simlink.common.utils.DateUtils;
 import com.simlink.common.utils.StringUtils;
 import com.simlink.common.web.BaseController;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.simlink.sinosoft.drugmonitor.entity.Query;
 import com.simlink.sinosoft.drugmonitor.service.ErpDataService;
 import org.apache.shiro.authz.annotation.Logical;
@@ -22,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 流通监控
@@ -55,7 +52,7 @@ public class ERPController extends BaseController {
     }
 
     @RequestMapping("instoreDetail")
-    @RequiresPermissions(value={"business:erp:instore","business:erp:storage","business:erp:supporter","business:vaccine:*"},logical= Logical.OR)
+    @RequiresPermissions(value={"business:erp:*","business:vaccine:*"},logical= Logical.OR)
     @ResponseBody
     public Map<String, Object> instoreDetail(Query query, String startDate, String endDate, Integer page, Integer rows) {
         Map<String, Object> result = Maps.newHashMap();
@@ -92,7 +89,7 @@ public class ERPController extends BaseController {
     }
 
     @RequestMapping("outstoreDetail")
-    @RequiresPermissions(value={"business:erp:outstore","business:erp:storage","business:erp:returned","business:vaccine:*"},logical= Logical.OR)
+    @RequiresPermissions(value={"business:erp:*","business:vaccine:*"},logical= Logical.OR)
     @ResponseBody
     public Map<String, Object> outstoreDetail(Query query, String startDate, String endDate, Integer page, Integer rows) {
         Map<String, Object> result = Maps.newHashMap();
@@ -101,6 +98,23 @@ public class ERPController extends BaseController {
         query.setStartDate(DateUtils.parseDate(startDate));
         query.setEndDate(DateUtils.parseDate(endDate));
         List<Map<String, Object>> results = erpDataService.outstoreDataDetail(query, pb);
+        PageList pageList = (PageList) results;
+        Integer totalCount = pageList.getPaginator().getTotalCount();
+        result.put("total", totalCount);
+        result.put("rows", results);
+        return result;
+    }
+
+    @RequestMapping("surplusDetail")
+    @RequiresPermissions(value={"business:erp:erp"},logical= Logical.OR)
+    @ResponseBody
+    public Map<String, Object> surplusDetail(Query query, String startDate, String endDate, Integer page, Integer rows) {
+        Map<String, Object> result = Maps.newHashMap();
+        String order = "SURPLUS_DATE.asc";
+        PageBounds pb = new PageBounds(page, rows, Order.formString(order));
+        query.setStartDate(DateUtils.parseDate(startDate));
+        query.setEndDate(DateUtils.parseDate(endDate));
+        List<Map<String, Object>> results = erpDataService.surplusDataDetail(query, pb);
         PageList pageList = (PageList) results;
         Integer totalCount = pageList.getPaginator().getTotalCount();
         result.put("total", totalCount);
@@ -137,8 +151,32 @@ public class ERPController extends BaseController {
         result.put("inResult",in);
         result.put("outResult",out);
         return result;
-
     }
+
+    @RequestMapping("erpData")
+    @RequiresPermissions("business:erp:erp")
+    @ResponseBody
+    public Map<String,Object> erpData(Query query, String monthDate) {
+        Map<String, Object> result = Maps.newHashMap();
+        List<Map<String, Object>> out;
+        List<Map<String, Object>> in;
+        List<Map<String, Object>> surplus;
+        DateUtils.getFirstDateOfMonth(DateUtils.parseDate(monthDate));
+        query.setStartDate(DateUtils.getFirstDateOfMonth(DateUtils.parseDate(monthDate)));
+        query.setEndDate(DateUtils.getLastDateOfMonth(DateUtils.parseDate(monthDate)));
+        if (StringUtils.isBlank(query.getPeriod())) query.setPeriod("yyyy/mm");
+        out = erpDataService.outstoreData(query);
+        in = erpDataService.instoreData(query);
+        surplus = erpDataService.surplusData(query);
+        result.put("in",in);
+        result.put("out",out);
+        result.put("surplus",surplus);
+        result.put("startDate",DateUtils.formatDate(query.getStartDate()));
+        result.put("endDate",DateUtils.formatDate(query.getEndDate()));
+        return result;
+    }
+
+
 
     @RequestMapping("returned")
     @RequiresPermissions("business:erp:returned")
@@ -152,6 +190,13 @@ public class ERPController extends BaseController {
     public String supporter(Model model) {
         defaultDate(model);
         return "erp/supporter";
+    }
+
+    @RequestMapping("erp")
+    @RequiresPermissions("business:erp:erp")
+    public String erp(Model model) {
+        defaultDate(model);
+        return "erp/erp";
     }
 
 

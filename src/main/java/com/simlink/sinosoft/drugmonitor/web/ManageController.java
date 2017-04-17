@@ -3,6 +3,7 @@ package com.simlink.sinosoft.drugmonitor.web;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.simlink.common.utils.DateUtils;
+import com.simlink.common.utils.StringUtils;
 import com.simlink.common.web.BaseController;
 import com.simlink.sinosoft.drugmonitor.entity.Query;
 import com.simlink.sinosoft.drugmonitor.service.ErpDataService;
@@ -34,6 +35,22 @@ public class ManageController extends BaseController {
     public String purchase(Model model){
         return "manage/purchase";
     }
+
+    @RequestMapping("classify")
+    @RequiresPermissions("business:manage:classify")
+    public String classify(Model model){
+        return "manage/classify";
+    }
+
+    @RequestMapping("classifyData")
+    @RequiresPermissions("business:manage:classify")
+    @ResponseBody
+    public List<Map<String,Object>> classifyData(Query query, String startDate, String endDate) {
+        query.setStartDate(DateUtils.parseDate(startDate));
+        query.setEndDate(DateUtils.parseDate(endDate));
+        return  erpDataService.classifyData(query);
+    }
+
 
     @RequestMapping("purchaseData")
     @RequiresPermissions("business:manage:purchase")

@@ -21,6 +21,8 @@ public class Query extends BaseEntity<Query>{
     private String supporter;
     private String prescriptionType;
     private String vaccine;
+    private String drugType;
+    private Date monthDate;
     public String getInstoreType() {
         return instoreType;
     }
@@ -108,5 +110,21 @@ public class Query extends BaseEntity<Query>{
 
     public void setVaccine(String vaccine) {
         this.vaccine = vaccine;
+    }
+
+    public String getDrugType() {
+        return drugType;
+    }
+
+    public void setDrugType(String drugType) {
+        this.drugType = drugType;
+    }
+
+    public Date getMonthDate() {
+        return monthDate;
+    }
+
+    public void setMonthDate(Date monthDate) {
+        this.monthDate = monthDate;
     }
 }

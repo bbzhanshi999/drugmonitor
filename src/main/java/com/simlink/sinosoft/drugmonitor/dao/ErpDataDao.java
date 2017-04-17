@@ -26,4 +26,8 @@ public interface ErpDataDao {
     public List<Map<String,Object>> outstoreData2(Query query);
 
     List<Map<String,Object>> prescriptionData(Query query);
+
+    List<Map<String,Object>> surplusData(Query query);
+
+    List<Map<String,Object>> surplusDataDetail(Query query, PageBounds pb);
 }
